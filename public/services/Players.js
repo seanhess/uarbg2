@@ -24,8 +24,10 @@ angular.module('services')
       player.y = 0
       player.facing = "down"
 
-      // ugly! figure out how to do rootScope.apply better!
       playersRef.child(player.name).set(player)
+    }
+
+    function listen() {
       playersRef.on('child_added', apply(onJoin))
       playersRef.on('child_changed', apply(onMove))
       playersRef.on('child_removed', apply(onQuit))
@@ -128,6 +130,7 @@ angular.module('services')
       current: null, 
       all: all, 
       join: join,
+      listen: listen,
       move: move,
       fireMissile: fireMissile
     }

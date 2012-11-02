@@ -20,4 +20,6 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
     CurrentPlayer.player = $scope.player
     $location.path("/game/" + $scope.gameId)
   }
+
+  players.listen()
 }
