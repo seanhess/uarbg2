@@ -27,7 +27,6 @@ angular.module('services',[])
         console.log("RECONNECT")
       },
       connect: function(data) {
-        console.log("Connected")
         PUBNUB.publish({
           channel: channel,
           message: {action:"join", player: player}
@@ -40,7 +39,6 @@ angular.module('services',[])
     var player = data.player
     if (player.name == myname) {
       players.current = player
-      console.log("ME", players.current)
     }
     player.x = 4
     player.y = 2
