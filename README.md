@@ -20,3 +20,11 @@ Todo
 * movement
 * missile firing
 * winning
+
+
+
+
+
+* who is in the game, avatar and name
+* you pick a name and avatar
+* then it puts you right in (delay)

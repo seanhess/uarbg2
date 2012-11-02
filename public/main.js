@@ -3,7 +3,7 @@ angular.module('directives', [])
 angular.module('filters', [])
 
 angular.module('uarbg2', ['services', 'directives'], function ($routeProvider) {
-    $routeProvider.when('/game', {templateUrl: 'partials/game.html', controller: GameCtrl})
+    $routeProvider.when('/game/:gameId', {templateUrl: 'partials/game.html', controller: GameCtrl})
     $routeProvider.when('/identify', {templateUrl: 'partials/identify.html', controller: IdentifyCtrl})
     $routeProvider.otherwise({redirectTo: '/identify'})
 })

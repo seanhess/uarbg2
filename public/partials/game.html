@@ -1,8 +1,10 @@
 <h1>Game</h1>
 
 <div id="board" keypress="keypress(e)">
-  <div ng-repeat="player in players.all">
-    <div class="player" ng-style="position(player)">{{player.name}}</div>
+  <div class="player" 
+      ng-repeat="player in players.all"
+      ng-style="position(player)">
+      {{player.name}}
   </div>
 </div>
 

@@ -6,12 +6,13 @@ angular.module('services')
   console.log("PS")
   return function(gameId) {
 
-    var gameRef = new FirebaseChannel("fake")
+    var gameRef = new FirebaseChannel(gameId)
     var playersRef = gameRef.child('players')
     var all = []
     var myname = null
 
     function join(player) {
+      console.log("JOIN", player)
       myname = player.name
       player.x = 0
       player.y = 0
