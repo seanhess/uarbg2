@@ -17,6 +17,8 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
   // If game doesn't have a current player, then go back to the identify/matchmaking screen!
 
   $scope.join = function() {
+    // HACK
+    $scope.player.avatar = "player1"
     CurrentPlayer.player = $scope.player
     $location.path("/game/" + $scope.gameId)
   }

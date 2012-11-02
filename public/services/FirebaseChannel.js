@@ -1,7 +1,3 @@
-
-
-console.log("FC")
-
 angular.module('services')
 .factory('FirebaseChannel', function($rootScope) {
   return function(gameId) {
