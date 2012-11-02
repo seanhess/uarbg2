@@ -1,6 +1,7 @@
 
 function GameCtrl($scope, Players, Board) {
-  $scope.players = Players
+  var players = new Players('fake')
+  $scope.players = players
 
   function getPosition(keycode) {
     var left = 37,
@@ -37,14 +38,14 @@ function GameCtrl($scope, Players, Board) {
 
   $scope.keypress = function (e) {
       var position = getPosition(e.keyCode);
-      var location = Board.move(Players.current, position.axis, position.distance);
+      var location = Board.move(players.current, position.axis, position.distance);
 
       if (location) {
-        Players.current[location.axis] = location.location;
-        Players.move(Players.current);
+        players.current[location.axis] = location.location;
+        players.move(players.current);
       }
   }
 
-  Players.join({name:"sean"})
+  players.join({name:"sean"})
 
 }
