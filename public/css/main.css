@@ -1,0 +1,12 @@
+#board {
+  background-color: #00f;
+  width: 500px;
+  height: 500px;
+  position: relative;
+}
+#board .player {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+}
