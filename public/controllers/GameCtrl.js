@@ -1,6 +1,8 @@
 
-function GameCtrl($scope, Players) {
-  var players = new Players('fake')
+function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board) {
+  $scope.gameId = $routeParams.gameId
+
+  var players = new Players($scope.gameId)
   $scope.players = players
 
   $scope.position = function (player) {
@@ -10,45 +12,57 @@ function GameCtrl($scope, Players) {
     return {left: missile.x * 30 + "px", top: missile.y * 30 + "px"}
   }
 
+  function getPosition(keycode) {
+    var left = 37,
+        up = 38,
+        right = 39, 
+        down = 40;
 
-  $scope.keypress = function (e) {
-      var left = 37,
-          up = 38,
-          right = 39, 
-          down = 40,
-          space = 32;
-      
-      if(e.keyCode === space) {
-        players.fireMissile(players.current)
-        console.log("Space hit, firing missile!")
-        return // so we don't fire players.move()
-      }
+    var position = {};
 
-      if(e.keyCode === up) {
-        players.current.y -= 1  
-        players.current.facing = "up"
+    if(keycode === up) {
+      position.axis = 'y';
+      position.distance = -1; 
+    }
 
-      }
+    if(keycode === right) {
+      position.axis = 'x';
+    }
 
-      if(e.keyCode === right) {
-        players.current.x += 1  
-        players.current.facing = "right"
-      }
+    if(keycode === down) {
+      position.axis = 'y';
+    }
 
-      if(e.keyCode === down) {
-        players.current.y += 1  
-        players.current.facing = "down"
-      }
+    if(keycode === left) {
+      position.axis = 'x';
+      position.distance = -1  
+    }
 
-      if(e.keyCode === left) {
-        players.current.x -= 1  
-        players.current.facing = "left"
-      }
-
-      
-      players.move(players.current)
+    return position;
   }
 
-  players.join({name:"sean"})
+  $scope.position = function (player) {
+    return Board.position(player.x, player.y)
+  }
 
+  $scope.keypress = function (e) {
+      if e.keyCode == 32 { //space -> fire missile
+        players.fireMissile(players.current)
+        console.log("Space hit, firing missile!")
+      } else {
+        var position = getPosition(e.keyCode);
+        var location = Board.move(players.current, position.axis, position.distance);
+
+        if (location) {
+          players.current[location.axis] = location.location;
+          players.move(players.current);
+        }
+      }
+  }
+
+  // only play if you are identified
+  if (!CurrentPlayer.player) 
+    return $location.path("/identify")
+
+  players.join(CurrentPlayer.player)
 }

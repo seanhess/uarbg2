@@ -1,4 +1,14 @@
 <div id="identify">
-  <input ng-model="name" placeholder="Your Name">
-  <button ng-click-"join">Join</button>
+  <h1>Underwater Adventure Rocket Bazooka Guys II</h1>
+  <h3>Game: "{{gameId}}"</h3>
+  <input ng-model="player.name" placeholder="Your Name">
+  <button ng-click="join()">Join</button>
+
+  <div class="players">
+    <div class="player" ng-repeat="player in players.all">
+      <img class="avatar" ng-src="{{player.avatar}}"></img>
+      <span class="name">{{player.name}}</span>
+      {{player | json}}
+    </div>
+  </div>
 </div>

@@ -6,7 +6,6 @@ angular.module('directives', [])
 				// element is a jquery element
 				var onPress = $parse(attrs.keypress)
 				$(document).keydown(function(e) {
-					e.preventDefault();
 				    scope.$apply(function() {
 				    	onPress(scope, {e:e})
 				   	})

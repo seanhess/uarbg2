@@ -1,11 +1,9 @@
 // This service keeps track of all the current players (in an array), and merges moves into your stuff
 // Also lets you join
 
-console.log("PS")
-
 angular.module('services')
 .factory('Players', function($rootScope, FirebaseChannel) {
-
+  console.log("PS")
   return function(gameId) {
 
     var gameRef = new FirebaseChannel("fake")
@@ -20,6 +18,7 @@ angular.module('services')
     var YMAX = 16
 
     function join(player) {
+      console.log("JOIN", player)
       myname = player.name
       player.x = 0
       player.y = 0
