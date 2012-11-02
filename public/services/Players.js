@@ -1,7 +1,7 @@
 // This service keeps track of all the current players (in an array), and merges moves into your stuff
 // Also lets you join
 
-angular.module('services',[])
+angular.module('services')
 .factory('Players', function($rootScope) {
 
   var channel = "fake"
