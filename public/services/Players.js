@@ -111,7 +111,7 @@ angular.module('services')
     }
 
     function move(player) {
-      playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y})
+      playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y, facing: player.facing})
     }
     
     function playerByName(name) {
@@ -128,7 +128,8 @@ angular.module('services')
 
     var players = { 
       current: null, 
-      all: all, 
+      all: all,
+      allMissiles: allMissiles,  
       join: join,
       listen: listen,
       move: move,

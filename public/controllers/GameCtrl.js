@@ -46,7 +46,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   }
 
   $scope.keypress = function (e) {
-      if e.keyCode == 32 { //space -> fire missile
+      if (e.keyCode === 32) { //space -> fire missile
         players.fireMissile(players.current)
         console.log("Space hit, firing missile!")
       } else {
@@ -55,6 +55,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
 
         if (location) {
           players.current[location.axis] = location.location;
+          players.current.facing = location.facing;
           players.move(players.current);
         }
       }
