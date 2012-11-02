@@ -1,6 +1,8 @@
 
-function GameCtrl($scope, Players, Board) {
-  var players = new Players('fake')
+function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board) {
+  $scope.gameId = $routeParams.gameId
+
+  var players = new Players($scope.gameId)
   $scope.players = players
 
   function getPosition(keycode) {
@@ -46,6 +48,9 @@ function GameCtrl($scope, Players, Board) {
       }
   }
 
-  players.join({name:"sean"})
+  // only play if you are identified
+  if (!CurrentPlayer.player) 
+    return $location.path("/identify")
 
+  players.join(CurrentPlayer.player)
 }
