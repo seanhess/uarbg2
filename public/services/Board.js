@@ -1,9 +1,9 @@
 angular.module('services')
 .factory('Board', function($rootScope) {
   var map = { 
-    width: 500, 
-    height: 500,
-    unit: 20
+    width: parseInt($('#board').css('width'), 10), 
+    height: parseInt($('#board').css('height'), 10),
+    unit: 50
   };
 
   map.grid = {
