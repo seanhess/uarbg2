@@ -1,5 +1,3 @@
-console.log("DIRECTIVE")
-
 angular.module('directives', [])
 	.directive('keypress', function($parse) {
 			return function(scope, element, attrs) {

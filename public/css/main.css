@@ -10,3 +10,19 @@
   width: 50px;
   height: 50px;
 }
+#identify .avatar {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  border: solid 3px #eee;
+}
+#identify .avatar.player1 {
+  background: url("/images/player1.png") no-repeat center bottom;
+}
+#identify .name {
+  clear: both;
+}
+#identify .players .player {
+  clear: both;
+}

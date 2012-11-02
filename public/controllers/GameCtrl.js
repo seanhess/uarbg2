@@ -65,6 +65,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   if (!CurrentPlayer.player) 
     return $location.path("/identify")
 
+  console.log("TESTING", CurrentPlayer.player)
   players.join(CurrentPlayer.player)
   players.listen()
 }

@@ -3,7 +3,6 @@
 
 angular.module('services')
 .factory('Players', function($rootScope, FirebaseChannel) {
-  console.log("PS")
   return function(gameId) {
 
     var gameRef = new FirebaseChannel("fake")
@@ -18,7 +17,6 @@ angular.module('services')
     var YMAX = 16
 
     function join(player) {
-      console.log("JOIN", player)
       myname = player.name
       player.x = 0
       player.y = 0
@@ -111,7 +109,8 @@ angular.module('services')
     }
 
     function move(player) {
-      playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y, facing: player.facing})
+      playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y, avatar: player.avatar, facing: player.facing})
+      // FIXME figure out how to just set x and y only firing one event
     }
     
     function playerByName(name) {
