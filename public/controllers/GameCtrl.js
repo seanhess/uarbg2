@@ -4,7 +4,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
-    CurrentPlayer.player = {name: $routeParams.debugPlayerName}
+    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1"}
 
   var players = new Players($scope.gameId, $routeParams.debugPlayerName)
   $scope.players = players
