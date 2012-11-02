@@ -2,7 +2,11 @@
 function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board) {
   $scope.gameId = $routeParams.gameId
 
-  var players = new Players($scope.gameId)
+  // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
+  if ($routeParams.debugPlayerName)
+    CurrentPlayer.player = {name: $routeParams.debugPlayerName}
+
+  var players = new Players($scope.gameId, $routeParams.debugPlayerName)
   $scope.players = players
 
   $scope.position = function (player) {
