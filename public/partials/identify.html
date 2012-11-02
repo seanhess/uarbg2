@@ -3,7 +3,12 @@
   <p>Choose a name and a character</p>
 
   <div class="avatars">
-    <div class="avatar player1"></div>
+    <div 
+      ng-repeat="name in avatars"
+      class="avatar {{name}}" 
+      ng-class="{selected: isPlayerAvatar(name)}"
+      ng-click="selectAvatar(name)"
+    ></div>
   </div>
 
   <div class="name">
