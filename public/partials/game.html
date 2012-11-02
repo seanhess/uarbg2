@@ -1,10 +1,8 @@
 <h1>Game</h1>
 
 <div id="board" ng-click="clickBoard()">
-  <div ng-repeat="player in players">
+  <div ng-repeat="player in players.all">
     <div class="player" ng-style="position(player)">{{player.name}}</div>
   </div>
 </div>
 
-<div id=pubnub pub-key=demo sub-key=demo></div>
-<script src=http://cdn.pubnub.com/pubnub-3.3.min.js ></script>
