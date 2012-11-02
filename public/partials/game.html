@@ -1,6 +1,6 @@
 <h1>Game</h1>
 
-<div id="board" ng-click="clickBoard()">
+<div id="board" ng-click="clickBoard()" keypress="keypress(e)">
   <div ng-repeat="player in players.all">
     <div class="player" ng-style="position(player)">{{player.name}}</div>
   </div>
