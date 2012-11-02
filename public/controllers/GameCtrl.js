@@ -10,16 +10,6 @@ function GameCtrl($scope, Players) {
     player.x += 1
   }
 
-  // temporary
-  $scope.clickBoard = function() {
-
-  }
-
-  $scope.test = function() {
-    console.log("TEST")
-
-  }
-
   $scope.keypress = function (e) {
       var left = 37,
           up = 38,
@@ -41,6 +31,8 @@ function GameCtrl($scope, Players) {
       if(e.keyCode === left) {
         Players.current.x -= 1  
       }
+
+      Players.move(Players.current)
   }
 
   Players.join({name:"sean"})

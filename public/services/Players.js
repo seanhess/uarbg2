@@ -16,8 +16,8 @@ angular.module('services',[])
       restore: false, // stay connected even when browser is closed
       callback: function(data) {
         $rootScope.$apply(function() {
-          if (data.action == "join") onJoin(data)
-          else if (data.action == "move") onMove(data)
+          if (data.action == "join") onJoin(data.player)
+          else if (data.action == "move") onMove(data.player)
         })
       },
       disconnect: function(data) {
@@ -35,28 +35,41 @@ angular.module('services',[])
     })
   }
 
-  function onJoin(data) {
-    var player = data.player
+  function onJoin(player) {
     if (player.name == myname) {
       players.current = player
     }
     player.x = 4
     player.y = 2
     all.push(player)
-    console.log(all, players.all)
   }
 
-  function onMove(data) {
+  function onMove(remotePlayer) {
+    var player = playerByName(remotePlayer.name)
+    player.x = remotePlayer.x
+    player.y = remotePlayer.y
+  }
 
+  function move(player) {
+      PUBNUB.publish({
+        channel: channel,
+        message: {action:"move", player: player}
+      })
+  }
+
+  function playerByName(name) {
+    return all.filter(function(p) {
+      return (p.name == name)
+    })[0]
   }
 
   var players = { 
     current: null, 
     all: all, 
-    join: join 
+    join: join,
+    move: move
   }
 
   return players
-
 })
 
