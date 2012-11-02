@@ -53,4 +53,5 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
     return $location.path("/identify")
 
   players.join(CurrentPlayer.player)
+  players.listen()
 }
