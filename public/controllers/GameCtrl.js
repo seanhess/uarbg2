@@ -6,10 +6,6 @@ function GameCtrl($scope, Players) {
     return {left: player.x * 30 + "px", top: player.y * 30 + "px"}
   }
 
-  $scope.moveRight = function (player) {
-    player.x += 1
-  }
-
   $scope.keypress = function (e) {
       var left = 37,
           up = 38,
