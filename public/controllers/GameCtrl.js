@@ -1,6 +1,7 @@
 
 function GameCtrl($scope, Players) {
-  $scope.players = Players
+  var players = new Players('fake')
+  $scope.players = players
 
   $scope.position = function (player) {
     return {left: player.x * 30 + "px", top: player.y * 30 + "px"}
@@ -13,24 +14,24 @@ function GameCtrl($scope, Players) {
           down = 40;
 
       if(e.keyCode === up) {
-        Players.current.y -= 1  
+        players.current.y -= 1  
       }
 
       if(e.keyCode === right) {
-        Players.current.x += 1  
+        players.current.x += 1  
       }
 
       if(e.keyCode === down) {
-        Players.current.y += 1  
+        players.current.y += 1  
       }
 
       if(e.keyCode === left) {
-        Players.current.x -= 1  
+        players.current.x -= 1  
       }
 
-      Players.move(Players.current)
+      players.move(players.current)
   }
 
-  Players.join({name:"sean"})
+  players.join({name:"sean"})
 
 }
