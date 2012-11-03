@@ -18,7 +18,7 @@ angular.module('services')
 
     function fireMissile(player) {
       // if the player has a current missile
-      if (missileByPlayerName(player.name) == null && Players.current.status != "dead") {
+      if (missileByPlayerName(player.name) == null && Players.current.state != "dead") {
         var missile = {
           x: player.x,
           y: player.y,

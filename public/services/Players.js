@@ -44,6 +44,7 @@ angular.module('services')
       if (player.name == myname) {
         players.current = player
       }
+      console.log("pushing ",player)
       all.push(player)
     }
 
@@ -58,8 +59,8 @@ angular.module('services')
       player.y = remotePlayer.y
       player.facing = remotePlayer.facing
       player.state = remotePlayer.state;
-      player.wins = player.wins;
-      player.losses = player.losses;
+      player.wins = remotePlayer.wins;
+      player.losses = remotePlayer.losses;
     }
 
     function onQuit(player) {
@@ -86,6 +87,7 @@ angular.module('services')
         gameStatusMessage = gamestatus.message;
         if (myname == gamestatus.winner) {
           all.forEach(function(val,key) {
+            console.log("setting "+val.name+" to alive...")
             playersRef.child(val.name).child("state").set("alive");
             //updateRef(playersRef.child(val.name),{state:"alive"})
           });
@@ -113,7 +115,8 @@ angular.module('services')
     }
     function alivePlayers() {
       return all.filter(function(p) {
-        return (p.status != "dead")
+        //console.log(p.name,p.state)
+        return (p.state != "dead")
       })
     }
 

@@ -73,9 +73,9 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
             });
           }, 500);
 
-          players.current[location.axis] = location.location;
+          /*players.current[location.axis] = location.location;
           players.current.facing = location.facing;
-          players.move(players.current);
+          players.move(players.current);*/
 
           var collision = false;
           players.alivePlayers().forEach(function(val,key){
