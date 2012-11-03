@@ -93,10 +93,25 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
         var location = Board.move(players.current, position.axis, position.distance);
 
         if (location) {
-          players.current[location.axis] = location.location;
-          players.current.sprite = getSprite(location.facing);
-          players.current.facing = location.facing;
-          players.move(players.current);
+          var collision = false;
+          players.all.forEach(function(val,key){
+            if (val.name != players.current.name) {
+              if (location.axis == "x") {
+                if (val.x == location.location && val.y == players.current.y) collision = true;
+              }
+              if (location.axis == "y") {
+                if (val.y == location.location && val.x == players.current.x) collision = true;
+              }
+            }
+          });
+          if (!collision) {
+            players.current[location.axis] = location.location;
+            players.current.sprite = getSprite(location.facing);
+            players.current.facing = location.facing;
+            players.move(players.current);
+          } else {
+            // we can play a collision sound here!
+          }
         }
       }
   }
