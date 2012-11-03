@@ -56,6 +56,7 @@ angular.module('services')
       }
       player.x = remotePlayer.x
       player.y = remotePlayer.y
+      player.facing = remotePlayer.facing
       player.state = remotePlayer.state;
     }
 
