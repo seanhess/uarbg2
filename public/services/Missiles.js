@@ -6,6 +6,7 @@ angular.module('services')
 
     var gameRef = new FB(gameId)
     var missilesRef = gameRef.child('missiles')
+    var gameStatusRef = gameRef.child('gameStatus')
 
     // {x: 3, y: 3, direction:'right', sourcePlayer:"asdfsa"}
     var allMissiles = []
@@ -17,7 +18,7 @@ angular.module('services')
 
     function fireMissile(player) {
       // if the player has a current missile
-      if (missileByPlayerName(player.name) == null) {
+      if (missileByPlayerName(player.name) == null && Players.current.status != "dead") {
         var missile = {
           x: player.x,
           y: player.y,
@@ -52,9 +53,9 @@ angular.module('services')
               missile[position.axis] = location.location              
               var numStillAlive = 0
               var winner = ""
-              console.log("Players ",Players)
-              console.log("Players.all ",Players.all)
-              Players.all.forEach( function (val,key) {
+              //console.log("Players ",Players)
+              //console.log("Players.all ",Players.all)
+              Players.alivePlayers().forEach( function (val,key) {
                 if (val.x == missile.x && val.y == missile.y) {
                   Players.killPlayer(val)
                   //playersRef.child(val.name).set({name: val.name, x:val.x, y: val.y, avatar: ""/*val.avatar*/, facing: val.facing, state: "dead"})            

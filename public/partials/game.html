@@ -1,7 +1,7 @@
 <div id="board" keypress="keypress(e)" ng-click="test()">
 
   <div class="player {{player.avatar}}" 
-      ng-repeat="player in players.all | filter:{state:'alive'}"
+      ng-repeat="player in players.alivePlayers() | filter:{state:'alive'}"
       ng-style="player | position"
       sprite="player.sprite"
       sprite-facing="player.facing"

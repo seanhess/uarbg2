@@ -63,7 +63,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
         if (!boardDirection) return
         var position = Board.getPosition(boardDirection)
         var location = Board.move(players.current, position)
-        if (location) {
+        if (location && players.current.status != "dead") {
           players.current.walking = true;
 
           setTimeout(function(){
@@ -78,8 +78,8 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
           players.move(players.current);
 
           var collision = false;
-          players.all.forEach(function(val,key){
-            if (val.name != players.current.name) {
+          players.alivePlayers().forEach(function(val,key){
+            if (val.name != players.current.name && val.status != "dead") {
               if (location.axis == "x") {
                 if (val.x == location.location && val.y == players.current.y) collision = true;
               }

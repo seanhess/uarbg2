@@ -86,7 +86,8 @@ angular.module('services')
         gameStatusMessage = gamestatus.message;
         if (myname == gamestatus.winner) {
           all.forEach(function(val,key) {
-            updateRef(playersRef.child(val.name),{state:"alive"})
+            playersRef.child(val.name).child("state").set("alive");
+            //updateRef(playersRef.child(val.name),{state:"alive"})
           });
           setTimeout(function() {
             gameStatusRef.set({status:"playing", winner: "", message:""});
@@ -110,11 +111,16 @@ angular.module('services')
         return (p.name == name)
       })[0]
     }
-
+    function alivePlayers() {
+      return all.filter(function(p) {
+        return (p.status != "dead")
+      })
+    }
 
     var players = { 
       current: null, 
       all: all,
+      alivePlayers: alivePlayers,
       join: join,
       listen: listen,
       move: move,
