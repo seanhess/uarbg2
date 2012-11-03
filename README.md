@@ -30,5 +30,6 @@ HitList
 * Unlocking Payments
 
 Skinning
+* New backgrounds!
 * Bring the playerCard to the main screen
 * Logo with padding and looking nicer
