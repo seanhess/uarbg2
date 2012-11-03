@@ -4,6 +4,13 @@ html {
   margin: 0px;
   background-color: #333;
 }
+.version {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  color: #fff;
+  font-weight: bold;
+}
 #board {
   margin: 0 auto;
   background: url("/images/bg.jpg") repeat;
@@ -54,15 +61,36 @@ html {
   background: url("/images/player6.png") no-repeat -150px -150px;
 }
 #board .missile {
-  background-color: #f00;
   position: absolute;
   width: 50px;
   height: 50px;
+  background: url("/images/rocket.png") no-repeat 0px 0px;
   -webkit-transition: all 100ms linear;
   -moz-transition: all 100ms linear;
   -o-transition: all 100ms linear;
   -ms-transition: all 100ms linear;
   transition: all 100ms linear;
+}
+#board .missile.down {
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+#board .missile.right {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+#board .missile.up {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 .scores {
   background-color: #555;
@@ -140,6 +168,11 @@ html {
 }
 #identify .menu .players .player {
   clear: both;
+}
+#identify .menu .gameId {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 #identify .title {
   display: block;

@@ -1,5 +1,7 @@
 <div id="board" keypress="keypress(e)" ng-click="test()">
 
+  <div class="version">v{{version}}</div>
+
   <div class="player {{player.avatar}}" 
       ng-repeat="player in players.alivePlayers() | filter:{state:'alive'}"
       ng-style="player | position"
@@ -10,11 +12,10 @@
     <div class="taunt triangle-border left" ng-show="players.taunt">{{players.taunt}}</div>
   </div>
   <div ng-repeat="missile in missiles.allMissiles"> 
- 	<div class="missile" ng-style="missile | position">*</div>
+ 	<div class="missile {{missile.direction}}" ng-style="missile | position"></div>
   </div>
 
   <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
-  
   <!--<div>{{players.current}}</div>-->
 </div>
 <!-- <div class="statusmessage">[ {{players.gameStatusMessage}} ]</div> -->

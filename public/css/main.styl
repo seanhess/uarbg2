@@ -4,6 +4,13 @@ body, html
   background-color #333
 
 
+.version
+  position absolute
+  bottom 0px
+  left 0px
+  color white
+  font-weight bold
+
 #board
   margin 0 auto
   background url(/images/bg.jpg) repeat
@@ -46,11 +53,20 @@ body, html
     background url(/images/player6.png) no-repeat -150px -150px
     
   .missile
-    background-color #f00 
     position absolute
     width 50px
     height 50px
+    background url(/images/rocket.png) no-repeat 0px 0px
     transition(all 100ms linear)
+
+  .missile.down
+    transform rotate(270deg)
+
+  .missile.right
+    transform rotate(180deg)
+
+  .missile.up
+    transform rotate(90deg)
 
 .scores
   background-color #555
@@ -122,6 +138,12 @@ body, html
     .players
       .player
         clear both
+
+
+    .gameId
+      position absolute
+      right 0
+      bottom 0
 
   .title
     display block
