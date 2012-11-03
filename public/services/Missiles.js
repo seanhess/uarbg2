@@ -45,7 +45,7 @@ angular.module('services')
         $rootScope.$apply(function() {
           moveMissile()
         })
-      }, 100);
+      }, 80);
 
       function moveMissile() {
         // move the missile
