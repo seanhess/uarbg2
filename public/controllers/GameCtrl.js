@@ -6,14 +6,14 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   if ($routeParams.debugPlayerName)
     CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1"}
 
-  var players = new Players($scope.gameId, $routeParams.debugPlayerName)
+  var players = new Players($scope.gameId)
   $scope.players = players
 
   $scope.position = function (player) {
-    return {left: player.x * 30 + "px", top: player.y * 30 + "px"}
+    return {left: player.x * 50 + "px", top: player.y * 50 + "px"}
   }
   $scope.missilePosition = function (missile) {
-    return {left: missile.x * 30 + "px", top: missile.y * 30 + "px"}
+    return {left: missile.x * 50 + "px", top: missile.y * 50 + "px"}
   }
 
   function getPosition(keycode) {

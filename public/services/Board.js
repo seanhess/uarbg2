@@ -30,8 +30,8 @@ angular.module('services')
     var direction; 
     if (axis == 'x' && distance > 0) direction = "right";
     if (axis == 'x' && distance < 0) direction = "left";
-    if (axis == 'y' && distance > 0) direction = "up";
-    if (axis == 'y' && distance < 0) direction = "down";
+    if (axis == 'y' && distance > 0) direction = "down";
+    if (axis == 'y' && distance < 0) direction = "up";
 
 
     if (map.grid[axis] <= potential || potential < 0) {

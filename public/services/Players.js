@@ -2,7 +2,7 @@
 // Also lets you join
 
 angular.module('services')
-.factory('Players', function($rootScope, FirebaseChannel) {
+.factory('Players', function($rootScope, FirebaseChannel, Board) {
   return function(gameId) {
 
     var gameRef = new FirebaseChannel(gameId)
@@ -10,7 +10,7 @@ angular.module('services')
     var missilesRef = gameRef.child('missiles')
 
     var all = []
-    var allMissiles = []
+    var allMissiles = [/*{x: 3, y: 3, direction:'right', sourcePlayer:"asdfsa"}*/]
     var myname = null
 
     var XMAX = 16
@@ -82,31 +82,42 @@ angular.module('services')
     function onNewMissile(missile) {
       allMissiles.push(missile)
       console.log("onNewMissile()")
+      console.log("allMissiles: "+allMissiles)
       if (missileByPlayerName(missile.sourcePlayer.name) == null) {
         var missTimer
         missTimer = setInterval(function () {
           $rootScope.$apply( function() {
             console.log("Missile timer missile.x="+missile.x+", missile.y="+missile.y)
+            var axis,distance
             if (missile.direction === "right") {
-              missile.x += 1
+              axis='x'
+              distance=1
             } else if (missile.direction === "left") {
-              missile.x -= 1
+              axis='x'
+              distance=-1
             } else if (missile.direction === "up") {
-              missile.y -= 1
+              axis='y'
+              distance=-1
             } else if (missile.direction === "down") {
-              missile.y += 1
+              axis='y'
+              distance=1
             }
-            if (missile.y < 0 || missile.y > YMAX || missile.x < 0 || missile.x > XMAX) {
-                var idx = allMissiles.indexOf(missile)
-                if (idx != -1) allMissiles.splice(idx,1);
-                console.log("Ending missile timer")
-                clearInterval(missTimer);
-                if (missile.sourcePlayer == players.current.name) missilesRef.child(missile.sourcePlayer).remove();
-                return false; // I don't think setInterval cares about these
+            var location = Board.move(missile, axis, distance);
+
+            if (location) {
+              missile[axis] = location.location              
+            } else { // off screen
+              var idx = allMissiles.indexOf(missile)
+              if (idx != -1) allMissiles.splice(idx,1);
+              console.log("Ending missile timer")
+              clearInterval(missTimer);
+              if (missile.sourcePlayer == players.current.name) missilesRef.child(missile.sourcePlayer).remove();
+              return false; // I don't think setInterval cares about these
+
             }
             return true;
           })
-        }, 1000);
+        }, 100);
       } else {
         console.log("skipped creating missile timer due to existing missile")
       }
