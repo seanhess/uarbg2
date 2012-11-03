@@ -23,6 +23,7 @@ angular.module('services')
       player.state = "alive"
       player.wins = 0
       player.losses = 0
+      playersRef.child(player.name).removeOnDisconnect();
       playersRef.child(player.name).set(player);
     }
 

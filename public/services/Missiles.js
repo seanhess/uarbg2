@@ -25,6 +25,7 @@ angular.module('services')
           sourcePlayer: player.name
         }
         console.log("fireMissile()")
+        missilesRef.child(player.name).removeOnDisconnect();
         missilesRef.child(player.name).set(missile)
       } else {
         console.log("fireMissile() skipped due to existing missile")
