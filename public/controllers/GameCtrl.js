@@ -16,7 +16,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
 
 
   // AUDIO
-  //SoundEffects.music()
+  SoundEffects.music()
 
   $scope.test = function() {
     SoundEffects.levelUp()
