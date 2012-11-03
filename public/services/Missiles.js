@@ -54,20 +54,25 @@ angular.module('services')
         if (!location) return explodeMissile(missile)
         missile[position.axis] = location.location              
 
-        // Check to see if the missile hits me! (only me, not all players)
-        if (Board.isHit(Players.current, missile)) {
+        // Check to see if the missile hits anyone
+        var hitPlayer = Players.all.filter(function(player) {
+            return Board.isHit(player, missile)
+        })[0]
+
+        if (hitPlayer) {
+          explodeMissile(missile)
+          if (hitPlayer == Players.current) 
             Players.killPlayer(Players.current)
-            explodeMissile(missile)
         }
       }
 
+      // how to do this? should I client-side predict?
       function explodeMissile(missile) {
         var idx = allMissiles.indexOf(missile)
         if (idx != -1) allMissiles.splice(idx,1)
         clearInterval(missTimer)
         missilesRef.child(missile.sourcePlayer).remove()
       }
-
     }
 
     function onRemovedMissile(missile) {

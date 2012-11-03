@@ -15,14 +15,12 @@ Install
 Todo
 ----
 
-* connect via pusher or pubnub
 * matchmaking via geolocation
-* movement
-* missile firing
-* winning
 
+* (Jeff) monitization
 
+* Change the blue background
+* Skinning the main screen
 
-* who is in the game, avatar and name
-* you pick a name and avatar
-* then it puts you right in (delay)
+* (Sean) Bug: winning and resetting the game
+* (Sean) Rocket

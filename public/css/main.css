@@ -136,6 +136,11 @@ html {
 #identify .menu .players .player {
   clear: both;
 }
+#identify .menu .gameId {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
 #identify .title {
   display: block;
   margin: 0px auto;
