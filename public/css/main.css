@@ -284,6 +284,9 @@ html {
 #identify img.lock-image {
   float: right;
   padding-top: 30px;
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
 }
 #identify .menu {
   -webkit-transition: all 500ms linear;
@@ -310,6 +313,11 @@ html {
 #identify .menu .avatars .avatar.selected {
   border: solid 3px #faa;
   margin: 0;
+}
+#identify .menu .avatars .avatar.locked:hover,
+#identify .menu .avatars .avatar.locked.selected {
+  border: none;
+  margin: 3px;
 }
 #identify .menu .name {
   clear: both;
