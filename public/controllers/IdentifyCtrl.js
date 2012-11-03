@@ -1,7 +1,7 @@
 
 // https://seanhess.firebaseio.com/
 
-function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
+function IdentifyCtrl($scope, Players, CurrentPlayer, $location, AppVersion) {
 
   // HACKY way to do the transition
   $scope.intro = "intro"
@@ -12,6 +12,8 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
         $scope.intro = "show"
       })
   }, 1200)
+
+  $scope.version = AppVersion
 
   // see if they have a preferred name and gameId
   $scope.player = CurrentPlayer.loadPreferences()

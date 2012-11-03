@@ -4,6 +4,13 @@ html {
   margin: 0px;
   background-color: #333;
 }
+.version {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  color: #fff;
+  font-weight: bold;
+}
 #board {
   margin: 0 auto;
   background: url("/images/bg.jpg") repeat;

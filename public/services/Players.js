@@ -1,8 +1,7 @@
 // This service keeps track of all the current players (in an array), and merges moves into your stuff
 // Also lets you join
 
-angular.module('services')
-.factory('Players', function($rootScope, FB, Board) {
+angular.module('services').factory('Players', function($rootScope, FB, Board, AppVersion) {
   return function(gameId) {
 
     var taunt_list = [
@@ -34,6 +33,7 @@ angular.module('services')
       player.wins = player.wins || 0
       player.losses = player.losses || 0
       player.message = null
+      player.version = AppVersion
 
       var ref = playersRef.child(player.name)
       ref.removeOnDisconnect();
@@ -184,6 +184,12 @@ angular.module('services')
       return all.filter(isAlive)
     }
 
+    function latestVersion() {
+      return _(all).max(function(player) {
+        return player.version
+      })
+    }
+
     var players = { 
       current: null, 
       winner: null,
@@ -195,6 +201,7 @@ angular.module('services')
       move: move,
       killPlayer: killPlayer,
       playerByName: playerByName,
+      latestVersion: latestVersion
     }
 
     return players

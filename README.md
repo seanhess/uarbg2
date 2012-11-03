@@ -21,6 +21,7 @@ Todo
 
 * Change the blue background
 
-* (Sean) Bug: winning and resetting the game
 * (Sean) Rocket
 * Skinning the main screen
+
+* Boot old players! Save your player version
