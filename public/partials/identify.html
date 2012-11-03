@@ -9,9 +9,10 @@
       <div 
         ng-repeat="name in avatars"
         class="avatar {{name}}" 
-        ng-class="{selected: isPlayerAvatar(name)}"
+        ng-class="{selected: isPlayerAvatar(name), locked: avatarIsLocked(name)}"
         ng-click="selectAvatar(name)"
-      ></div>
+      ><div ng-show="avatarIsLocked(name)"><img class="lock-image" src="images/lock.png"></div>
+      </div>
     </div>
 
     <div class="name">
@@ -39,7 +40,7 @@
     </div>
 
     <div class="upgrade-link">
-      <span ng-hide="players.isPaid" ><a href="https://spb.io/s/osgtq3F3kS">Pay $1.00 to unlock all features!</a></span>
+      <span ng-hide="players.isPaid" ><a class="upgrade-button" href="https://spb.io/s/osgtq3F3kS">Pay $1.00 to unlock all features!</a></span>
       <span ng-show="players.isPaid">Thank you for your support!</span>
     </div>
 

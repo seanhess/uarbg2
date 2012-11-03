@@ -25,6 +25,17 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location, AppVersion) {
 
   // available avatars
   $scope.avatars = ['player1', 'player2', 'player3', 'player4', 'player5', 'player6']
+  $scope.freeAvatars = ['player1','player2']
+  $scope.avatarIsFree = function (avatarName) {
+    return ($scope.freeAvatars.indexOf(avatarName) != -1);
+  }
+  $scope.avatarIsAvailable = function (avatarName) {
+    return (players.isPaid || $scope.freeAvatars.indexOf(avatarName) != -1);
+  }
+
+  $scope.avatarIsLocked = function (avatarName) {
+    return ($scope.avatarIsAvailable(avatarName) != true);
+  }
 
   // [ ] Pick a name and avatar
   // set a service with the currently selected player. the name and avatar, etc
@@ -49,8 +60,12 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location, AppVersion) {
   }
 
   $scope.selectAvatar = function(name) {
-    $scope.player = $scope.player || {}
-    $scope.player.avatar = name
+    if ($scope.avatarIsAvailable(name)) {
+      $scope.player = $scope.player || {}
+      $scope.player.avatar = name
+    } else {
+      window.location = "https://spb.io/s/osgtq3F3kS";
+    }
   }
 
   $scope.isPlayerAvatar = function(name) {
