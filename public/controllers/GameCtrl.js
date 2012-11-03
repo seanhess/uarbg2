@@ -6,7 +6,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
-    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1", state: "alive"}
+    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player" + Math.floor(Math.random()*6), state: "alive"}
 
   // only play if you are identified
   if (!CurrentPlayer.player) 
@@ -26,11 +26,14 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
   $scope.missiles = missiles
 
 
+  $scope.latestAlert = "Sean blew up Merrick!"
+
+
   // AUDIO
   SoundEffects.music()
 
   $scope.test = function() {
-    SoundEffects.levelUp()
+
   }
 
   var LEFT = 37,

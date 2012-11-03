@@ -21,7 +21,8 @@ Todo
 
 * Change the blue background
 
-* (Sean) Rocket
+* (Will) Rocket
 * Skinning the main screen
 
 * Boot old players! Save your player version
+* Bug: tracking points / wins correctly?
