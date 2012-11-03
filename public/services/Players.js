@@ -65,19 +65,24 @@ angular.module('services')
       })
     }
     function fireMissile(player) {
-      var missile = {
-        x: player.x,
-        y: player.y,
-        direction: player.facing,
-        sourcePlayer: player.name
+      if (missileByPlayerName(player.name) == null) {
+        var missile = {
+          x: player.x,
+          y: player.y,
+          direction: player.facing,
+          sourcePlayer: player.name
+        }
+        console.log("fireMissile()")
+        missilesRef.child(player.name).set(missile)
+      } else {
+        console.log("fireMissile() skipped due to existing missile")
       }
-      console.log("fireMissile()")
-      missilesRef.child(player.name).set(missile)
     }
 
     function onNewMissile(missile) {
       allMissiles.push(missile)
       console.log("onNewMissile()")
+      return;
       var missTimer
       missTimer = setInterval(function () {
         $rootScope.$apply( function() {
@@ -96,7 +101,7 @@ angular.module('services')
               if (idx != -1) allMissiles.splice(idx,1);
               console.log("Ending missile timer")
               clearInterval(missTimer);
-              missilesRef.child(missile.sourcePlayer).remove();
+              if (missile.sourcePlayer == players.current.name) missilesRef.child(missile.sourcePlayer).remove();
               return false; // I don't think setInterval cares about these
           }
           return true;
