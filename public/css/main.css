@@ -35,6 +35,9 @@ html {
 #board .player2 {
   background: url("/images/player2.png") no-repeat -150px -150px;
 }
+#board .player3 {
+  background: url("/images/player3.png") no-repeat -150px -150px;
+}
 #board .missile {
   background-color: #f00;
   position: absolute;
@@ -73,6 +76,9 @@ html {
 }
 #identify .menu .avatar.player2 {
   background: url("/images/player2.png") no-repeat center bottom;
+}
+#identify .menu .avatar.player3 {
+  background: url("/images/player3.png") no-repeat center bottom;
 }
 #identify .menu .avatars .avatar:hover,
 #identify .menu .avatars .avatar.selected {
