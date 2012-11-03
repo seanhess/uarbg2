@@ -76,8 +76,12 @@ angular.module('services').factory('Players', function($rootScope, FB, Board, Ap
       player.wins = remotePlayer.wins;
       player.losses = remotePlayer.losses;
       player.walking = remotePlayer.walking;
+      if (remotePlayer.killer) player.killer = remotePlayer.killer
 
-      if (player.state == STATE_DEAD) checkWin()
+      if (player.state == STATE_DEAD) {
+        $rootScope.$broadcast("kill", player)
+        checkWin()
+      }
     }
 
     function onQuit(player) {
@@ -157,9 +161,11 @@ angular.module('services').factory('Players', function($rootScope, FB, Board, Ap
     }
 
     // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
-    function killPlayer(player) {
+    function killPlayer(player, killerName) {
       player.state = STATE_DEAD
       player.losses += 1
+      player.killer = killerName
+      console.log("KILL PLAYER", player)
       FB.update(playersRef.child(player.name), player)
     }
 

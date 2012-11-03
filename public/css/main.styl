@@ -1,9 +1,12 @@
+
+carbon = url(/images/carbon_fibre.png) #333
+aluminum = url(/images/brushed_alu_dark.png) #888
+
 body, html
   padding 0px
   margin 0px
-  background-color #333
+  background carbon
   font-family "Helvetica"
-
 
 .version
   position absolute
@@ -26,8 +29,11 @@ body, html
 
   .logo
     position relative
-    background-color #888
+    background aluminum
     margin-bottom 10px
+    padding 4px
+    color white
+    font-weight bold
 
   .content
     margin-left 10px
@@ -40,14 +46,16 @@ body, html
     padding-top 5px
     padding-bottom 5px
     .label
-      background-color #888
+      background aluminum
       padding 5px
+      color white
     .alert
       display inline-block
 
   #board
     margin 10px
     background url(/images/bg3.png) repeat
+    box-shadow(inset 0px 0px 50px 0px rgba(0, 0, 0, 0.8))
     width 800px
     height 600px
     position relative
@@ -115,7 +123,8 @@ body, html
 
 .playerCard
   position relative
-  background-color #888
+  background aluminum
+
   padding 10px
   margin-bottom 10px
   .name
@@ -146,6 +155,20 @@ body, html
       text-align center
       font-size 30px
       font-weight bold
+  &.dead 
+    .status
+      background-color rgba(0, 0, 0, 0.5)
+      position absolute
+      top 0px
+      left 0px
+      height 118px
+
+    .skull
+      background url(/images/dead.png) no-repeat center bottom
+      opacity 0.6
+      width 130px
+      height 89px
+      margin-top 16px
 
 .avatar.player1
   background url(/images/player1.png) no-repeat center bottom
@@ -167,7 +190,8 @@ body, html
 
 #identify
   background url(/images/bg3.png)
-  border solid 5px #333
+  box-shadow(inset 0px 0px 50px 0px rgba(0, 0, 0, 0.8))
+  margin 10px
   min-height 600px
   
   .upgrade-link
@@ -275,11 +299,6 @@ body, html
     &.intro, &.show
       top 100px
 
-
-#intro
-  background url(/images/bg3.png)
-  border solid 5px #333
-  height 600px
 
 
 ////////////// For taunts /////////////

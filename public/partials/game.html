@@ -5,13 +5,16 @@
     <div class="logo">Underwater Adventure Rocket Bazooka Guys 2</div>
 
     <div class="leaderboard">
-      <div class="playerCard"
+      <div class="playerCard {{player.state}}"
         ng-repeat="player in players.all | orderBy:'-wins'">
         <div class="name">{{player.name}}</div>
         <div class="avatarbg">
           <div class="avatar {{player.avatar}}"></div>
         </div>
         <div class="score"><div class="label">Points</div><div class="num">{{player.wins}}</div></div>
+        <div class="status">
+          <div class="skull"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,6 +27,9 @@
     </div>
 
     <div id="board" keypress="keypress(e)" ng-click="test()">
+
+      <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
+
       <div class="player {{player.avatar}}" 
           ng-repeat="player in players.alivePlayers() | filter:{state:'alive'}"
           ng-style="player | position"
@@ -37,8 +43,6 @@
       <div class="missile {{missile.direction}}" ng-style="missile | position"></div>
       </div>
 
-      <!-- centered over the board -->
-      <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
     </div>
 
   </div>

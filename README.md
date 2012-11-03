@@ -17,12 +17,19 @@ Todo
 
 * matchmaking via geolocation
 
-* (Jeff) monitization
-
-* Change the blue background
-
-* (Will) Rocket
 * Skinning the main screen
 
 * Boot old players! Save your player version
-* Bug: tracking points / wins correctly?
+
+
+
+HitList
+------
+* Winning Bug/ Dead player moves. Too many points
+* Explosion
+* Unlocking Payments
+
+Skinning
+* New backgrounds!
+* Bring the playerCard to the main screen
+* Logo with padding and looking nicer
