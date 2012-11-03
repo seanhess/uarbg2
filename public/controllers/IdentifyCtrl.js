@@ -22,7 +22,7 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
   $scope.players = players
 
   // available avatars
-  $scope.avatars = ['player1']
+  $scope.avatars = ['player1', 'player2']
 
   // [ ] Pick a name and avatar
   // set a service with the currently selected player. the name and avatar, etc
