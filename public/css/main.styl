@@ -175,12 +175,55 @@ body, html
     padding-top 50px
     clear both
 
+  .upgrade-button
+    -moz-box-shadow inset 0px 1px 0px 0px #ffffff
+    -webkit-box-shadow inset 0px 1px 0px 0px #ffffff
+    box-shadow inset 0px 1px 0px 0px #ffffff
+    background-color #78d34f
+    background-image -webkit-gradient(linear, left top, left bottom, from(rgb(120, 211, 79)), to(rgb(62, 164, 38)))
+    background-image -webkit-linear-gradient(top, rgb(120, 211, 79), rgb(62, 164, 38))
+    background-image -moz-linear-gradient(top, rgb(120, 211, 79), rgb(62, 164, 38))
+    background-image -o-linear-gradient(top, rgb(120, 211, 79), rgb(62, 164, 38))
+    background-image -ms-linear-gradient(top, rgb(120, 211, 79), rgb(62, 164, 38))
+    background-image linear-gradient(top, rgb(120, 211, 79), rgb(62, 164, 38))
+    //filter progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#78d34f', EndColorStr='#3ea426')
+    -moz-border-radius 6px
+    -webkit-border-radius 6px
+    border-radius 6px
+    border 1px solid #3ea426
+    display inline-block
+    color #eee
+    font-family arial
+    font-size 15px
+    font-weight bold
+    padding 6px 24px
+    text-decoration none
+    text-shadow 1px 1px 0px #555
+
+  .upgrade-button:hover 
+    background -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #3ea426), color-stop(1, #78d34f) )
+    background -moz-linear-gradient( center top, #3ea426 5%, #78d34f 100% )
+    //filter progid DXImageTransform.Microsoft.gradient(startColorstr='#3ea426', endColorstr='#78d34f')
+    background-color:#3ea426
+
+  .upgrade-button active 
+    position relative
+    top 1px
+
 
   .avatar
     float left
     width 50px
     height 50px
     margin 3px
+
+  .avatar.locked
+    opacity 0.4
+
+  img.lock-image
+    float right
+    padding-top 30px
+
 
   .menu
     transition(all 500ms linear)

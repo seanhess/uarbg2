@@ -206,11 +206,60 @@ html {
   padding-top: 50px;
   clear: both;
 }
+#identify .upgrade-button {
+  -moz-box-shadow: inset 0px 1px 0px 0px #fff;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #fff;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #fff;
+  box-shadow: inset 0px 1px 0px 0px #fff;
+  background-color: #78d34f;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#78d34f), to(#3ea426));
+  background-image: -webkit-linear-gradient(top, #78d34f, #3ea426);
+  background-image: -moz-linear-gradient(top, #78d34f, #3ea426);
+  background-image: -o-linear-gradient(top, #78d34f, #3ea426);
+  background-image: -ms-linear-gradient(top, #78d34f, #3ea426);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #78d34f), color-stop(1, #3ea426));
+  background-image: -webkit-linear-gradient(top, #78d34f 0%, #3ea426 100%);
+  background-image: -moz-linear-gradient(top, #78d34f 0%, #3ea426 100%);
+  background-image: -o-linear-gradient(top, #78d34f 0%, #3ea426 100%);
+  background-image: -ms-linear-gradient(top, #78d34f 0%, #3ea426 100%);
+  background-image: linear-gradient(top, #78d34f 0%, #3ea426 100%);
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #3ea426;
+  display: inline-block;
+  color: #eee;
+  font-family: arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #555;
+}
+#identify .upgrade-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3ea426), color-stop(1, #78d34f));
+  background: -moz-linear-gradient(center top, #3ea426 5%, #78d34f 100%);
+  background-color: #3ea426;
+}
+#identify .upgrade-button active {
+  position: relative;
+  top: 1px;
+}
 #identify .avatar {
   float: left;
   width: 50px;
   height: 50px;
   margin: 3px;
+}
+#identify .avatar.locked {
+  opacity: 0.4;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  filter: alpha(opacity=40);
+}
+#identify img.lock-image {
+  float: right;
+  padding-top: 30px;
 }
 #identify .menu {
   -webkit-transition: all 500ms linear;
