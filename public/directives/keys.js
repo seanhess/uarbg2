@@ -7,10 +7,18 @@ angular.module('directives')
         element.attr('tabindex', 0)
 
 				var onPress = $parse(attrs.keypress)
-				element.bind('keydown', function(e) {
+        var isPressed = false
+
+				element.keydown(function(e) {
+            if (isPressed) return
+            isPressed = true
 				    scope.$apply(function() {
 				    	onPress(scope, {e:e})
 				   	})
 				});				
+
+        element.keyup(function(e) {
+          isPressed = false
+        })
 			}
 	})

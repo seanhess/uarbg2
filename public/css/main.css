@@ -1,8 +1,16 @@
+body,
+html {
+  padding: 0px;
+  margin: 0px;
+  background-color: #333;
+}
 #board {
   background: url("/images/bg.jpg") repeat;
+  border: solid 5px #333;
   width: 800px;
   height: 600px;
   position: relative;
+  outline: none;
 }
 #board .player {
   background: url("/images/player1.png") no-repeat left bottom;
@@ -10,23 +18,70 @@
   width: 40px;
   height: 40px;
 }
-#identify .avatar {
+#board .missile {
+  background-color: #f00;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+#identify {
+  background: url("/images/bg.jpg");
+  border: solid 5px #333;
+  min-height: 600px;
+}
+#identify .menu {
+  -webkit-transition: all 500ms linear;
+  -moz-transition: all 500ms linear;
+  -o-transition: all 500ms linear;
+  -ms-transition: all 500ms linear;
+  transition: all 500ms linear;
+  opacity: 0;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: alpha(opacity=0);
+}
+#identify .menu.show {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+#identify .menu .avatar {
   float: left;
   width: 40px;
   height: 40px;
   margin: 5px;
-  border: solid 3px #eee;
+  border: solid 3px transparent;
 }
-#identify .avatar.player1 {
+#identify .menu .avatar.player1 {
   background: url("/images/player1.png") no-repeat center bottom;
 }
-#identify .avatars .avatar:hover,
-#identify .avatars .avatar.selected {
+#identify .menu .avatars .avatar:hover,
+#identify .menu .avatars .avatar.selected {
   border: solid 3px #faa;
 }
-#identify .name {
+#identify .menu .name {
   clear: both;
 }
-#identify .players .player {
+#identify .menu .players .player {
   clear: both;
+}
+#identify .title {
+  display: block;
+  margin: 0px auto;
+  position: absolute;
+  top: -400px;
+  right: 150px;
+  -webkit-transition: all 1200ms linear;
+  -moz-transition: all 1200ms linear;
+  -o-transition: all 1200ms linear;
+  -ms-transition: all 1200ms linear;
+  transition: all 1200ms linear;
+}
+#identify .title.intro,
+#identify .title.show {
+  top: 100px;
+}
+#intro {
+  background: url("/images/bg.jpg");
+  border: solid 5px #333;
+  height: 600px;
 }

@@ -3,6 +3,17 @@
 
 function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
 
+  // HACKY way to do the transition
+  $scope.intro = "intro"
+
+  // hacky way to do this. cssTransitionEnd would be better
+  setTimeout(function() {
+      $scope.$apply(function() {
+        $scope.intro = "show"
+      })
+  }, 1200)
+
+
   // [ ] detect which game to join ("global")
   $scope.gameId = "global"
   var players = new Players($scope.gameId)

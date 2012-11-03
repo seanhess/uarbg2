@@ -5,7 +5,7 @@ angular.module('filters', [])
 angular.module('uarbg2', ['services', 'directives'], function ($routeProvider) {
     $routeProvider.when('/game/:gameId', {templateUrl: 'partials/game.html', controller: GameCtrl})
     $routeProvider.when('/identify', {templateUrl: 'partials/identify.html', controller: IdentifyCtrl})
-    $routeProvider.otherwise({redirectTo: '/identify'})
+    $routeProvider.otherwise({redirectTo: '/intro'})
 })
 
 //var myDataReference = new Firebase('https://seanhess.firebaseio.com/');
