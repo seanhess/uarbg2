@@ -26,7 +26,12 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
   $scope.missiles = missiles
 
 
-  $scope.latestAlert = "Sean blew up Merrick!"
+  $scope.latestAlert = "Welcome to Your Underwater Adventure"
+
+  $scope.$on("kill", function(e, player) {
+    $scope.latestAlert = player.killer + " blew up " + player.name
+  })
+
 
 
   // AUDIO

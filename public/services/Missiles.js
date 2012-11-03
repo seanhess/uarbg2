@@ -62,7 +62,7 @@ angular.module('services')
         if (hitPlayer) {
           explodeMissile(missile)
           if (hitPlayer == Players.current) 
-            Players.killPlayer(Players.current)
+            Players.killPlayer(Players.current, missile.sourcePlayer)
         }
       }
 

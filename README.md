@@ -27,10 +27,8 @@ HitList
 ------
 * Winning Bug/ Dead player moves. Too many points
 * Explosion
-* Full skinning on two screens
 * Unlocking Payments
 
-
-
-* NewsReel
-* Huge X on death
+Skinning
+* Bring the playerCard to the main screen
+* Logo with padding and looking nicer
