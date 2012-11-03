@@ -25,15 +25,19 @@
 
     <div class="error" ng-show="error">{{error}}</div>
 
-    <div>{{players.all.length}} Players</div>
-    <div class="players">
-      <div class="player" ng-repeat="player in players.all">
-        <div class="avatar {{player.avatar}}"></div>
-        <span class="name">{{player.name}}</span>
-        <span class="state">({{player.state}})</span>
-        <span class="wins">{{player.wins}} Wins</span>
+    <div class="leaderboard">
+      <div class="playerCard {{player.state}}"
+        ng-repeat="player in players.all | orderBy:'-wins'">
+        <div class="name">{{player.name}}</div>
+        <div class="avatarbg">
+          <div class="avatar {{player.avatar}}"></div>
+        </div>
+        <div class="score"><div class="label">Points</div><div class="num">{{player.wins}}</div></div>
+        <div class="status">
+          <div class="skull"></div>
+        </div>
       </div>
-    </div>
+   </div>
 
     <div class="gameId">
       <input ng-model="gameId">
