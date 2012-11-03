@@ -1,5 +1,5 @@
 
-function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board, SoundEffects) {
+function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $location, Board, SoundEffects) {
   $scope.gameId = $routeParams.gameId
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
@@ -13,6 +13,9 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
 
   var players = new Players($scope.gameId)
   $scope.players = players
+
+  var missiles = new Missiles($scope.gameId,players)
+  $scope.missiles = missiles
 
 
 
@@ -79,7 +82,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
       var position = getPosition(e.keyCode);
 
       if (e.keyCode === 32) { //space -> fire missile
-        players.fireMissile(players.current)
+        missiles.fireMissile(players.current)
         console.log("Space hit, firing missile!")
       } else if(position) {
         var position = getPosition(e.keyCode);
@@ -98,4 +101,5 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   console.log("TESTING", CurrentPlayer.player)
   players.join(CurrentPlayer.player)
   players.listen()
+  missiles.listen()
 }
