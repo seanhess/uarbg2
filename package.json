@@ -1,8 +1,8 @@
 {
   "name": "uarbg2",
   "version": "0.0.0",
-  "description": "uarbg2 ======",
-  "main": "app.coffee",
+  "description": "uarbg2",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,7 +19,6 @@
   "dependencies": {
     "express": "3.0.1",
     "stylus": "0.30.1",
-    "nib": "0.8.2",
-    "coffee-script": "1.4.0"
+    "nib": "0.8.2"
   }
 }
