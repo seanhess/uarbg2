@@ -47,6 +47,7 @@ angular.module('services')
 
   return {
     move: move,
-    position: position
+    position: position,
+    unit: map.unit
   };
 })

@@ -1,14 +1,13 @@
 <div id="board" keypress="keypress(e)">
   <div class="player {{player.avatar}}" 
       ng-repeat="player in players.all"
-      ng-style="position(player)"
+      ng-style="player | position"
       sprite="{{player.sprite}}"
       sprite-facing="{{player.facing}}"
       >
-      {{player.name}}
   </div>
   <div ng-repeat="missile in players.allMissiles"> 
- 	<div class="missile" ng-style="missilePosition(missile)">*</div>
+ 	<div class="missile" ng-style="missile | position">*</div>
   </div>
 </div>
 

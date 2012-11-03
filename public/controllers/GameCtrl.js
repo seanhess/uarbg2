@@ -9,13 +9,6 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   var players = new Players($scope.gameId)
   $scope.players = players
 
-  $scope.position = function (player) {
-    return {left: player.x * 50 + "px", top: player.y * 50 + "px"}
-  }
-  $scope.missilePosition = function (missile) {
-    return {left: missile.x * 50 + "px", top: missile.y * 50 + "px"}
-  }
-
   function getPosition(keycode) {
     var left = 37,
         up = 38,
