@@ -1,52 +1,22 @@
 // This service keeps track of the missiles
 
 angular.module('services')
-.factory('Missiles', function($rootScope, FirebaseChannel, Board) {
+.factory('Missiles', function($rootScope, FB, Board) {
   return function(gameId, Players) {
-    console.log(Players)
-    var gameRef = new FirebaseChannel(gameId)
-    //var playersRef = gameRef.child('players')    
+
+    var gameRef = new FB(gameId)
     var missilesRef = gameRef.child('missiles')
-    var gameStatusRef = gameRef.child('gameStatus')
 
-    var allMissiles = [/*{x: 3, y: 3, direction:'right', sourcePlayer:"asdfsa"}*/]
-
-
+    // {x: 3, y: 3, direction:'right', sourcePlayer:"asdfsa"}
+    var allMissiles = []
 
     function listen() {
-      missilesRef.on('child_added', apply(onNewMissile))
-      missilesRef.on('child_removed', apply(onRemovedMissile))
-      //gameStatusRef.on('value',apply(onGameStatusChange))
-    }
-
-    function apply(f) {
-      return function(ref) {
-        if ($rootScope.$$phase)
-          return f(ref.val())
-        $rootScope.$apply(function() {
-          f(ref.val())
-        })
-      }
-    }
-
-
-    // updates only a few keys, instead of having to set all of them.
-    function updateRef(ref, vals){
-      ref.once('value', function(dataSnapshot) {
-        var oldvals = dataSnapshot.val();
-        var key;
-        //console.log("updateRef oldvals: ",oldvals);
-        for (key in vals) {
-          if (vals.hasOwnProperty(key)) {
-            oldvals[key] = vals[key];
-          }
-        }
-        //console.log("updateRef update: ",oldvals)
-        ref.set(oldvals);
-      });
+      missilesRef.on('child_added', FB.apply(onNewMissile))
+      missilesRef.on('child_removed', FB.apply(onRemovedMissile))
     }
 
     function fireMissile(player) {
+      // if the player has a current missile
       if (missileByPlayerName(player.name) == null) {
         var missile = {
           x: player.x,
@@ -66,30 +36,19 @@ angular.module('services')
       allMissiles.push(missile)
       console.log("onNewMissile()")
       console.log("allMissiles: "+allMissiles)
-      var axis,distance
-      if (missile.direction === "right") {
-        axis='x'
-        distance=1
-      } else if (missile.direction === "left") {
-        axis='x'
-        distance=-1
-      } else if (missile.direction === "up") {
-        axis='y'
-        distance=-1
-      } else if (missile.direction === "down") {
-        axis='y'
-        distance=1
-      }
+
+
       if (missileByPlayerName(missile.sourcePlayer.name) == null) {
         var missTimer
         var missileFunc = function () {
           $rootScope.$apply( function() {
             //console.log("Missile timer missile.x="+missile.x+", missile.y="+missile.y)
             
-            var location = Board.move(missile, axis, distance);
+            var position = Board.getPosition(missile.direction)
+            var location = Board.move(missile, position);
             var disposeOfMissile = false
             if (location) {
-              missile[axis] = location.location              
+              missile[position.axis] = location.location              
               var numStillAlive = 0
               var winner = ""
               console.log("Players ",Players)
@@ -108,22 +67,10 @@ angular.module('services')
                 }
               });
               console.log("numStillAlive: "+numStillAlive)
-              /*Players.all.forEach( function(val,key) {
-                console.log("  all["+key+"]: ",val)
-                  
-              })*/
               
               if (numStillAlive <= 1)  {
                 console.log("numStillAlive <= 1")
                 console.log("GAME OVER, "+winner+" wins!")
-                /*gameStatusRef.set({status:"over", winner: winner});
-                setTimeout(function () {
-                  all.forEach(function(val,key) {
-                    updateRef(playersRef.child(val.name),{state:"alive"})
-                  })
-                  gameStatusRef.set({status:"playing", winner: ""});
-
-                },5000);*/
               }
             } else { // off screen
               disposeOfMissile = true;
@@ -151,13 +98,14 @@ angular.module('services')
       console.log("onRemovedMissile()")
     }
 
-
-    
-
     function missileByPlayerName(name) {
       return allMissiles.filter(function(p) {
         return (p.sourcePlayer == name)
       })[0]
+    }
+
+    function currentPlayerHasMissile(name) {
+
     }
 
     var missiles = { 

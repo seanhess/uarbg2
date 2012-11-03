@@ -2,10 +2,10 @@
 // Also lets you join
 
 angular.module('services')
-.factory('Players', function($rootScope, FirebaseChannel, Board) {
+.factory('Players', function($rootScope, FB, Board) {
   return function(gameId) {
 
-    var gameRef = new FirebaseChannel(gameId)
+    var gameRef = new FB(gameId)
     var playersRef = gameRef.child('players')    
     
     var gameStatusRef = gameRef.child('gameStatus')
@@ -24,22 +24,15 @@ angular.module('services')
       playersRef.child(player.name).set(player);
     }
 
-    function listen() {
-      //if (gameStatusRef.val() == null) gameStatusRef.set({status:"playing", winner: ""});
-      playersRef.on('child_added', apply(onJoin))
-      playersRef.on('child_changed', apply(onMove))
-      playersRef.on('child_removed', apply(onQuit))
-      gameStatusRef.on('value',apply(onGameStatusChange))
-    }
+    // what can change on a person?
+    // position = {x, y, facing}
+    // then you can bind to it separately
 
-    function apply(f) {
-      return function(ref) {
-        if ($rootScope.$$phase)
-          return f(ref.val())
-        $rootScope.$apply(function() {
-          f(ref.val())
-        })
-      }
+    function listen() {
+      playersRef.on('child_added', FB.apply(onJoin))
+      playersRef.on('child_changed', FB.apply(onUpdate))
+      playersRef.on('child_removed', FB.apply(onQuit))
+      gameStatusRef.on('value', FB.apply(onGameStatusChange))
     }
 
     function onJoin(player) {
@@ -49,11 +42,13 @@ angular.module('services')
       all.push(player)
     }
 
-    function onMove(remotePlayer) {
+    function onUpdate(remotePlayer) {
       var player = playerByName(remotePlayer.name)
       if (!player) {
         return console.log("Error, player not found: "+remotePlayer.name)
       }
+
+      // copy as many properites as you care about
       player.x = remotePlayer.x
       player.y = remotePlayer.y
       player.facing = remotePlayer.facing
@@ -67,26 +62,8 @@ angular.module('services')
     }
 
     function killPlayer(player) {
-      updateRef(playersRef.child(player.name),{state: 'dead'})
+        playersRef.child(player.name).child("state").set("dead")
     }
-
-
-    // updates only a few keys, instead of having to set all of them.
-    function updateRef(ref, vals){
-      ref.once('value', function(dataSnapshot) {
-        var oldvals = dataSnapshot.val();
-        var key;
-        //console.log("updateRef oldvals: ",oldvals);
-        for (key in vals) {
-          if (vals.hasOwnProperty(key)) {
-            oldvals[key] = vals[key];
-          }
-        }
-        //console.log("updateRef update: ",oldvals)
-        ref.set(oldvals);
-      });
-    }
-
 
     function onGameStatusChange(gamestatus) {
       console.log("onGameStatusChange ",gamestatus)
@@ -95,13 +72,17 @@ angular.module('services')
       } else if (gamestatus.status == "playing") {
         console.log("status: playing")
       } else if (gamestatus.status == "over") {
-        alert("Game over!  "+gamestatus.winner+" won!")
+        console.log("Game over!  "+gamestatus.winner+" won!")
       }
     } 
 
     function move(player) {
-      //playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y, avatar: player.avatar, facing: player.facing, state: player.state})
-      updateRef(playersRef.child(player.name), {x:player.x, y:player.y, facing: player.facing})
+      var playerRef = getPlayerRef(player.name)
+      FB.update(playerRef, player)
+    }
+
+    function getPlayerRef(name) {
+      return playersRef.child(name)
     }
     
     function playerByName(name) {
