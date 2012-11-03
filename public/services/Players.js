@@ -5,6 +5,14 @@ angular.module('services')
 .factory('Players', function($rootScope, FB, Board) {
   return function(gameId) {
 
+    var taunt_list = [
+      "Oooh yeah!",
+      "I fart in your general direction.",
+      "Your mother was a hamster and your father smelt of elderberries.",
+      "All your base are belong to us!",
+      "OK, next round, try it WITH your glasses on.",
+      "If your daddy's aim is as bad as yours, I'm surprised you're here at all!"
+      ]
 
     var STATE_ALIVE = "alive"
     var STATE_DEAD = "dead"
@@ -24,6 +32,7 @@ angular.module('services')
       player.state = STATE_ALIVE
       player.wins = player.wins || 0
       player.losses = player.losses || 0
+      player.message = null
 
       var ref = playersRef.child(player.name)
       ref.removeOnDisconnect();
@@ -102,11 +111,13 @@ angular.module('services')
     function onWinner(player) {
       if (!player) {
         players.winner = null
+        players.taunt = null
         return
       }
       if (players.winner == player) return
       players.winner = player
       console.log("ON WINNER", player)
+      players.taunt = taunt_list[Math.floor(Math.random()*taunt_list.length)];
 
       setTimeout(function() {
         console.log("STARTING")
@@ -167,6 +178,7 @@ angular.module('services')
     var players = { 
       current: null, 
       winner: null,
+      taunt: null,
       all: all,
       alivePlayers: alivePlayers,
       join: join,
