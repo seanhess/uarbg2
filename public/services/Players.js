@@ -5,7 +5,7 @@ angular.module('services')
 .factory('Players', function($rootScope, FirebaseChannel) {
   return function(gameId) {
 
-    var gameRef = new FirebaseChannel("fake")
+    var gameRef = new FirebaseChannel(gameId)
     var playersRef = gameRef.child('players')    
     var missilesRef = gameRef.child('missiles')
 
