@@ -13,16 +13,13 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
       })
   }, 1200)
 
+  // see if they have a preferred name and gameId
+  $scope.player = CurrentPlayer.loadPreferences()
+  $scope.gameId = $scope.player.gameId || "global"
 
   // [ ] detect which game to join ("global")
   var players = new Players($scope.gameId)
-
-  // [ ] provide current players with avatars for that game
   $scope.players = players
-
-  // see if they have a preferred name
-  $scope.player = CurrentPlayer.loadPreferences()
-  $scope.gameId = $scope.player.gameId || "global"
 
   // available avatars
   $scope.avatars = ['player1', 'player2', 'player3', 'player4', 'player5', 'player6']

@@ -24,6 +24,7 @@ angular.module('services')
     var myname = null
 
     function join(player) {
+      //console.log("Join:", player.name)
       myname = player.name
       player.x = Board.randomX()
       player.y = Board.randomY()
@@ -52,7 +53,7 @@ angular.module('services')
     }
 
     function onJoin(player) {
-      if (player.name == myname) {
+      if (!players.current && player.name == myname) {
         players.current = player
       }
       all.push(player)
@@ -63,6 +64,8 @@ angular.module('services')
       if (!player) {
         return console.log("Error, player not found: "+remotePlayer.name)
       }
+
+      //console.log("Update:", player.name, "state="+player.state)
 
       // copy as many properites as you care about
       player.x = remotePlayer.x
@@ -116,7 +119,7 @@ angular.module('services')
       }
 
       // don't "WIN" twice if you're already the winner
-      if (players.winner == player) return
+      if (players.winner && players.winner.name == player.name) return
 
       // set the winner on all computers
       players.winner = player
@@ -129,13 +132,13 @@ angular.module('services')
       //if (players.winner) console.log(" - old", players.winner.name)
       //console.log("PASSED")
 
-      if (players.current.name == player.name) {
+      if (players.current && players.current.name == player.name) {
         setTimeout(resetGame, 3000)
       }
     }
 
     function resetGame() {
-        //console.log("Initialize Game")
+        console.log("Initialize Game")
         // build walls?? (how t
         // for each player, make them alive
         gameRef.child('winner').remove()
