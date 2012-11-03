@@ -9,7 +9,10 @@ angular.module('services')
       "Oooh yeah!",
       "I fart in your general direction.",
       "Your mother was a hamster and your father smelt of elderberries.",
-      "All your base are belong to us!"]
+      "All your base are belong to us!",
+      "OK, next round, try it WITH your glasses on.",
+      "If your daddy's aim is as bad as yours, I'm surprised you're here at all!"
+      ]
 
     var STATE_ALIVE = "alive"
     var STATE_DEAD = "dead"
