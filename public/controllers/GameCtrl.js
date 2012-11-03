@@ -15,9 +15,12 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   $scope.players = players
 
 
-
   // AUDIO
-  SoundEffects.music.play()
+  //SoundEffects.music()
+
+  $scope.test = function() {
+    SoundEffects.levelUp()
+  }
 
   function getPosition(keycode) {
     var left = 37,
