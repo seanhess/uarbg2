@@ -13,14 +13,13 @@ angular.module('services')
     var allMissiles = [/*{x: 3, y: 3, direction:'right', sourcePlayer:"asdfsa"}*/]
     var myname = null
 
-    var XMAX = 16
-    var YMAX = 16
 
     function join(player) {
       myname = player.name
       player.x = 0
       player.y = 0
       player.facing = "down"
+      player.state = "alive"
 
       playersRef.child(player.name).set(player)
     }
@@ -109,7 +108,7 @@ angular.module('services')
               missile[axis] = location.location              
               all.forEach( function (val,key) {
                 if (val.x == missile.x && val.y == missile.y) {
-                  playersRef.child(val.name).set({name: val.name, x:val.x, y: val.y, avatar: ""/*val.avatar*/, facing: val.facing})            
+                  playersRef.child(val.name).set({name: val.name, x:val.x, y: val.y, avatar: ""/*val.avatar*/, facing: val.facing, state: "dead"})            
                   console.log("Killed "+val.name)
                   disposeOfMissile = true;
                 }
@@ -141,7 +140,7 @@ angular.module('services')
     }
 
     function move(player) {
-      playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y, avatar: player.avatar, facing: player.facing})
+      playersRef.child(player.name).set({name: player.name, x:player.x, y: player.y, avatar: player.avatar, facing: player.facing, state: player.state})
       // FIXME figure out how to just set x and y only firing one event
     }
     
