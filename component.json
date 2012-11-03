@@ -2,6 +2,7 @@
   "name": "uarbg2",
   "version": "0.0.1",
   "main": "./path/to/main.css",
+  "directory": "public/components",
   "dependencies": {
     "jquery": "git://github.com/components/jquery.git#1.8.1",
     "requirejs": "git://github.com/jrburke/requirejs#2.0.6",
