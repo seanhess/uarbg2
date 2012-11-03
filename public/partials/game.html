@@ -1,4 +1,5 @@
-<div id="board" keypress="keypress(e)">
+<div id="board" keypress="keypress(e)" ng-click="woot()">
+
   <div class="player {{player.avatar}}" 
       ng-repeat="player in players.all"
       ng-style="player | position"

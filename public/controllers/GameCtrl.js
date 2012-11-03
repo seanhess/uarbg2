@@ -1,13 +1,23 @@
 
-function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board) {
+function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board, SoundEffects) {
   $scope.gameId = $routeParams.gameId
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
     CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1"}
 
+  // only play if you are identified
+  if (!CurrentPlayer.player) 
+    return $location.path("/identify")
+
+
   var players = new Players($scope.gameId)
   $scope.players = players
+
+
+
+  // AUDIO
+  SoundEffects.music.play()
 
   function getPosition(keycode) {
     var left = 37,
@@ -84,10 +94,6 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
         }
       }
   }
-
-  // only play if you are identified
-  if (!CurrentPlayer.player) 
-    return $location.path("/identify")
 
   console.log("TESTING", CurrentPlayer.player)
   players.join(CurrentPlayer.player)
