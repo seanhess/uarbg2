@@ -24,7 +24,7 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location, AppVersion) {
   $scope.players = players
 
   // available avatars
-  $scope.avatars = ['player1', 'player2', 'player3', 'player4', 'player5', 'player6']
+  $scope.avatars = ['player2', 'player5', 'player3','player1', 'player4', 'player6']
   $scope.freeAvatars = ['player1','player2']
   $scope.avatarIsFree = function (avatarName) {
     return ($scope.freeAvatars.indexOf(avatarName) != -1);
