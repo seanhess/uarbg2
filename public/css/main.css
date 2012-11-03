@@ -230,6 +230,7 @@ html {
   min-height: 600px;
 }
 #identify .upgrade-link {
+  color: #fff;
   margin: 10px;
 }
 #identify .upgrade-button {
