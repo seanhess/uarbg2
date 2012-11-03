@@ -46,11 +46,20 @@ body, html
     background url(/images/player6.png) no-repeat -150px -150px
     
   .missile
-    background-color #f00 
     position absolute
     width 50px
     height 50px
+    background url(/images/rocket.png) no-repeat 0px 0px
     transition(all 100ms linear)
+
+  .missile.down
+    transform rotate(270deg)
+
+  .missile.right
+    transform rotate(180deg)
+
+  .missile.up
+    transform rotate(90deg)
 
 .scores
   background-color #555
