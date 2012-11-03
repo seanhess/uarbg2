@@ -13,6 +13,12 @@ html {
   position: relative;
   outline: none;
 }
+#board .taunt {
+  position: absolute;
+  left: 50px;
+  top: -20px;
+  min-width: 150px;
+}
 #board .player {
   -webkit-transition-property: top, left;
   -webkit-transition-property: top, left;

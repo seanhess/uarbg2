@@ -7,13 +7,14 @@
       sprite-facing="player.facing"
       sprite-walking="player.walking"
       >
+    <div class="taunt triangle-border left" ng-show="players.taunt">{{players.taunt}}</div>
   </div>
   <div ng-repeat="missile in missiles.allMissiles"> 
  	<div class="missile" ng-style="missile | position">*</div>
   </div>
 
   <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
-  <div class="taunt triangle-border left" ng-style="players.winner | tauntposition" ng-show="players.taunt">{{players.taunt}}</div>
+  
   <!--<div>{{players.current}}</div>-->
 </div>
 <!-- <div class="statusmessage">[ {{players.gameStatusMessage}} ]</div> -->
