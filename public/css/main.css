@@ -6,9 +6,11 @@ html {
 }
 #board {
   background: url("/images/bg.jpg") no-repeat;
+  border: solid 5px #333;
   width: 800px;
   height: 500px;
   position: relative;
+  outline: none;
 }
 #board .player {
   background: url("/images/player1.png") no-repeat center bottom;
@@ -47,7 +49,7 @@ html {
   width: 40px;
   height: 40px;
   margin: 5px;
-  border: solid 3px #eee;
+  border: solid 3px transparent;
 }
 #identify .menu .avatar.player1 {
   background: url("/images/player1.png") no-repeat center bottom;
