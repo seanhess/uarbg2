@@ -63,6 +63,7 @@ angular.module('services')
       player.state = remotePlayer.state;
       player.wins = remotePlayer.wins;
       player.losses = remotePlayer.losses;
+      player.walking = remotePlayer.walking;
 
       if (player.state == STATE_DEAD) checkWin()
     }
