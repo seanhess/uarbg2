@@ -27,6 +27,7 @@
       <div class="player {{player.avatar}}" 
           ng-repeat="player in players.alivePlayers() | filter:{state:'alive'}"
           ng-style="player | position"
+          state="player.state"
           sprite="player.sprite"
           sprite-facing="player.facing"
           sprite-walking="player.walking"

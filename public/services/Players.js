@@ -158,6 +158,7 @@ angular.module('services').factory('Players', function($rootScope, FB, Board, Ap
 
     // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
     function killPlayer(player) {
+      console.log("dead")
       player.state = STATE_DEAD
       player.losses += 1
       FB.update(playersRef.child(player.name), player)

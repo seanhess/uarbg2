@@ -5,6 +5,7 @@ angular.module('directives')
 				// attrs.sprite is "player1"
 
 			var isWalking;
+			var isDying;
 
 			function setFacing(facing) {
 				var facing = (typeof facing == 'undefined') ? "down" : facing;
@@ -26,6 +27,41 @@ angular.module('directives')
 				}
 			}
 
+			function startDying(index) {
+				if(index == "1") {
+					element.css('backgroundPositionY', '0px');
+				}
+
+				if(index == "2") {
+					element.css('backgroundPositionY', '-50px');
+				}
+
+				if(index == "3") {
+					element.css('backgroundPositionY', '-100px');
+				}
+
+				if(index == "4") {
+					element.css('backgroundPositionY', '-150px');
+				}
+
+				if(index == "5") {
+					element.css('backgroundPositionY', '-200px');
+				}
+
+				if(index == "6") {
+					element.css('backgroundPositionY', '-250px');
+				}
+
+				if(index == "7") {
+					element.css('backgroundPositionY', '-300px');
+				}
+
+				if(index == "0") {
+					element.css('backgroundPositionY', '-350px');
+					isDying = false;
+				}
+			}
+
 			function walking() {
 				var i = 0;
 				var animateWalk = function() {
@@ -38,6 +74,22 @@ angular.module('directives')
 				}
 
 				return animateWalk();
+			}
+
+			function dying(callback) {
+				var i = 0;
+				var animateDeath = function() {
+					return setTimeout(function(){
+						startDying(++i % 8);		
+						if(isDying) {
+							animateDeath();
+						} else {
+							callback();
+						}
+					}, 70);
+				}
+
+				return animateDeath();
 			}
 
 			function setSprite(sprite) {
@@ -60,6 +112,22 @@ angular.module('directives')
 
 	        scope.$watch(attrs.spriteFacing, function(val) {
 	          setFacing(val);
+	        })
+
+	        scope.$watch(attrs.state, function(val) {
+	        	if(val == "dead") {
+	        		element.addClass('dead')
+	        		element.css('backgroundPositionX', '0');
+	        		isDying = true;
+	        		dying(function() {
+	        			element.removeClass('dead');
+	        			element.hide();
+	        		});
+	        	} else {
+	        		element.show();
+	        		element.css('backgroundPositionY', '-150px');
+	        		element.css('backgroundPositionX', '-50px');
+	        	}
 	        })
 
 	        scope.$watch(attrs.spriteWalking, function(val) {
