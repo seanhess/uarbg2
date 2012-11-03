@@ -4,6 +4,8 @@ angular.module('directives')
 				// element is the player div
 				// attrs.sprite is "player1"
 
+			var isWalking;
+
 			function setFacing(facing) {
 				var facing = (typeof facing == 'undefined') ? "down" : facing;
 
@@ -22,6 +24,20 @@ angular.module('directives')
 				if(facing == "left") {
 					element.css('backgroundPositionY', '0px');
 				}
+			}
+
+			function walking() {
+				var i = 0;
+				var animateWalk = function() {
+					return setTimeout(function(){
+						setSprite(++i % 3);		
+						if(isWalking) {
+							animateWalk();
+						}
+					}, 70);
+				}
+
+				return animateWalk();
 			}
 
 			function setSprite(sprite) {
@@ -44,6 +60,15 @@ angular.module('directives')
 
 	        scope.$watch(attrs.spriteFacing, function(val) {
 	          setFacing(val);
+	        })
+
+	        scope.$watch(attrs.spriteWalking, function(val) {
+	        	if(val) {
+	        		isWalking = true;
+	        		walking();
+	        	} else {
+	        		isWalking = false;
+	        	}
 	        })
 
 		}

@@ -12,6 +12,11 @@ body, html
   outline none // removes the selected highlight
 
   .player
+    -webkit-transition-property top, left
+    transition-property top, left
+    -ms-transition-property top, left
+    -o-transition-property top, left
+    transition-duration(500ms)
     background url(/images/player1.png) no-repeat -150px -150px
     position absolute
     width 50px

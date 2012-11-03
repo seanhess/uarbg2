@@ -1,23 +1,20 @@
 
-function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board, SoundEffects) {
+function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board) {
   $scope.gameId = $routeParams.gameId
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
     CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1"}
 
-  // only play if you are identified
-  if (!CurrentPlayer.player) 
-    return $location.path("/identify")
-
-
-  var players = new Players($scope.gameId)
+  var players = new Players($scope.gameId, $routeParams.debugPlayerName)
   $scope.players = players
 
-
-
-  // AUDIO
-  SoundEffects.music.play()
+  $scope.position = function (player) {
+    return {left: player.x * 30 + "px", top: player.y * 30 + "px"}
+  }
+  $scope.missilePosition = function (missile) {
+    return {left: missile.x * 30 + "px", top: missile.y * 30 + "px"}
+  }
 
   function getPosition(keycode) {
     var left = 37,
@@ -57,19 +54,19 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
     }
   }
 
-  function getSprite(newDirection) {
-    var slide,
-        previousDirection = players.current.facing,
-        previous = players.current.sprite;
+  // function getSprite(newDirection) {
+  //   var slide,
+  //       previousDirection = players.current.facing,
+  //       previous = players.current.sprite;
 
-    if(previousDirection === newDirection) {
-      slide = ++previous % 3;
-    } else {
-      slide = 1;
-    }
+  //   if(previousDirection === newDirection) {
+  //     slide = ++previous % 3;
+  //   } else {
+  //     slide = 1;
+  //   }
 
-    return slide;
-  }
+  //   return slide;
+  // }
 
   $scope.position = function (player) {
     return Board.position(player.x, player.y)
@@ -87,13 +84,26 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
         var location = Board.move(players.current, position.axis, position.distance);
 
         if (location) {
+          players.current.walking = true;
+
+          setTimeout(function(){
+            $scope.$apply(function() {
+              players.current.walking = false;
+              players.move(players.current);
+            });
+          }, 500);
+
           players.current[location.axis] = location.location;
-          players.current.sprite = getSprite(location.facing);
+         // players.current.sprite = getSprite(location.facing);
           players.current.facing = location.facing;
           players.move(players.current);
         }
       }
   }
+
+  // only play if you are identified
+  if (!CurrentPlayer.player) 
+    return $location.path("/identify")
 
   console.log("TESTING", CurrentPlayer.player)
   players.join(CurrentPlayer.player)
