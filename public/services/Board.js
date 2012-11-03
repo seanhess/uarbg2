@@ -1,8 +1,9 @@
 angular.module('services')
 .factory('Board', function($rootScope) {
+
   var map = { 
-    width: parseInt($('#board').css('width'), 10), 
-    height: parseInt($('#board').css('height'), 10),
+    width: 800,
+    height: 600,
     unit: 50
   }
 
@@ -10,6 +11,8 @@ angular.module('services')
     x: map.width / map.unit,
     y: map.height / map.unit
   }
+
+  console.log(map, map.grid)
 
   // Directions
   var LEFT = "left"
