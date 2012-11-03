@@ -15,7 +15,7 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
 
 
   // [ ] detect which game to join ("global")
-  $scope.gameId = "global"
+  $scope.gameId = "sean"
   var players = new Players($scope.gameId)
 
   // [ ] provide current players with avatars for that game

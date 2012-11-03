@@ -4,7 +4,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
-    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1"}
+    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1", state: "alive"}
 
   // only play if you are identified
   if (!CurrentPlayer.player) 

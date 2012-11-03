@@ -73,10 +73,23 @@ angular.module('services')
     }
   }
 
+  function isHit(one, two) {
+    return (one.x == two.x && one.y == two.y)
+  }
+
+  function makeRandomN(max) {
+    return function() {
+      return Math.floor(Math.random() * max)
+    }
+  }
+
   return {
     move: move,
     getPosition: getPosition,
     unit: map.unit,
+    isHit: isHit,
+    randomX: makeRandomN(map.grid.x),
+    randomY: makeRandomN(map.grid.y),
     LEFT: LEFT,
     RIGHT: RIGHT,
     UP: UP,

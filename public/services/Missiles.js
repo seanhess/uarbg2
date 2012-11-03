@@ -17,92 +17,57 @@ angular.module('services')
     }
 
     function fireMissile(player) {
-      // if the player has a current missile
-      if (missileByPlayerName(player.name) == null && Players.current.state != "dead") {
-        var missile = {
-          x: player.x,
-          y: player.y,
-          direction: player.facing,
-          sourcePlayer: player.name
-        }
-        console.log("fireMissile()")
-        missilesRef.child(player.name).removeOnDisconnect();
-        missilesRef.child(player.name).set(missile)
-      } else {
-        console.log("fireMissile() skipped due to existing missile")
+      if (playerHasMissile(player) && Players.current.state != "dead") return
+
+      var missile = {
+        x: player.x,
+        y: player.y,
+        direction: player.facing,
+        sourcePlayer: player.name
       }
+
+      missilesRef.child(player.name).removeOnDisconnect();
+      missilesRef.child(player.name).set(missile)
     }
 
+    // everyone moves all missiles
+    // only the defending player checks for missile hits
+
+    // TODO use a SINGLE timer for ALL missiles (observer?)
+    // TODO do any missiles collide with each other?
 
     function onNewMissile(missile) {
       allMissiles.push(missile)
       console.log("onNewMissile()")
       console.log("allMissiles: "+allMissiles)
 
+      var missTimer = setInterval(function() {
+        $rootScope.$apply(function() {
+          moveMissile()
+        })
+      }, 100);
 
-      if (missileByPlayerName(missile.sourcePlayer.name) == null) {
-        var missTimer
-        var missileFunc = function () {
-          $rootScope.$apply( function() {
-            //console.log("Missile timer missile.x="+missile.x+", missile.y="+missile.y)
-            
-            var position = Board.getPosition(missile.direction)
-            var location = Board.move(missile, position);
-            var disposeOfMissile = false
-            if (location) {
-              missile[position.axis] = location.location              
-              var numStillAlive = 0
-              var winner = ""
-              //console.log("Players ",Players)
-              //console.log("Players.all ",Players.all)
-              Players.alivePlayers().forEach( function (val,key) {
-                if (val.x == missile.x && val.y == missile.y) {
-                  Players.killPlayer(val)
-                  //playersRef.child(val.name).set({name: val.name, x:val.x, y: val.y, avatar: ""/*val.avatar*/, facing: val.facing, state: "dead"})            
-                  console.log("Killed "+val.name)
-                  disposeOfMissile = true;
-                } else {
-                  if ( val.state != "dead") {
-                    numStillAlive++;
-                    winner = val.name;
-                  }
-                }
-              });
-              console.log("numStillAlive: "+numStillAlive)
-              
-              if (numStillAlive <= 1)  {
-                console.log("numStillAlive <= 1")
-                console.log("GAME OVER, "+winner+" wins!")
-                gameStatusRef.set({status:"over", winner: winner, message: winner+" won!"});
-                /*setTimeout(function () {
-                  all.forEach(function(val,key) {
-                    updateRef(playersRef.child(val.name),{state:"alive"})
-                  })
-                  gameStatusRef.set({status:"playing", winner: ""});
+      function moveMissile() {
+        // move the missile
+        var position = Board.getPosition(missile.direction)
+        var location = Board.move(missile, position);
+        if (!location) return explodeMissile(missile)
+        missile[position.axis] = location.location              
 
-                },5000);*/
-
-              }
-            } else { // off screen
-              disposeOfMissile = true;
-            }
-            if (disposeOfMissile) {
-              var idx = allMissiles.indexOf(missile)
-              if (idx != -1) allMissiles.splice(idx,1);
-              console.log("Ending missile timer")
-              clearInterval(missTimer);
-              if (missile.sourcePlayer == Players.current.name) missilesRef.child(missile.sourcePlayer).remove();
-              return false; // I don't think setInterval cares about these
-            }
-            return true;
-          })
-        };
-
-        missTimer = setInterval(missileFunc, 100);
-        setTimeout(missileFunc,0); // run once so the missile doesn't start ON the player, but already one step in the direction it is moving
-      } else {
-        console.log("skipped creating missile timer due to existing missile")
+        // Check to see if the missile hits me! (only me, not all players)
+        if (Board.isHit(Players.current, missile)) {
+            Players.killPlayer(Players.current)
+            explodeMissile(missile)
+        }
       }
+
+      function explodeMissile(missile) {
+        var idx = allMissiles.indexOf(missile)
+        if (idx != -1) allMissiles.splice(idx,1)
+        clearInterval(missTimer)
+        missilesRef.child(missile.sourcePlayer).remove()
+      }
+
     }
 
     function onRemovedMissile(missile) {
@@ -115,8 +80,8 @@ angular.module('services')
       })[0]
     }
 
-    function currentPlayerHasMissile(name) {
-
+    function playerHasMissile(player) {
+      return missileByPlayerName(player.name)
     }
 
     var missiles = { 
