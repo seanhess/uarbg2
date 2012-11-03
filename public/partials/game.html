@@ -4,7 +4,8 @@
   <div class="player {{player.avatar}}" 
       ng-repeat="player in players.all"
       ng-style="position(player)"
-      sprite="player.sprite"
+      sprite="{{player.sprite}}"
+      sprite-facing="{{player.facing}}"
       >
       {{player.name}}
   </div>

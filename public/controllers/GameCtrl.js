@@ -57,15 +57,10 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   function getSprite(newDirection) {
     var slide,
         previousDirection = players.current.facing,
-        previous = players.current.sprite,
-        newSlide = previous + 1;
-
-    if(newSlide > 3) {
-      newSlide = 3;
-    }
+        previous = players.current.sprite;
 
     if(previousDirection === newDirection) {
-      slide = newSlide;
+      slide = ++previous % 3;
     } else {
       slide = 1;
     }
