@@ -20,7 +20,7 @@ Todo
 * (Jeff) monitization
 
 * Change the blue background
-* Skinning the main screen
 
 * (Sean) Bug: winning and resetting the game
 * (Sean) Rocket
+* Skinning the main screen
