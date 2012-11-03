@@ -17,12 +17,20 @@ Todo
 
 * matchmaking via geolocation
 
-* (Jeff) monitization
-
-* Change the blue background
-
-* (Will) Rocket
 * Skinning the main screen
 
 * Boot old players! Save your player version
-* Bug: tracking points / wins correctly?
+
+
+
+HitList
+------
+* Winning Bug/ Dead player moves. Too many points
+* Explosion
+* Full skinning on two screens
+* Unlocking Payments
+
+
+
+* NewsReel
+* Huge X on death

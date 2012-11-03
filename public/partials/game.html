@@ -24,6 +24,9 @@
     </div>
 
     <div id="board" keypress="keypress(e)" ng-click="test()">
+
+      <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
+
       <div class="player {{player.avatar}}" 
           ng-repeat="player in players.alivePlayers() | filter:{state:'alive'}"
           ng-style="player | position"
@@ -37,8 +40,6 @@
       <div class="missile {{missile.direction}}" ng-style="missile | position"></div>
       </div>
 
-      <!-- centered over the board -->
-      <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
     </div>
 
   </div>
