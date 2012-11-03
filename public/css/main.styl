@@ -1,5 +1,7 @@
-
-
+body, html
+  padding 0px
+  margin 0px
+  background-color #333
 
 #board
   background url(/images/bg.jpg) no-repeat
@@ -19,26 +21,53 @@
     height 50px
 
 #identify
+  background url(/images/bg.jpg)
+  border solid 5px #333
+  min-height 600px
 
-  .avatar
-    float left
-    width 40px
-    height 40px
-    margin 5px
-    border solid 3px #EEE
 
-  .avatar.player1
-    background url(/images/player1.png) no-repeat center bottom
+  .menu
+    transition(all 500ms linear)
+    opacity 0
 
-  .avatars
+    &.show
+      opacity 1
+
     .avatar
-      &:hover, &.selected
-        border solid 3px #FAA
+      float left
+      width 40px
+      height 40px
+      margin 5px
+      border solid 3px #EEE
 
-  .name
-    clear both
+    .avatar.player1
+      background url(/images/player1.png) no-repeat center bottom
 
-  .players
-    .player
+    .avatars
+      .avatar
+        &:hover, &.selected
+          border solid 3px #FAA
+
+    .name
       clear both
+
+    .players
+      .player
+        clear both
+
+  .title
+    display block
+    margin 0px auto
+    position absolute
+    top -400px
+    right 150px
+    transition(all 1200ms linear)
+    &.intro, &.show
+      top 100px
+
+
+#intro
+  background url(/images/bg.jpg)
+  border solid 5px #333
+  height 600px
 
