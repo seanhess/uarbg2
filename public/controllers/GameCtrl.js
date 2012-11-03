@@ -1,5 +1,7 @@
 
-function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $location, Board, SoundEffects) {
+function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $location, Board, SoundEffects, AppVersion) {
+
+  $scope.version = AppVersion
   $scope.gameId = $routeParams.gameId
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
@@ -9,6 +11,13 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
   // only play if you are identified
   if (!CurrentPlayer.player) 
     return $location.path("/identify")
+
+  // not going to help! The person is still in the game!
+  //if (AppVersion != Player.latestVersion()) {
+    //alert("Your version " + AppVersion + " is out of date. Reloading...")
+    //window.location.reload()
+    //return
+  //}
 
   var players = new Players($scope.gameId, $routeParams.debugPlayerName)
   $scope.players = players

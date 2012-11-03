@@ -1,7 +1,7 @@
 
 // https://seanhess.firebaseio.com/
 
-function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
+function IdentifyCtrl($scope, Players, CurrentPlayer, $location, AppVersion) {
 
   // HACKY way to do the transition
   $scope.intro = "intro"
@@ -13,16 +13,15 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
       })
   }, 1200)
 
+  $scope.version = AppVersion
+
+  // see if they have a preferred name and gameId
+  $scope.player = CurrentPlayer.loadPreferences()
+  $scope.gameId = $scope.player.gameId || "global"
 
   // [ ] detect which game to join ("global")
-  $scope.gameId = "global"
   var players = new Players($scope.gameId)
-
-  // [ ] provide current players with avatars for that game
   $scope.players = players
-
-  // see if they have a preferred name
-  $scope.player = CurrentPlayer.loadPreference()
 
   // available avatars
   $scope.avatars = ['player1', 'player2', 'player3', 'player4', 'player5', 'player6']
@@ -45,7 +44,7 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
     }
 
     CurrentPlayer.player = $scope.player
-    CurrentPlayer.savePreference(CurrentPlayer.player)
+    CurrentPlayer.savePreferences(CurrentPlayer.player, $scope.gameId)
     $location.path("/game/" + $scope.gameId)
   }
 

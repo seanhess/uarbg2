@@ -20,7 +20,8 @@ Todo
 * (Jeff) monitization
 
 * Change the blue background
+
+* (Sean) Rocket
 * Skinning the main screen
 
-* (Sean) Bug: winning and resetting the game
-* (Sean) Rocket
+* Boot old players! Save your player version

@@ -1,8 +1,7 @@
 // This service keeps track of all the current players (in an array), and merges moves into your stuff
 // Also lets you join
 
-angular.module('services')
-.factory('Players', function($rootScope, FB, Board) {
+angular.module('services').factory('Players', function($rootScope, FB, Board, AppVersion) {
   return function(gameId) {
 
     var taunt_list = [
@@ -24,6 +23,7 @@ angular.module('services')
     var myname = null
 
     function join(player) {
+      //console.log("Join:", player.name)
       myname = player.name
       player.x = Board.randomX()
       player.y = Board.randomY()
@@ -33,6 +33,7 @@ angular.module('services')
       player.wins = player.wins || 0
       player.losses = player.losses || 0
       player.message = null
+      player.version = AppVersion
 
       var ref = playersRef.child(player.name)
       ref.removeOnDisconnect();
@@ -52,10 +53,9 @@ angular.module('services')
     }
 
     function onJoin(player) {
-      if (player.name == myname) {
+      if (!players.current && player.name == myname) {
         players.current = player
       }
-      console.log("pushing ",player)
       all.push(player)
     }
 
@@ -64,6 +64,8 @@ angular.module('services')
       if (!player) {
         return console.log("Error, player not found: "+remotePlayer.name)
       }
+
+      //console.log("Update:", player.name, "state="+player.state)
 
       // copy as many properites as you care about
       player.x = remotePlayer.x
@@ -109,40 +111,48 @@ angular.module('services')
     }
 
     function onWinner(player) {
+
+      // this can get called with null
       if (!player) {
         players.winner = null
         players.taunt = null
         return
       }
-      if (players.winner == player) return
+
+      // don't "WIN" twice if you're already the winner
+      if (players.winner && players.winner.name == player.name) return
+
+      // set the winner on all computers
       players.winner = player
-      console.log("ON WINNER", player)
       players.taunt = taunt_list[Math.floor(Math.random()*taunt_list.length)];
 
-      setTimeout(function() {
-        console.log("STARTING")
-        // set EVERYONE to alive
-        // or rather, everyone who is connected, can start a new game?
-        // what about a matchId?
-        // if it changes you can set yourself to alive?
+      // only one person should reset the game
+      //console.log("ON WINNER")
+      //if (players.current) console.log(" - me ", players.current.name)
+      //if (player) console.log(" - win", player.name)
+      //if (players.winner) console.log(" - old", players.winner.name)
+      //console.log("PASSED")
+
+      if (players.current && players.current.name == player.name) {
+        setTimeout(resetGame, 3000)
+      }
+    }
+
+    function resetGame() {
+        console.log("Initialize Game")
+        // build walls?? (how t
+        // for each player, make them alive
         gameRef.child('winner').remove()
-        all.forEach(join)
-      }, 3000)
 
-        //console.log("numStillAlive: "+numStillAlive)
-        //if (numStillAlive <= 1)  {
-          //console.log("numStillAlive <= 1")
-          //console.log("GAME OVER, "+winner+" wins!")
-          ////gameStatusRef.set({status:"over", winner: winner, message: winner+" won!"});
-          //[>setTimeout(function () {
-            //all.forEach(function(val,key) {
-              //updateRef(playersRef.child(val.name),{state:"alive"})
-            //})
-            //gameStatusRef.set({status:"playing", winner: ""});
+        all.forEach(function(player) {
+            player.x = Board.randomX()
+            player.y = Board.randomY()
+            player.sprite = '1'
+            player.facing = "down"
+            player.state = STATE_ALIVE
+            FB.update(playersRef.child(player.name), player)
+        })
 
-          //},5000);*/
-
-        //}
     }
 
     // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
@@ -175,6 +185,12 @@ angular.module('services')
       return all.filter(isAlive)
     }
 
+    function latestVersion() {
+      return _(all).max(function(player) {
+        return player.version
+      })
+    }
+
     var players = { 
       current: null, 
       winner: null,
@@ -186,6 +202,7 @@ angular.module('services')
       move: move,
       killPlayer: killPlayer,
       playerByName: playerByName,
+      latestVersion: latestVersion
     }
 
     return players
