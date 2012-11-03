@@ -7,7 +7,6 @@
     "jquery": "git://github.com/components/jquery.git#1.8.1",
     "requirejs": "git://github.com/jrburke/requirejs#2.0.6",
     "underscore": "git://github.com/documentcloud/underscore.git#1.4.2",
-    "angular-modules": "git://github.com/chadhietala/Angular-Modules.git",
     "angular": "git://github.com/angular/bower-angular.git",
     "fjs": "git://github.com/seanhess/fjs#0.5.2"
   }

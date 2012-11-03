@@ -22,6 +22,7 @@ angular.module('services')
     
     var all = []
     var myname = null
+    var isPaidVal = isPaid();
 
     function join(player) {
       myname = player.name
@@ -87,7 +88,7 @@ angular.module('services')
 
       if (alive.length > 1) return
       var winner = alive[0]
-      if (winner != players.current) return
+      if (players.current == null || winner != players.current) return
 
       // only if is ME
       // why not share the winner with everyone?
@@ -174,10 +175,18 @@ angular.module('services')
       return all.filter(isAlive)
     }
 
+    function isPaid() {
+      return (localStorage.getItem("payment_status") == "paid");
+      //return FB.apply(function () {return (localStorage.getItem("payment_status") == "paid")});
+    }
+    console.log("isPaid()= ",isPaid())
+    console.log("isPaidVal= ",isPaidVal)
+
     var players = { 
       current: null, 
       winner: null,
       taunt: null,
+      isPaid: isPaidVal,
       all: all,
       alivePlayers: alivePlayers,
       join: join,

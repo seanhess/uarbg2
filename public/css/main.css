@@ -72,6 +72,11 @@ html {
   border: solid 5px #333;
   min-height: 600px;
 }
+#identify .upgrade-link {
+  float: left;
+  padding-top: 50px;
+  clear: both;
+}
 #identify .menu {
   -webkit-transition: all 500ms linear;
   -moz-transition: all 500ms linear;

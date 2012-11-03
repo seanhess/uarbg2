@@ -31,7 +31,9 @@
         <span class="wins">{{player.wins}} Wins</span>
       </div>
     </div>
+    <div class="upgrade-link"><span ng-hide="players.isPaid" ><a href="https://spb.io/s/osgtq3F3kS">Pay $0.99 to unlock all features!</a></span><span ng-show="players.isPaid">Thank you for your support! {{players.isPaid}}</span></div>
   </div>
+  
 
   <img 
     class="title {{intro}}" 
