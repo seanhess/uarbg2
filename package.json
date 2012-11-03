@@ -11,14 +11,15 @@
     "url": "git://github.com/seanhess/uarbg2.git"
   },
   "engines": {
-    "node": "0.8.x"
+    "node": "0.8.x",
+    "npm": "1.1.x"
   },
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "express": "~3.0.1",
-    "stylus": "~0.30.1",
-    "nib": "~0.8.2",
-    "coffee-script": "~1.4.0"
+    "express": "3.0.1",
+    "stylus": "0.30.1",
+    "nib": "0.8.2",
+    "coffee-script": "1.4.0"
   }
 }
