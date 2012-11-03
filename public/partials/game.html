@@ -2,12 +2,14 @@
   <div class="player {{player.avatar}}" 
       ng-repeat="player in players.all"
       ng-style="player | position"
-      sprite="{{player.sprite}}"
-      sprite-facing="{{player.facing}}"
+      sprite="player.sprite"
+      sprite-facing="player.facing"
       >
   </div>
   <div ng-repeat="missile in players.allMissiles"> 
  	<div class="missile" ng-style="missile | position">*</div>
   </div>
+
+  <!--<div>{{players.current}}</div>-->
 </div>
 
