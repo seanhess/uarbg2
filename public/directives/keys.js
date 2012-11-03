@@ -3,7 +3,7 @@ angular.module('directives', [])
 			return function(scope, element, attrs) {
 				// element is a jquery element
 				var onPress = $parse(attrs.keypress)
-				$(document).keydown(function(e) {
+				element.bind('keydown', function(e) {
 				    scope.$apply(function() {
 				    	onPress(scope, {e:e})
 				   	})

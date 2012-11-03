@@ -54,6 +54,7 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
         players.fireMissile(players.current)
         console.log("Space hit, firing missile!")
       } else {
+        if (!position.axis) return
         var position = getPosition(e.keyCode);
         var location = Board.move(players.current, position.axis, position.distance);
 
