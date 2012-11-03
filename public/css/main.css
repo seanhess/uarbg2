@@ -38,6 +38,15 @@ html {
 #board .player3 {
   background: url("/images/player3.png") no-repeat -150px -150px;
 }
+#board .player4 {
+  background: url("/images/player4.png") no-repeat -150px -150px;
+}
+#board .player5 {
+  background: url("/images/player5.png") no-repeat -150px -150px;
+}
+#board .player6 {
+  background: url("/images/player6.png") no-repeat -150px -150px;
+}
 #board .missile {
   background-color: #f00;
   position: absolute;
@@ -93,6 +102,15 @@ html {
 }
 #identify .menu .avatar.player3 {
   background: url("/images/player3.png") no-repeat center bottom;
+}
+#identify .menu .avatar.player4 {
+  background: url("/images/player4.png") no-repeat center bottom;
+}
+#identify .menu .avatar.player5 {
+  background: url("/images/player5.png") no-repeat center bottom;
+}
+#identify .menu .avatar.player6 {
+  background: url("/images/player6.png") no-repeat center bottom;
 }
 #identify .menu .avatars .avatar:hover,
 #identify .menu .avatars .avatar.selected {
