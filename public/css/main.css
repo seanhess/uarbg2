@@ -3,6 +3,7 @@ html {
   padding: 0px;
   margin: 0px;
   background-color: #333;
+  font-family: "Helvetica";
 }
 .version {
   position: absolute;
@@ -52,6 +53,15 @@ html {
   height: 600px;
   position: relative;
   outline: none;
+}
+#game #board .winner {
+  position: absolute;
+  display: block;
+  border: solid 3px #333;
+  background-color: #fff;
+  padding: 20px;
+  right: 10px;
+  bottom: -10px;
 }
 #game #board .taunt {
   position: absolute;
