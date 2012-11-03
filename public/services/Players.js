@@ -83,41 +83,54 @@ angular.module('services')
       allMissiles.push(missile)
       console.log("onNewMissile()")
       console.log("allMissiles: "+allMissiles)
+      var axis,distance
+      if (missile.direction === "right") {
+        axis='x'
+        distance=1
+      } else if (missile.direction === "left") {
+        axis='x'
+        distance=-1
+      } else if (missile.direction === "up") {
+        axis='y'
+        distance=-1
+      } else if (missile.direction === "down") {
+        axis='y'
+        distance=1
+      }
       if (missileByPlayerName(missile.sourcePlayer.name) == null) {
         var missTimer
-        missTimer = setInterval(function () {
+        var missileFunc = function () {
           $rootScope.$apply( function() {
-            console.log("Missile timer missile.x="+missile.x+", missile.y="+missile.y)
-            var axis,distance
-            if (missile.direction === "right") {
-              axis='x'
-              distance=1
-            } else if (missile.direction === "left") {
-              axis='x'
-              distance=-1
-            } else if (missile.direction === "up") {
-              axis='y'
-              distance=-1
-            } else if (missile.direction === "down") {
-              axis='y'
-              distance=1
-            }
+            //console.log("Missile timer missile.x="+missile.x+", missile.y="+missile.y)
+            
             var location = Board.move(missile, axis, distance);
-
+            var disposeOfMissile = false
             if (location) {
               missile[axis] = location.location              
+              all.forEach( function (val,key) {
+                if (val.x == missile.x && val.y == missile.y) {
+                  playersRef.child(val.name).set({name: val.name, x:val.x, y: val.y, avatar: ""/*val.avatar*/, facing: val.facing})            
+                  console.log("Killed "+val.name)
+                  disposeOfMissile = true;
+                }
+              })
             } else { // off screen
+              disposeOfMissile = true;
+            }
+            if (disposeOfMissile) {
               var idx = allMissiles.indexOf(missile)
               if (idx != -1) allMissiles.splice(idx,1);
               console.log("Ending missile timer")
               clearInterval(missTimer);
               if (missile.sourcePlayer == players.current.name) missilesRef.child(missile.sourcePlayer).remove();
               return false; // I don't think setInterval cares about these
-
             }
             return true;
           })
-        }, 100);
+        };
+
+        missTimer = setInterval(missileFunc, 100);
+        setTimeout(missileFunc,0); // run once so the missile doesn't start ON the player, but already one step in the direction it is moving
       } else {
         console.log("skipped creating missile timer due to existing missile")
       }
