@@ -19,6 +19,8 @@
       <button ng-click="join()">Join</button>
     </div>
 
+    <div class="error" ng-show="error">{{error}}</div>
+
     <h3>Game: "{{gameId}}"</h3>
     <div>{{players.all.length}} Players</div>
     <div class="players">

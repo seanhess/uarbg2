@@ -21,10 +21,12 @@ angular.module('services')
       player.sprite = '1'
       player.facing = "down"
       player.state = "alive"
-      player.wins = 0
-      player.losses = 0
-      playersRef.child(player.name).removeOnDisconnect();
-      playersRef.child(player.name).set(player);
+      player.wins = player.wins || 0
+      player.losses = player.losses || 0
+
+      var ref = playersRef.child(player.name)
+      ref.removeOnDisconnect();
+      ref.set(player);
     }
 
     // what can change on a person?
@@ -117,7 +119,8 @@ angular.module('services')
       listen: listen,
       move: move,
       killPlayer: killPlayer,
-      gameStatusMessage: gameStatusMessage
+      gameStatusMessage: gameStatusMessage,
+      playerByName: playerByName
     }
 
     return players

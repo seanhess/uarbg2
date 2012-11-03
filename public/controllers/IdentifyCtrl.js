@@ -31,8 +31,15 @@ function IdentifyCtrl($scope, Players, CurrentPlayer, $location) {
   // If game doesn't have a current player, then go back to the identify/matchmaking screen!
 
   $scope.join = function() {
-    if (!$scope.player || !$scope.player.avatar || !$scope.player.name)
-      return alert("Please select a valid name and an avatar")
+    if (!$scope.player || !$scope.player.avatar || !$scope.player.name) {
+      $scope.error = "Please select a valid name and an avatar"
+      return
+    }
+
+    if (players.playerByName($scope.player.name)) {
+      $scope.error = '"' + $scope.player.name + '" is already taken'
+      return
+    }
 
     CurrentPlayer.player = $scope.player
     $location.path("/game/" + $scope.gameId)

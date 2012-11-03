@@ -72,6 +72,11 @@ html {
   -ms-filter: none;
   filter: none;
 }
+#identify .menu .error {
+  font-size: 18px;
+  color: #f33;
+  font-weight: bold;
+}
 #identify .menu .avatar {
   float: left;
   width: 40px;
