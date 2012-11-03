@@ -18,6 +18,13 @@ angular.module('services')
 
   // just updates everything, ignore angular $$hashKey
   FB.update = function(ref, obj) {
+    console.log("UPDATE", obj)
+
+    for (var key in obj) {
+      if (obj[key] === undefined)
+        delete obj[key]
+    }
+
     ref.set(_.omit(obj, "$$hashKey"))
   }
 

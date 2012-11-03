@@ -25,7 +25,7 @@ html {
 }
 #game .logo {
   position: relative;
-  background: url("/images/brushed_alu_dark.png") #888;
+  background: #888;
   margin-bottom: 10px;
   padding: 4px;
   color: #fff;
@@ -43,7 +43,7 @@ html {
   padding-bottom: 5px;
 }
 #game .alerts .label {
-  background: url("/images/brushed_alu_dark.png") #888;
+  background: #888;
   padding: 5px;
   color: #fff;
 }
@@ -149,7 +149,7 @@ html {
 }
 .playerCard {
   position: relative;
-  background: url("/images/brushed_alu_dark.png") #888;
+  background: #888;
   padding: 10px;
   margin-bottom: 10px;
 }
@@ -165,6 +165,7 @@ html {
   height: 60px;
 }
 .playerCard .avatar {
+  margin-top: 5px;
   width: 50px;
   height: 50px;
 }
@@ -229,9 +230,8 @@ html {
   min-height: 600px;
 }
 #identify .upgrade-link {
-  float: left;
-  padding-top: 50px;
-  clear: both;
+  color: #fff;
+  margin: 10px;
 }
 #identify .upgrade-button {
   -moz-box-shadow: inset 0px 1px 0px 0px #fff;
@@ -273,12 +273,6 @@ html {
   position: relative;
   top: 1px;
 }
-#identify .avatar {
-  float: left;
-  width: 50px;
-  height: 50px;
-  margin: 3px;
-}
 #identify .avatar.locked {
   opacity: 0.4;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
@@ -300,7 +294,15 @@ html {
   opacity: 0;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   filter: alpha(opacity=0);
-  margin-left: 10px;
+  float: left;
+  width: 200px;
+  margin: 10px;
+  background-color: #333;
+}
+#identify .menu .join {
+  margin: 10px;
+  font-size: 40px;
+  width: 180px;
 }
 #identify .menu.show {
   opacity: 1;
@@ -311,21 +313,35 @@ html {
   font-size: 18px;
   color: #f33;
   font-weight: bold;
+  margin: 10px;
 }
-#identify .menu .avatars .avatar:hover,
-#identify .menu .avatars .avatar.selected {
+#identify .menu .avatarSelection {
+  margin: 10px;
+}
+#identify .menu .avatarSelection .avatar {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin: 3px;
+}
+#identify .menu .avatarSelection .avatar:hover,
+#identify .menu .avatarSelection .avatar.selected {
   border: solid 3px #faa;
   margin: 0;
 }
-#identify .menu .avatars .avatar.locked:hover,
-#identify .menu .avatars .avatar.locked.selected {
+#identify .menu .avatarSelection .avatar.locked:hover,
+#identify .menu .avatarSelection .avatar.locked.selected {
   border: none;
   margin: 3px;
 }
-#identify .menu .name {
+#identify .menu .playerNameInput {
   clear: both;
+  margin: 10px;
+  margin-bottom: 0px;
 }
-#identify .menu .name input {
+#identify .menu .playerNameInput input {
+  margin-top: 10px;
+  font-size: 15px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -333,8 +349,11 @@ html {
   padding-left: 5px;
   padding-right: 5px;
 }
-#identify .menu .players .player {
+#identify .menu .leaderboard {
   clear: both;
+  margin: 10px;
+  margin-left: 30px;
+  margin-bottom: 20px;
 }
 #identify .menu .gameId {
   position: absolute;

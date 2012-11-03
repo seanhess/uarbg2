@@ -1,6 +1,7 @@
 
 carbon = url(/images/carbon_fibre.png) #333
-aluminum = url(/images/brushed_alu_dark.png) #888
+//aluminum = url(/images/brushed_alu_dark.png) #888
+aluminum = #888
 
 body, html
   padding 0px
@@ -141,6 +142,7 @@ body, html
     margin-top 5px
     height 60px
   .avatar
+    margin-top 5px
     width 50px
     height 50px
   .score
@@ -197,11 +199,10 @@ body, html
   box-shadow(inset 0px 0px 50px 0px rgba(0, 0, 0, 0.8))
   margin 10px
   min-height 600px
-  
+
   .upgrade-link
-    float left
-    padding-top 50px
-    clear both
+    color white
+    margin 10px
 
   .upgrade-button
     -moz-box-shadow inset 0px 1px 0px 0px #ffffff
@@ -238,13 +239,6 @@ body, html
     position relative
     top 1px
 
-
-  .avatar
-    float left
-    width 50px
-    height 50px
-    margin 3px
-
   .avatar.locked
     opacity 0.4
 
@@ -257,8 +251,16 @@ body, html
   .menu
     transition(all 500ms linear)
     opacity 0
+    float left
+    width 200px
 
-    margin-left 10px
+    margin 10px
+    background-color #333
+
+    .join
+      margin 10px
+      font-size 40px
+      width 180px
 
     &.show
       opacity 1
@@ -267,10 +269,15 @@ body, html
       font-size 18px
       color #F33
       font-weight bold
+      margin 10px
 
-
-    .avatars
+    .avatarSelection
+      margin 10px
       .avatar
+        width 50px
+        height 50px
+        float left
+        margin 3px
         &:hover, &.selected
           border solid 3px #FAA
           margin 0
@@ -280,19 +287,24 @@ body, html
           margin 3px
           
 
-    .name
+    .playerNameInput
       clear both
+      margin 10px
+      margin-bottom 0px
       input
+        margin-top 10px
+        font-size 15px
         -webkit-border-radius 10px
         -moz-border-radius 10px
         border-radius 10px
         padding-left 5px
         padding-right 5px
 
-    .players
-      .player
-        clear both
-
+    .leaderboard
+      clear both
+      margin 10px
+      margin-left 30px
+      margin-bottom 20px
 
     .gameId
       position absolute

@@ -30,15 +30,19 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
 
   $scope.$on("kill", function(e, player) {
     $scope.latestAlert = player.killer + " blew up " + player.name
+    SoundEffects.explosion()
   })
 
+  $scope.$on("missile", function(e, player) {
+    SoundEffects.rocket()
+  })
 
 
   // AUDIO
   SoundEffects.music()
 
   $scope.test = function() {
-
+    //SoundEffects.rocket()
   }
 
   var LEFT = 37,
