@@ -16,13 +16,22 @@ angular.module('services').factory('SoundEffects', function() {
   var underwater = new Audio("/audio/Underwater.mp3")
 
   function makeMusic(audio, seconds) {
+    console.log("makeMusic ",audio.networkState, " / ", audio.readyState)
     seconds = seconds || 0
+    
     return function() {
+      audio.play();
+    }
+    /*
+    var callback = function() {
       $(audio).bind("canplay", function() {
+        console.log("makeMusic - canplay")
         audio.currentTime = seconds
         audio.play()
       })
     }
+    audio.load()
+    return callback*/
   }
 
   // all parameters required
