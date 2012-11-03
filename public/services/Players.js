@@ -74,13 +74,13 @@ angular.module('services')
       ref.once('value', function(dataSnapshot) {
         var oldvals = dataSnapshot.val();
         var key;
-        console.log("updateRef oldvals: ",oldvals);
+        //console.log("updateRef oldvals: ",oldvals);
         for (key in vals) {
           if (vals.hasOwnProperty(key)) {
             oldvals[key] = vals[key];
           }
         }
-        console.log("updateRef update: ",oldvals)
+        //console.log("updateRef update: ",oldvals)
         ref.set(oldvals);
       });
     }
@@ -154,7 +154,11 @@ angular.module('services')
                 console.log("numStillAlive <= 1")
                 gameStatusRef.set({status:"over", winner: winner});
                 setTimeout(function () {
+                  all.forEach(function(val,key) {
+                    updateRef(playersRef.child(val.name),{state:"alive"})
+                  })
                   gameStatusRef.set({status:"playing", winner: ""});
+
                 },5000);
               }
             } else { // off screen
