@@ -27,6 +27,12 @@ angular.module('services')
     distance = distance || 1;
 
     var potential = position[axis] + distance;
+    var direction; 
+    if (axis == 'x' && distance > 0) direction = "right";
+    if (axis == 'x' && distance < 0) direction = "left";
+    if (axis == 'y' && distance > 0) direction = "up";
+    if (axis == 'y' && distance < 0) direction = "down";
+
 
     if (map.grid[axis] <= potential || potential < 0) {
       return false
@@ -34,7 +40,8 @@ angular.module('services')
 
     return {
       axis: axis,
-      location: potential
+      location: potential,
+      facing: direction
     }
   }
 

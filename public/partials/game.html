@@ -8,5 +8,8 @@
       >
       {{player.name}}
   </div>
+  <div ng-repeat="missile in players.allMissiles"> 
+ 	<div class="missile" ng-style="missilePosition(missile)">*</div>
+  </div>
 </div>
 

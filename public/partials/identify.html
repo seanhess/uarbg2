@@ -1,14 +1,30 @@
 <div id="identify">
   <h1>Underwater Adventure Rocket Bazooka Guys II</h1>
-  <h3>Game: "{{gameId}}"</h3>
-  <input ng-model="player.name" placeholder="Your Name">
-  <button ng-click="join()">Join</button>
+  <p>Choose a name and a character</p>
 
+  <div class="avatars">
+    <div 
+      ng-repeat="name in avatars"
+      class="avatar {{name}}" 
+      ng-class="{selected: isPlayerAvatar(name)}"
+      ng-click="selectAvatar(name)"
+    ></div>
+  </div>
+
+  <div class="name">
+    <input ng-model="player.name" placeholder="Your Name">
+  </div>
+ 
+  <div>
+    <button ng-click="join()">Join</button>
+  </div>
+
+  <h3>Game: "{{gameId}}"</h3>
+  <div>{{players.all.length}} Players</div>
   <div class="players">
     <div class="player" ng-repeat="player in players.all">
-      <img class="avatar" ng-src="{{player.avatar}}"></img>
+      <div class="avatar {{player.avatar}}"></div>
       <span class="name">{{player.name}}</span>
-      {{player | json}}
     </div>
   </div>
 </div>
