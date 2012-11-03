@@ -116,8 +116,9 @@ angular.module('services')
               if (numStillAlive <= 1)  {
                 console.log("numStillAlive <= 1")
                 console.log("GAME OVER, "+winner+" wins!")
-                /*gameStatusRef.set({status:"over", winner: winner});
-                setTimeout(function () {
+
+                gameStatusRef.set({status:"over", winner: winner, message: winner+" won!"});
+                /*setTimeout(function () {
                   all.forEach(function(val,key) {
                     updateRef(playersRef.child(val.name),{state:"alive"})
                   })

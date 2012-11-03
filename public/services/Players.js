@@ -9,7 +9,7 @@ angular.module('services')
     var playersRef = gameRef.child('players')    
     
     var gameStatusRef = gameRef.child('gameStatus')
-
+    var gameStatusMessage = "";
     var all = []
     var myname = null
 
@@ -21,6 +21,8 @@ angular.module('services')
       player.sprite = '1'
       player.facing = "down"
       player.state = "alive"
+      player.wins = 0
+      player.losses = 0
       playersRef.child(player.name).set(player);
     }
 
@@ -58,6 +60,8 @@ angular.module('services')
       player.y = remotePlayer.y
       player.facing = remotePlayer.facing
       player.state = remotePlayer.state;
+      player.wins = player.wins;
+      player.losses = player.losses;
     }
 
     function onQuit(player) {
@@ -67,7 +71,8 @@ angular.module('services')
     }
 
     function killPlayer(player) {
-      updateRef(playersRef.child(player.name),{state: 'dead'})
+      playerLosses = playerByName(player.name).losses
+      updateRef(playersRef.child(player.name),{state: 'dead',losses: playerLosses+1})
     }
 
 
@@ -90,13 +95,25 @@ angular.module('services')
 
     function onGameStatusChange(gamestatus) {
       console.log("onGameStatusChange ",gamestatus)
-      if (gamestatus == null) {
-        gameStatusRef.set({status:"playing", winner: ""})
-      } else if (gamestatus.status == "playing") {
-        console.log("status: playing")
-      } else if (gamestatus.status == "over") {
-        alert("Game over!  "+gamestatus.winner+" won!")
-      }
+      //$rootScope.$apply( function () {
+        if (gamestatus == null) {
+          gameStatusRef.set({status:"playing", winner: "", message: ""})
+        } else if (gamestatus.status == "playing") {
+          console.log("status: playing")
+          gameStatusMessage = gamestatus.message;
+        } else if (gamestatus.status == "over") {
+          gameStatusMessage = gamestatus.message;
+          if (myname == gamestatus.winner) {
+            all.forEach(function(val,key) {
+              updateRef(playersRef.child(val.name),{state:"alive"})
+            });
+            setTimeout(function() {
+              gameStatusRef.set({status:"playing", winner: "", message:""});
+            },2000)  
+          }
+          //alert("Game over!  "+gamestatus.winner+" won!")
+        }
+      //});
     } 
 
     function move(player) {
@@ -117,7 +134,8 @@ angular.module('services')
       join: join,
       listen: listen,
       move: move,
-      killPlayer: killPlayer
+      killPlayer: killPlayer,
+      gameStatusMessage: gameStatusMessage
     }
 
     return players
