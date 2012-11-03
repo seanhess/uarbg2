@@ -178,6 +178,22 @@ html {
   font-size: 30px;
   font-weight: bold;
 }
+.playerCard.dead .status {
+  background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 118px;
+}
+.playerCard.dead .skull {
+  background: url("/images/dead.png") no-repeat center bottom;
+  opacity: 0.6;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
+  filter: alpha(opacity=60);
+  width: 130px;
+  height: 89px;
+  margin-top: 16px;
+}
 .avatar.player1 {
   background: url("/images/player1.png") no-repeat center bottom;
 }

@@ -5,13 +5,16 @@
     <div class="logo">Underwater Adventure Rocket Bazooka Guys 2</div>
 
     <div class="leaderboard">
-      <div class="playerCard"
+      <div class="playerCard {{player.state}}"
         ng-repeat="player in players.all | orderBy:'-wins'">
         <div class="name">{{player.name}}</div>
         <div class="avatarbg">
           <div class="avatar {{player.avatar}}"></div>
         </div>
         <div class="score"><div class="label">Points</div><div class="num">{{player.wins}}</div></div>
+        <div class="status">
+          <div class="skull"></div>
+        </div>
       </div>
     </div>
   </div>
