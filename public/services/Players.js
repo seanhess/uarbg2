@@ -19,6 +19,7 @@ angular.module('services')
       myname = player.name
       player.x = 0
       player.y = 0
+      player.sprite = '1'
       player.facing = "down"
       player.state = "alive"
       playersRef.child(player.name).set(player);

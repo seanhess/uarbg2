@@ -1,20 +1,23 @@
 
-function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board) {
+function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board, SoundEffects) {
   $scope.gameId = $routeParams.gameId
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
     CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player1"}
 
+  // only play if you are identified
+  if (!CurrentPlayer.player) 
+    return $location.path("/identify")
+
+
   var players = new Players($scope.gameId)
   $scope.players = players
 
-  $scope.position = function (player) {
-    return {left: player.x * 50 + "px", top: player.y * 50 + "px"}
-  }
-  $scope.missilePosition = function (missile) {
-    return {left: missile.x * 50 + "px", top: missile.y * 50 + "px"}
-  }
+
+
+  // AUDIO
+  SoundEffects.music.play()
 
   function getPosition(keycode) {
     var left = 37,
@@ -22,27 +25,50 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
         right = 39, 
         down = 40;
 
-    var position = {};
+    //super ghetto, i know. just want to get it working.
+    //was resetting position when a key other than a direction
+    //was being pressed and breaking things
+    if(keycode === up ||
+       keycode === right ||
+       keycode === down ||
+       keycode === left) {
 
-    if(keycode === up) {
-      position.axis = 'y';
-      position.distance = -1; 
+        var position = {};
+
+        if(keycode === up) {
+          position.axis = 'y';
+          position.distance = -1; 
+        }
+
+        if(keycode === right) {
+          position.axis = 'x';
+        }
+
+        if(keycode === down) {
+          position.axis = 'y';
+        }
+
+        if(keycode === left) {
+          position.axis = 'x';
+          position.distance = -1;
+        }
+
+        return position;
+    }
+  }
+
+  function getSprite(newDirection) {
+    var slide,
+        previousDirection = players.current.facing,
+        previous = players.current.sprite;
+
+    if(previousDirection === newDirection) {
+      slide = ++previous % 3;
+    } else {
+      slide = 1;
     }
 
-    if(keycode === right) {
-      position.axis = 'x';
-    }
-
-    if(keycode === down) {
-      position.axis = 'y';
-    }
-
-    if(keycode === left) {
-      position.axis = 'x';
-      position.distance = -1  
-    }
-
-    return position;
+    return slide;
   }
 
   $scope.position = function (player) {
@@ -50,25 +76,24 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
   }
 
   $scope.keypress = function (e) {
+      var position = getPosition(e.keyCode);
+
       if (e.keyCode === 32) { //space -> fire missile
         players.fireMissile(players.current)
         console.log("Space hit, firing missile!")
-      } else {
+      } else if(position) {
         var position = getPosition(e.keyCode);
         if (!position.axis) return
         var location = Board.move(players.current, position.axis, position.distance);
 
         if (location) {
           players.current[location.axis] = location.location;
+          players.current.sprite = getSprite(location.facing);
           players.current.facing = location.facing;
           players.move(players.current);
         }
       }
   }
-
-  // only play if you are identified
-  if (!CurrentPlayer.player) 
-    return $location.path("/identify")
 
   console.log("TESTING", CurrentPlayer.player)
   players.join(CurrentPlayer.player)

@@ -1,4 +1,4 @@
-angular.module('directives', [])
+angular.module('directives')
 	.directive('keypress', function($parse) {
 			return function(scope, element, attrs) {
 				// element is a jquery element

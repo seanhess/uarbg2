@@ -5,15 +5,15 @@ html {
   background-color: #333;
 }
 #board {
-  background: url("/images/bg.jpg") no-repeat;
+  background: url("/images/bg.jpg") repeat;
   border: solid 5px #333;
   width: 800px;
-  height: 500px;
+  height: 600px;
   position: relative;
   outline: none;
 }
 #board .player {
-  background: url("/images/player1.png") no-repeat center bottom;
+  background: url("/images/player1.png") no-repeat -150px -150px;
   position: absolute;
   width: 50px;
   height: 50px;
