@@ -13,10 +13,10 @@
   </div>
 
   <h1 class="winner" ng-show="players.winner">"{{players.winner.name}}" Wins!</h1>
-
+  <div class="taunt triangle-border left" ng-style="players.winner | tauntposition" ng-show="players.taunt">{{players.taunt}}</div>
   <!--<div>{{players.current}}</div>-->
 </div>
-<div class="statusmessage">[ {{players.gameStatusMessage}} ]</div>
+<!-- <div class="statusmessage">[ {{players.gameStatusMessage}} ]</div> -->
 <div class="scores">
 	<ol>
 		<li ng-repeat="player in players.all | orderBy:-player.wins">{{player.name}} {{player.wins}}W / {{player.losses}}L</li>
