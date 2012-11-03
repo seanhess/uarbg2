@@ -11,27 +11,58 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
         right = 39, 
         down = 40;
 
-    var position = {};
+    //super ghetto, i know. just want to get it working.
+    if(keycode === up ||
+       keycode === right ||
+       keycode === down ||
+       keycode === left) {
 
-    if(keycode === up) {
-      position.axis = 'y';
-      position.distance = -1; 
+        var position = {};
+
+        if(keycode === up) {
+          position.axis = 'y';
+          position.distance = -1; 
+          position.direction = 'u';
+        }
+
+        if(keycode === right) {
+          position.axis = 'x';
+          position.direction = 'r';
+        }
+
+        if(keycode === down) {
+          position.axis = 'y';
+          position.direction = 'd';
+        }
+
+        if(keycode === left) {
+          position.axis = 'x';
+          position.distance = -1;
+          position.direction = 'l'; 
+        }
+
+        return position;
+    }
+  }
+
+  function getSprite(direction) {
+    var newDirection,
+        previous = players.current.sprite,
+        previousDirection = previous.charAt(0),
+        previousSlide = previous.charAt(1)
+        newSlide = parseInt(previousSlide) + 1;
+
+    if(newSlide > 3) {
+      newSlide = 3;
     }
 
-    if(keycode === right) {
-      position.axis = 'x';
+    if(previousDirection == direction) {
+      newDirection = direction + newSlide.toString();
+    } else {
+      newDirection = direction + "1";
     }
 
-    if(keycode === down) {
-      position.axis = 'y';
-    }
-
-    if(keycode === left) {
-      position.axis = 'x';
-      position.distance = -1  
-    }
-
-    return position;
+    return newDirection;
   }
 
   $scope.position = function (player) {
@@ -40,10 +71,15 @@ function GameCtrl($scope, Players, $routeParams, CurrentPlayer, $location, Board
 
   $scope.keypress = function (e) {
       var position = getPosition(e.keyCode);
-      var location = Board.move(players.current, position.axis, position.distance);
+
+      if(position) {
+        var location = Board.move(players.current, position.axis, position.distance);
+      }
 
       if (location) {
         players.current[location.axis] = location.location;
+        players.current.sprite = getSprite(position.direction);
+        console.log(players.current.sprite)
         players.move(players.current);
       }
   }

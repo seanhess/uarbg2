@@ -16,6 +16,7 @@ angular.module('services')
       myname = player.name
       player.x = 0
       player.y = 0
+      player.sprite = 'd1'
 
       // ugly! figure out how to do rootScope.apply better!
       playersRef.child(player.name).set(player)

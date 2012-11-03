@@ -3,7 +3,7 @@ angular.module('services')
   var map = { 
     width: parseInt($('#board').css('width'), 10), 
     height: parseInt($('#board').css('height'), 10),
-    unit: 50
+    unit: 40
   };
 
   map.grid = {
