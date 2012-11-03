@@ -10,8 +10,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
   if (!CurrentPlayer.player) 
     return $location.path("/identify")
 
-
-  var players = new Players($scope.gameId)
+  var players = new Players($scope.gameId, $routeParams.debugPlayerName)
   $scope.players = players
 
   var missiles = new Missiles($scope.gameId,players)
@@ -25,42 +24,18 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
     SoundEffects.levelUp()
   }
 
-  function getPosition(keycode) {
-    var left = 37,
-        up = 38,
-        right = 39, 
-        down = 40;
+  var LEFT = 37,
+      UP = 38,
+      RIGHT = 39, 
+      DOWN = 40,
+      SPACE = 32
 
-    //super ghetto, i know. just want to get it working.
-    //was resetting position when a key other than a direction
-    //was being pressed and breaking things
-    if(keycode === up ||
-       keycode === right ||
-       keycode === down ||
-       keycode === left) {
-
-        var position = {};
-
-        if(keycode === up) {
-          position.axis = 'y';
-          position.distance = -1; 
-        }
-
-        if(keycode === right) {
-          position.axis = 'x';
-        }
-
-        if(keycode === down) {
-          position.axis = 'y';
-        }
-
-        if(keycode === left) {
-          position.axis = 'x';
-          position.distance = -1;
-        }
-
-        return position;
-    }
+  function keyCodeToDirection(code) {
+    if (code == LEFT) return Board.LEFT
+    else if (code == RIGHT) return Board.RIGHT
+    else if (code == DOWN) return Board.DOWN
+    else if (code == UP) return Board.UP
+    return false
   }
 
   function getSprite(newDirection) {
@@ -77,22 +52,31 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
     return slide;
   }
 
-  $scope.position = function (player) {
-    return Board.position(player.x, player.y)
-  }
-
   $scope.keypress = function (e) {
-      var position = getPosition(e.keyCode);
 
-      if (e.keyCode === 32) { //space -> fire missile
+      if (e.keyCode === 32) {
         missiles.fireMissile(players.current)
-        console.log("Space hit, firing missile!")
-      } else if(position) {
-        var position = getPosition(e.keyCode);
-        if (!position.axis) return
-        var location = Board.move(players.current, position.axis, position.distance);
+      }
 
+      else {
+        var boardDirection = keyCodeToDirection(e.keyCode)
+        if (!boardDirection) return
+        var position = Board.getPosition(boardDirection)
+        var location = Board.move(players.current, position)
         if (location) {
+          players.current.walking = true;
+
+          setTimeout(function(){
+            $scope.$apply(function() {
+              players.current.walking = false;
+              players.move(players.current);
+            });
+          }, 500);
+
+          players.current[location.axis] = location.location;
+          players.current.facing = location.facing;
+          players.move(players.current);
+
           var collision = false;
           players.all.forEach(function(val,key){
             if (val.name != players.current.name) {
@@ -106,7 +90,6 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
           });
           if (!collision) {
             players.current[location.axis] = location.location;
-            players.current.sprite = getSprite(location.facing);
             players.current.facing = location.facing;
             players.move(players.current);
           } else {
@@ -116,7 +99,6 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
       }
   }
 
-  console.log("TESTING", CurrentPlayer.player)
   players.join(CurrentPlayer.player)
   players.listen()
   missiles.listen()
