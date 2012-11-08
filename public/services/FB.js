@@ -1,7 +1,7 @@
 define(function(require) {
   var app = require('app')
 
-.factory('FB', function($rootScope) {
+  app.main.factory('FB', function($rootScope) {
   var FB = function(gameId) {
     var ref = new Firebase("https://seanhess.firebaseio.com/uarbg2/" + gameId)
     return ref

@@ -5,6 +5,8 @@
 // This service keeps track of all the current players (in an array), and merges moves into your stuff
 // Also lets you join
 
+import app = module("../app")
+
 export class Players {
   current: any;
   winner: any;
@@ -22,7 +24,7 @@ export class Players {
   latestVersion: Function;
 }
 
-angular.module('services').factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion) {
+app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion) {
 
   return function(gameId) {
 

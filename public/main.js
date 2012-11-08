@@ -46,7 +46,7 @@ require([
   //This callback is optional.
 
   angular.element(document).ready(function () {
-    angular.bootstrap(document, ['uarbg'])
+    angular.bootstrap(document, ['uarbg2'])
   })
 
 })

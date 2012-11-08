@@ -1,4 +1,6 @@
-define(["require", "exports"], function(require, exports) {
+define(["require", "exports", "../app"], function(require, exports, __app__) {
+    var app = __app__;
+
     var Players = (function () {
         function Players() {
             this.all = [];
@@ -6,7 +8,7 @@ define(["require", "exports"], function(require, exports) {
         return Players;
     })();
     exports.Players = Players;    
-    angular.module('services').factory('Players', function ($rootScope, FB, Board, AppVersion) {
+    app.main.factory('Players', function ($rootScope, FB, Board, AppVersion) {
         return function (gameId) {
             var taunt_list = [
                 "Oooh yeah!", 
