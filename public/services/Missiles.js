@@ -1,6 +1,10 @@
+define(function(require) {
+  var app = require('app')
+  app.main
+
 // This service keeps track of the missiles
 
-angular.module('services').factory('Missiles', function($rootScope, FB, Board) {
+.factory('Missiles', function($rootScope, FB, Board) {
   return function(gameId, Players) {
 
     var gameRef = new FB(gameId)
@@ -100,3 +104,4 @@ angular.module('services').factory('Missiles', function($rootScope, FB, Board) {
 
 })
 
+})

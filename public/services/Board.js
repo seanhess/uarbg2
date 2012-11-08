@@ -1,4 +1,7 @@
-angular.module('services')
+define(function(require) {
+  var app = require('app')
+  app.main
+
 .factory('Board', function($rootScope) {
 
   var map = { 
@@ -95,4 +98,6 @@ angular.module('services')
     UP: UP,
     DOWN: DOWN,
   }
+})
+
 })

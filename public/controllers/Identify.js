@@ -1,5 +1,5 @@
-var Identify;
-(function (Identify) {
+define(["require", "exports"], function(require, exports) {
+    
     var Controller = (function () {
         function Controller($scope, $location, Players, CurrentPlayer, AppVersion) {
             $scope.intro = "intro";
@@ -11,7 +11,7 @@ var Identify;
             $scope.version = AppVersion;
             $scope.player = CurrentPlayer.loadPreferences();
             $scope.gameId = $scope.player.gameId || "global";
-            var players = new Players($scope.gameId);
+            var players = Players($scope.gameId);
             $scope.players = players;
             $scope.avatars = [
                 'player2', 
@@ -63,6 +63,6 @@ var Identify;
         }
         return Controller;
     })();
-    Identify.Controller = Controller;    
-})(Identify || (Identify = {}));
+    exports.Controller = Controller;    
+})
 

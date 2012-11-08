@@ -1,30 +1,21 @@
 <!doctype html>
-<html lang="en" ng-app="uarbg2">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Underwater Adventure Rocket Bazooka Guys II</title>
   <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
-  <div ng-view></div>
-  <script src="https://static.firebase.com/v0/firebase.js"></script>
-  <script src="components/underscore/underscore-min.js"></script>
-  <script src="components/jquery/jquery.js"></script>
-  <script src="components/AngularJS/angular.js"></script>
+    <div ng-view></div>
 
-  <script src="main.js"></script>
-  <script src="controllers/IdentifyCtrl.js"></script>
-  <script src="controllers/GameCtrl.js"></script>
-  <script src="controllers/PaymentCtrl.js"></script>
-  <script src="services/Board.js"></script>
-  <script src="services/Players.js"></script>
-  <script src="services/Missiles.js"></script>
-  <script src="services/FB.js"></script>
-  <script src="services/CurrentPlayer.js"></script>
-  <script src="services/SoundEffects.js"></script>
-  <script src="services/AppVersion.js"></script>
-  <script src="directives/keys.js"></script>  
-  <script src="directives/sprite.js"></script>  
-  <script src="filters/position.js"></script>  
+    <!-- Libraries: TODO switch to AMD once typescript is less stupid -->
+    <script src="https://static.firebase.com/v0/firebase.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
+
+    <!-- Application Code -->
+    <script data-main="main" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js"></script>
+
 </body>
 </html>

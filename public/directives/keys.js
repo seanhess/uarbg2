@@ -1,5 +1,8 @@
-angular.module('directives')
-	.directive('keypress', function($parse) {
+// need to convert these all to requirejs
+
+define(function(require) {
+  var app = require('app')
+	app.main.directive('keypress', function($parse) {
 			return function(scope, element, attrs) {
 				// element is a jquery element
 
@@ -22,3 +25,4 @@ angular.module('directives')
         })
 			}
 	})
+})

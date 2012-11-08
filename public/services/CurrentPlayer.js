@@ -1,4 +1,7 @@
-angular.module('services')
+define(function(require) {
+  var app = require('app')
+  app.main
+
 .factory('CurrentPlayer', function() {
   // lets you share the current player
 
@@ -24,3 +27,5 @@ angular.module('services')
   }
 })
 
+
+})
