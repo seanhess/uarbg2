@@ -1,6 +1,10 @@
-define(function(require) {
-  var app = require('app')
-  app.main.factory('AppVersion', function($rootScope) {
-    return "1.1"
-  })
+define(["require", "exports", "../app"], function(require, exports, __app__) {
+    var app = __app__;
+
+    app.main.factory('AppVersion', function ($rootScope) {
+        return {
+            num: "1.1"
+        };
+    });
 })
+

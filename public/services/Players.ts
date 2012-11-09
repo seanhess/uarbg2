@@ -5,18 +5,43 @@
 // This service keeps track of all the current players (in an array), and merges moves into your stuff
 // Also lets you join
 
-import app = module("../app")
+// Stick with a functional paradigm
+// but if you have SOME state, you're going to want classes or nested functions
 
-export class Players {
-  current: any;
-  winner: any;
+import app = module("../app")
+import av = module("./AppVersion")
+
+// the angular service returns this IPlayerFactory
+export interface IPlayerFactory {
+  (gameId:string):IPlayers;
+}
+
+export interface IPlayer {
+  x:number;
+  y:number;
+  sprite:string;
+  facing:string;
+  state:string;
+  wins:number;
+  losses:number;
+  message:string;
+  version:string;
+  name:string;
+  killer:string;
+}
+
+// interfaces with RAW objects. that's my STYLE baby.
+export interface IPlayers {
+  current: IPlayer;
+  winner: IPlayer;
   taunt: string;
   isPaid: bool;
-  all: any [] = [];
+  all: IPlayer [];
 
   // hacky.. switch to some other pattern soon
+  // everyone needs to be able to call these function. They take the state into account!
   alivePlayers: Function;
-  join: Function;
+  join(p:IPlayer);
   listen: Function;
   move: Function;
   killPlayer: Function;
@@ -24,29 +49,46 @@ export class Players {
   latestVersion: Function;
 }
 
-app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion) {
 
+var TAUNT_LIST = [ 
+  "Oooh yeah!"
+  , "I fart in your general direction."
+  , "Your mother was a hamster and your father smelt of elderberries."
+  , "All your base are belong to us!"
+  , "OK, next round, try it WITH your glasses on."
+  , "If your daddy's aim is as bad as yours, I'm surprised you're here at all!"
+]
+
+var STATE = {
+  DEAD: "dead",
+  ALIVE: "alive"
+}
+
+app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion:av.IAppVersion) {
   return function(gameId) {
-
-    var taunt_list = [
-      "Oooh yeah!",
-      "I fart in your general direction.",
-      "Your mother was a hamster and your father smelt of elderberries.",
-      "All your base are belong to us!",
-      "OK, next round, try it WITH your glasses on.",
-      "If your daddy's aim is as bad as yours, I'm surprised you're here at all!"
-      ]
-
-    var STATE_ALIVE = "alive"
-    var STATE_DEAD = "dead"
 
     var gameRef = new FB(gameId)
     var playersRef = gameRef.child('players')    
-    
-    var all = []
-    var myname = null
-    var isPaidVal = isPaid();
 
+    var myname:string;
+
+    var players:IPlayers = {
+      current: null,
+      winner: null,
+      taunt: null,
+      isPaid: isPaid(),
+      all: [],
+
+      alivePlayers: alivePlayers,
+      join: join,
+      listen: listen,
+      move: move,
+      killPlayer: killPlayer,
+      playerByName: playerByName,
+      latestVersion: latestVersion,
+    }
+
+    // you need to define the functions in here, so they have access to the state!
     function join(player) {
       //console.log("Join:", player.name)
       myname = player.name
@@ -54,7 +96,7 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       player.y = Board.randomY()
       player.sprite = '1'
       player.facing = "down"
-      player.state = STATE_ALIVE
+      player.state = STATE.ALIVE
       player.wins = player.wins || 0
       player.losses = player.losses || 0
       player.message = null
@@ -74,14 +116,14 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       playersRef.on('child_changed', FB.apply(onUpdate))
       playersRef.on('child_removed', FB.apply(onQuit))
 
-      gameRef.child('winner').on('value', FB.apply(onWinner))
+      //gameRef.child('winner').on('value', FB.apply(onWinner))
     }
 
     function onJoin(player) {
       if (!players.current && player.name == myname) {
         players.current = player
       }
-      all.push(player)
+      players.all.push(player)
     }
 
     function onUpdate(remotePlayer) {
@@ -99,17 +141,17 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       player.state = remotePlayer.state;
       player.wins = remotePlayer.wins;
       player.losses = remotePlayer.losses;
-      player.walking = remotePlayer.walking;
+      //player.walking = remotePlayer.walking;
       if (remotePlayer.killer) player.killer = remotePlayer.killer
 
-      if (player.state == STATE_DEAD) {
+      if (player.state == STATE.DEAD) {
         $rootScope.$broadcast("kill", player)
         checkWin()
       }
     }
 
     function onQuit(player) {
-      all = all.filter((p) => p.name != player.name)
+      players.all = players.all.filter((p) => p.name != player.name)
     }
 
     function checkWin() {
@@ -152,7 +194,7 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
 
       // set the winner on all computers
       players.winner = player
-      players.taunt = taunt_list[Math.floor(Math.random()*taunt_list.length)];
+      players.taunt = TAUNT_LIST[Math.floor(Math.random()*TAUNT_LIST.length)];
 
       // only one person should reset the game
       //console.log("ON WINNER")
@@ -172,19 +214,19 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
         // for each player, make them alive
         gameRef.child('winner').remove()
 
-        all.forEach((player) => {
+        players.all.forEach((player) => {
             player.x = Board.randomX()
             player.y = Board.randomY()
             player.sprite = '1'
             player.facing = "down"
-            player.state = STATE_ALIVE
+            player.state = STATE.ALIVE
             FB.update(playersRef.child(player.name), player)
         })
     }
 
     // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
     function killPlayer(player, killerName) {
-      player.state = STATE_DEAD
+      player.state = STATE.DEAD
       player.losses += 1
       player.killer = killerName
       console.log("KILL PLAYER", player)
@@ -200,16 +242,20 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       return playersRef.child(name)
     }
     
+    // just make them class members?
+    // your function stuff is CRAP if you don't pass it in. no better than a class
+    // property of PLAYERS
     function playerByName(name) {
-      return all.filter((p) => (p.name == name))[0]
+      return players.all.filter((p) => (p.name == name))[0]
     }
 
     function isAlive(p) {
-      return (p.state == STATE_ALIVE)
+      return (p.state == STATE.ALIVE)
     }
 
+    // this is a property of PLAYERS
     function alivePlayers() {
-      return all.filter(isAlive)
+      return players.all.filter(isAlive)
     }
 
 
@@ -217,27 +263,12 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       return (localStorage.getItem("payment_status") == "paid");
       //return FB.apply(function () {return (localStorage.getItem("payment_status") == "paid")});
     }
-    console.log("isPaid()= ",isPaid())
-    console.log("isPaidVal= ",isPaidVal)
 
     function latestVersion() {
-      return _.max(all, (player) => player.version)
+      return _.max(players.all, (player) => player.version)
     }
-
-    var players = new Players()
-    players.isPaid = isPaidVal
-    players.all = all
-    players.alivePlayers = alivePlayers
-    players.join = join
-    players.listen = listen
-    players.move = move
-    players.killPlayer = killPlayer
-    players.playerByName = playerByName
-    players.latestVersion = latestVersion
 
     return players
   }
 
 })
-
-

@@ -12,6 +12,15 @@ Install
 * node_modules/.bin/coffee app.coffee
 
 
+Compiling
+---------
+
+This should compile EVERYTHING, since app includes the controllers, and the controllers import the services
+
+    tsc --module amd public/app.ts
+
+You still need to add everything to public/main.js to get it to load
+
 Todo
 ----
 

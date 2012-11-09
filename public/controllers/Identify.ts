@@ -1,7 +1,7 @@
 ///<reference path="../def/jquery.d.ts"/>
 ///<reference path="../def/angular.d.ts"/>
 
-import Players = module("../services/Players")
+import ps = module("../services/Players")
 
 export interface Scope extends ng.IScope {
 
@@ -11,7 +11,7 @@ export interface Scope extends ng.IScope {
   version:any;
   player:any;
   gameId:string;
-  players:Players.Players;
+  players:ps.IPlayers;
   avatars:string [];
   freeAvatars:string [];
 
@@ -25,7 +25,7 @@ export interface Scope extends ng.IScope {
 }
 
 export class Controller {
-  constructor ($scope: Scope, $location: any, Players: Function, CurrentPlayer: any, AppVersion: any) {
+  constructor ($scope: Scope, $location: any, Players: ps.IPlayerFactory, CurrentPlayer: any, AppVersion: any) {
     // HACKY way to do the transition
     $scope.intro = "intro"
 
@@ -43,7 +43,7 @@ export class Controller {
     $scope.gameId = $scope.player.gameId || "global"
 
     // [ ] detect which game to join ("global")
-    var players:Players.Players = Players($scope.gameId)
+    var players = Players($scope.gameId)
     $scope.players = players
 
     // available avatars

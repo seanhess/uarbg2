@@ -14,3 +14,8 @@ var app = angular.module('uarbg2', [], function ($routeProvider: ng.IRouteProvid
 export var main = app
 
 // I want to EXPORT this thing.
+
+// RequireJS = MUST HAVE (but could ignore it, if you go the ANGULAR way)
+// ok, so ignore it
+// you'll be fine
+
