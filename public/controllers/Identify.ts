@@ -25,7 +25,7 @@ export interface Scope extends ng.IScope {
 }
 
 export class Controller {
-  constructor ($scope: Scope, $location: any, Players:ps.PlayerService, CurrentPlayer: any, AppVersion: any) {
+  constructor ($scope: Scope, $location: any, Players:ps.IPlayerService, CurrentPlayer: any, AppVersion: any) {
     // HACKY way to do the transition
     $scope.intro = "intro"
 
@@ -35,6 +35,8 @@ export class Controller {
           $scope.intro = "show"
         })
     }, 1200)
+
+    console.log("WAHOO")
 
     $scope.version = AppVersion
 

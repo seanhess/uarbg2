@@ -2,6 +2,13 @@
 // I have a freaking circular reference. LAME!
 // There's no reason to, I guess
 // Except that I have no way to bind it otherwise :)
+
+// So, pretty much all I'm doing is exporting interfaces
+// and using them. Everything else is the same
+
+// And I like passing the state around instead of making it internal
+// but keep it minimal (use state.all instead of state)
+
 import app = module("../app")
 import fb = module("./FB")
 import av = module("./AppVersion")
@@ -20,6 +27,7 @@ export interface IPlayer {
   killer:string;
 }
 
+// only variables
 export interface IPlayerState {
   current: IPlayer;
   winner: IPlayer;
@@ -33,22 +41,39 @@ export interface IPlayerState {
   playersRef:fb.IRef;
 }
 
-export class PlayerService {
+// only methods
+export interface IPlayerService {
 
-  // dependencies
-  constructor( 
-    private $rootScope:ng.IRootScopeService,
-    private FB:fb.FB,
-    private Board,
-    private AppVersion:av.IAppVersion
-  ) {}
+  isAlive(p:IPlayer):bool;
+  alivePlayers(players:IPlayer[]):IPlayer[];
+  playerByName(players:IPlayer[], name:string):IPlayer;
+  latestVersion(players:IPlayer[]):string;
 
+  connect(gameId:string):IPlayerState;
+  join(state:IPlayerState, player:IPlayer);
+  killPlayer(state:IPlayerState, player:IPlayer, killerName:string);
+  move(state:IPlayerState, player:IPlayer);
+}
+
+app.main.factory('Players', function($rootScope:ng.IScope, FB:fb.FB, Board, AppVersion:av.IAppVersion):IPlayerService {
   // the big cheese. Does the deed
   // you can make fancy bindings here, no?
 
-  connect(gameId:string):IPlayerState {
+  return {
+    isAlive: isAlive,
+    alivePlayers: alivePlayers,
+    playerByName: playerByName,
+    latestVersion: latestVersion,
 
-    var gameRef = this.FB.game(gameId)
+    connect: connect,
+    join: join,
+    killPlayer: killPlayer,
+    move: move
+  }
+
+  function connect(gameId:string):IPlayerState {
+
+    var gameRef = FB.game(gameId)
     var playersRef = gameRef.child('players')
 
     var state:IPlayerState = {
@@ -59,59 +84,59 @@ export class PlayerService {
       current: null,
       winner: null,
       taunt: null,
-      isPaid: this.isPaid(),
+      isPaid: isPaid(),
       all: []
     }
 
     // better way to bind? nope! that's what they are for!
-    playersRef.on('child_added', this.FB.apply((p) => this.onJoin(state,p)))
-    playersRef.on('child_changed', this.FB.apply((p) => this.onUpdate(state,p)))
-    playersRef.on('child_removed', this.FB.apply((p) => this.onQuit(state,p)))
+    playersRef.on('child_added', FB.apply((p) => onJoin(state,p)))
+    playersRef.on('child_changed', FB.apply((p) => onUpdate(state,p)))
+    playersRef.on('child_removed', FB.apply((p) => onQuit(state,p)))
 
     return state
   }
 
-  isAlive(p:IPlayer):bool {
+  function isAlive(p:IPlayer):bool {
     return (p.state == STATE.ALIVE)
   }
 
-  alivePlayers(players:IPlayer[]):IPlayer[] {
-    return players.filter(this.isAlive)
+  function alivePlayers(players:IPlayer[]):IPlayer[] {
+    return players.filter(isAlive)
   }
 
   // you need to define the functions in here, so they have access to the state!
-  join(state:IPlayerState, player:IPlayer) {
+  function join(state:IPlayerState, player:IPlayer) {
 
     state.myname = player.name
 
-    player.x = this.Board.randomX()
-    player.y = this.Board.randomY()
+    player.x = Board.randomX()
+    player.y = Board.randomY()
     player.sprite = '1'
     player.facing = "down"
     player.state = STATE.ALIVE
     player.wins = player.wins || 0
     player.losses = player.losses || 0
     player.message = null
-    player.version = this.AppVersion.num
+    player.version = AppVersion.num
 
     var ref = state.playersRef.child(player.name)
     ref.removeOnDisconnect();
-    this.FB.update(ref, player)
+    FB.update(ref, player)
   }
 
   // what can change on a person?
   // position = {x, y, facing}
   // then you can bind to it separately
 
-  onJoin(state:IPlayerState, player:IPlayer) {
+  function onJoin(state:IPlayerState, player:IPlayer) {
     if (!state.current && player.name == state.myname) {
       state.current = player
     }
     state.all.push(player)
   }
 
-  onUpdate(state:IPlayerState, remotePlayer:IPlayer) {
-    var player = this.playerByName(state.all, remotePlayer.name)
+  function onUpdate(state:IPlayerState, remotePlayer:IPlayer) {
+    var player = playerByName(state.all, remotePlayer.name)
     if (!player) {
       return console.log("Error, player not found: "+remotePlayer.name)
     }
@@ -129,17 +154,17 @@ export class PlayerService {
     if (remotePlayer.killer) player.killer = remotePlayer.killer
 
     if (player.state == STATE.DEAD) {
-      this.$rootScope.$broadcast("kill", player)
-      this.checkWin(state)
+      $rootScope.$broadcast("kill", player)
+      checkWin(state)
     }
   }
 
-  onQuit(state:IPlayerState, player:IPlayer) {
+  function onQuit(state:IPlayerState, player:IPlayer) {
     state.all = state.all.filter((p) => p.name != player.name)
   }
 
-  checkWin(state:IPlayerState) {
-    var alive = this.alivePlayers(state.all)
+  function checkWin(state:IPlayerState) {
+    var alive = alivePlayers(state.all)
 
     if (alive.length > 1) return
     var winner = alive[0]
@@ -150,7 +175,7 @@ export class PlayerService {
     winner.wins += 1
     state.playersRef.child(winner.name).child("wins").set(winner.wins)
     state.gameRef.child("winner").removeOnDisconnect();
-    this.FB.update(state.gameRef.child("winner"), winner)
+    FB.update(state.gameRef.child("winner"), winner)
     // Nobody else should be able to act (already because they are dead)
 
     // game is set to OVER (missiles finish hitting? like, can you still die?)
@@ -163,7 +188,7 @@ export class PlayerService {
     // then turn everyone back to alive! (the winner does this?)
   }
 
-  onWinner(state:IPlayerState, player:IPlayer) {
+  function onWinner(state:IPlayerState, player:IPlayer) {
 
     // this can get called with null
     if (!player) {
@@ -188,59 +213,56 @@ export class PlayerService {
     //console.log("PASSED")
 
     if (state.current && state.current.name == player.name) {
-      setTimeout(() => this.resetGame(state), 3000)
+      setTimeout(() => resetGame(state), 3000)
     }
   }
 
-  resetGame(state:IPlayerState) {
+  function resetGame(state:IPlayerState) {
       console.log("Initialize Game")
       // build walls?? (how t
       // for each player, make them alive
       state.gameRef.child('winner').remove()
 
       state.all.forEach((player) => {
-          player.x = this.Board.randomX()
-          player.y = this.Board.randomY()
+          player.x = Board.randomX()
+          player.y = Board.randomY()
           player.sprite = '1'
           player.facing = "down"
           player.state = STATE.ALIVE
-          this.FB.update(state.playersRef.child(player.name), player)
+          FB.update(state.playersRef.child(player.name), player)
       })
   }
 
   // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
-  killPlayer(state:IPlayerState, player:IPlayer, killerName:string) {
+  function killPlayer(state:IPlayerState, player:IPlayer, killerName:string) {
     player.state = STATE.DEAD
     player.losses += 1
     player.killer = killerName
-    this.FB.update(state.playersRef.child(player.name), player)
+    FB.update(state.playersRef.child(player.name), player)
   }
 
-  move(state:IPlayerState, player:IPlayer) {
+  function move(state:IPlayerState, player:IPlayer) {
     var playerRef = state.playersRef.child(player.name)
-    this.FB.update(playerRef, player)
+    FB.update(playerRef, player)
   }
   
   // just make them class members?
   // your function stuff is CRAP if you don't pass it in. no better than a class
   // property of PLAYERS
-  playerByName(players:IPlayer[], name:string):IPlayer {
+  function playerByName(players:IPlayer[], name:string):IPlayer {
     return players.filter((p) => (p.name == name))[0]
   }
 
-  latestVersion(players:IPlayer[]):string {
+  function latestVersion(players:IPlayer[]):string {
     return _.max(players, (player) => player.version)
   }
 
   // TODO move me into another service
-  isPaid():bool {
+  function isPaid():bool {
     return (localStorage.getItem("payment_status") == "paid");
     //return FB.apply(function () {return (localStorage.getItem("payment_status") == "paid")});
   }
-}
 
-app.main.factory('Players', function($rootScope:ng.IScope, FB:fb.FB, Board, AppVersion:av.IAppVersion) {
-    return new PlayerService($rootScope, FB, Board, AppVersion)
 })
 
 // CONSTANTS
