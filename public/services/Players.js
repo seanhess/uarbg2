@@ -2,13 +2,15 @@ define(["require", "exports", "../app"], function(require, exports, __app__) {
     var app = __app__;
 
     
+    
     var TAUNT_LIST = [
         "Oooh yeah!", 
         "I fart in your general direction.", 
         "Your mother was a hamster and your father smelt of elderberries.", 
         "All your base are belong to us!", 
         "OK, next round, try it WITH your glasses on.", 
-        "If your daddy's aim is as bad as yours, I'm surprised you're here at all!"
+        "If your daddy's aim is as bad as yours, I'm surprised you're here at all!", 
+        "Boom!"
     ];
     var STATE = {
         DEAD: "dead",
@@ -16,7 +18,7 @@ define(["require", "exports", "../app"], function(require, exports, __app__) {
     };
     app.main.factory('Players', function ($rootScope, FB, Board, AppVersion) {
         return function (gameId) {
-            var gameRef = new FB(gameId);
+            var gameRef = FB.game(gameId);
             var playersRef = gameRef.child('players');
             var myname;
             var players = {
@@ -43,7 +45,7 @@ define(["require", "exports", "../app"], function(require, exports, __app__) {
                 player.wins = player.wins || 0;
                 player.losses = player.losses || 0;
                 player.message = null;
-                player.version = AppVersion;
+                player.version = AppVersion.num;
                 var ref = playersRef.child(player.name);
                 ref.removeOnDisconnect();
                 FB.update(ref, player);
@@ -128,7 +130,6 @@ define(["require", "exports", "../app"], function(require, exports, __app__) {
                 player.state = STATE.DEAD;
                 player.losses += 1;
                 player.killer = killerName;
-                console.log("KILL PLAYER", player);
                 FB.update(playersRef.child(player.name), player);
             }
             function move(player) {

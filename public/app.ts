@@ -1,4 +1,6 @@
+///<reference path="def/jquery.d.ts"/>
 ///<reference path="def/angular.d.ts"/>
+///<reference path="def/underscore.d.ts"/>
 
 import Identify = module('controllers/Identify')
 

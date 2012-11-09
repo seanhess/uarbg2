@@ -1,36 +1,38 @@
-define(function(require) {
-  var app = require('app')
+define(["require", "exports", '../app'], function(require, exports, __app__) {
+    var app = __app__;
 
-  app.main.factory('FB', function($rootScope) {
-  var FB = function(gameId) {
-    var ref = new Firebase("https://seanhess.firebaseio.com/uarbg2/" + gameId)
-    return ref
-  }
-
-  // helps you bind to firebase events
-  FB.apply = function(f) {
-    return function(ref) {
-      if ($rootScope.$$phase)
-        return f(ref.val())
-      $rootScope.$apply(function() {
-        f(ref.val())
-      })
-    }
-  }
-
-  // just updates everything, ignore angular $$hashKey
-  FB.update = function(ref, obj) {
-    //console.log("UPDATE", obj)
-
-    for (var key in obj) {
-      if (obj[key] === undefined)
-        delete obj[key]
-    }
-
-    ref.set(_.omit(obj, "$$hashKey"))
-  }
-
-  return FB
+    var FB = (function () {
+        function FB($rootScope) {
+            this.$rootScope = $rootScope;
+        }
+        FB.prototype.game = function (gameId) {
+            var ref = new Firebase("https://seanhess.firebaseio.com/uarbg2/" + gameId);
+            return ref;
+        };
+        FB.prototype.apply = function (f) {
+            var _this = this;
+            return function (ref) {
+                if((_this.$rootScope).$$phase) {
+                    return f(ref.val());
+                }
+                _this.$rootScope.$apply(function () {
+                    f(ref.val());
+                });
+            }
+        };
+        FB.prototype.update = function (ref, obj) {
+            for(var key in obj) {
+                if(obj[key] === undefined) {
+                    delete obj[key];
+                }
+            }
+            ref.set(_.omit(obj, "$$hashKey"));
+        };
+        return FB;
+    })();
+    exports.FB = FB;    
+    app.main.factory('FB', function ($rootScope) {
+        return new FB($rootScope);
+    });
 })
 
-})

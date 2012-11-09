@@ -7,7 +7,7 @@ define(function(require) {
 .factory('Missiles', function($rootScope, FB, Board) {
   return function(gameId, Players) {
 
-    var gameRef = new FB(gameId)
+    var gameRef = FB.game(gameId)
     var missilesRef = gameRef.child('missiles')
     var gameStatusRef = gameRef.child('gameStatus')
 

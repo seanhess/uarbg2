@@ -1,14 +1,6 @@
-///<reference path="../def/jquery.d.ts"/>
-///<reference path="../def/angular.d.ts"/>
-///<reference path="../def/underscore.d.ts"/>
-
-// This service keeps track of all the current players (in an array), and merges moves into your stuff
-// Also lets you join
-
-// Stick with a functional paradigm
-// but if you have SOME state, you're going to want classes or nested functions
 
 import app = module("../app")
+import fb = module("./FB")
 import av = module("./AppVersion")
 
 // the angular service returns this IPlayerFactory
@@ -40,15 +32,14 @@ export interface IPlayers {
 
   // hacky.. switch to some other pattern soon
   // everyone needs to be able to call these function. They take the state into account!
-  alivePlayers: Function;
+  alivePlayers():IPlayer[];
   join(p:IPlayer);
-  listen: Function;
-  move: Function;
-  killPlayer: Function;
-  playerByName: Function;
-  latestVersion: Function;
+  listen();
+  move(player:IPlayer);
+  killPlayer(player:IPlayer, killerName:string);
+  playerByName(name:string):IPlayer;
+  latestVersion():string;
 }
-
 
 var TAUNT_LIST = [ 
   "Oooh yeah!"
@@ -57,6 +48,7 @@ var TAUNT_LIST = [
   , "All your base are belong to us!"
   , "OK, next round, try it WITH your glasses on."
   , "If your daddy's aim is as bad as yours, I'm surprised you're here at all!"
+  , "Boom!"
 ]
 
 var STATE = {
@@ -64,10 +56,10 @@ var STATE = {
   ALIVE: "alive"
 }
 
-app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion:av.IAppVersion) {
+app.main.factory('Players', function($rootScope:ng.IScope, FB:fb.FB, Board, AppVersion:av.IAppVersion) {
   return function(gameId) {
 
-    var gameRef = new FB(gameId)
+    var gameRef = FB.game(gameId)
     var playersRef = gameRef.child('players')    
 
     var myname:string;
@@ -89,7 +81,7 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
     }
 
     // you need to define the functions in here, so they have access to the state!
-    function join(player) {
+    function join(player:IPlayer) {
       //console.log("Join:", player.name)
       myname = player.name
       player.x = Board.randomX()
@@ -100,7 +92,7 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       player.wins = player.wins || 0
       player.losses = player.losses || 0
       player.message = null
-      player.version = AppVersion
+      player.version = AppVersion.num
 
       var ref = playersRef.child(player.name)
       ref.removeOnDisconnect();
@@ -119,14 +111,14 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       //gameRef.child('winner').on('value', FB.apply(onWinner))
     }
 
-    function onJoin(player) {
+    function onJoin(player:IPlayer) {
       if (!players.current && player.name == myname) {
         players.current = player
       }
       players.all.push(player)
     }
 
-    function onUpdate(remotePlayer) {
+    function onUpdate(remotePlayer:IPlayer) {
       var player = playerByName(remotePlayer.name)
       if (!player) {
         return console.log("Error, player not found: "+remotePlayer.name)
@@ -150,7 +142,7 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       }
     }
 
-    function onQuit(player) {
+    function onQuit(player:IPlayer) {
       players.all = players.all.filter((p) => p.name != player.name)
     }
 
@@ -179,7 +171,7 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
       // then turn everyone back to alive! (the winner does this?)
     }
 
-    function onWinner(player) {
+    function onWinner(player:IPlayer) {
 
       // this can get called with null
       if (!player) {
@@ -225,46 +217,45 @@ app.main.factory('Players', function($rootScope:ng.IScope, FB, Board, AppVersion
     }
 
     // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
-    function killPlayer(player, killerName) {
+    function killPlayer(player:IPlayer, killerName:string) {
       player.state = STATE.DEAD
       player.losses += 1
       player.killer = killerName
-      console.log("KILL PLAYER", player)
       FB.update(playersRef.child(player.name), player)
     }
 
-    function move(player) {
+    function move(player:IPlayer) {
       var playerRef = getPlayerRef(player.name)
       FB.update(playerRef, player)
     }
 
-    function getPlayerRef(name) {
+    function getPlayerRef(name:string):any {
       return playersRef.child(name)
     }
     
     // just make them class members?
     // your function stuff is CRAP if you don't pass it in. no better than a class
     // property of PLAYERS
-    function playerByName(name) {
+    function playerByName(name:string):IPlayer {
       return players.all.filter((p) => (p.name == name))[0]
     }
 
-    function isAlive(p) {
+    function isAlive(p:IPlayer):bool {
       return (p.state == STATE.ALIVE)
     }
 
     // this is a property of PLAYERS
-    function alivePlayers() {
+    function alivePlayers():IPlayer[] {
       return players.all.filter(isAlive)
     }
 
 
-    function isPaid() {
+    function isPaid():bool {
       return (localStorage.getItem("payment_status") == "paid");
       //return FB.apply(function () {return (localStorage.getItem("payment_status") == "paid")});
     }
 
-    function latestVersion() {
+    function latestVersion():string {
       return _.max(players.all, (player) => player.version)
     }
 
