@@ -26,6 +26,9 @@ export interface IFB {
 
 
 // Functional Style Class: it's the same as the module that you were looking for!
+// wait, this sucks. To call other functions in the module, you have to use this
+// oh, it's not that bad
+
 export class FB {
 
   constructor(

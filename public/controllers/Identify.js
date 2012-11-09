@@ -11,7 +11,7 @@ define(["require", "exports"], function(require, exports) {
             $scope.version = AppVersion;
             $scope.player = CurrentPlayer.loadPreferences();
             $scope.gameId = $scope.player.gameId || "global";
-            var players = Players($scope.gameId);
+            var players = Players.connect($scope.gameId);
             $scope.players = players;
             $scope.avatars = [
                 'player2', 
@@ -39,7 +39,7 @@ define(["require", "exports"], function(require, exports) {
                     $scope.error = "Please select a valid name and an avatar";
                     return;
                 }
-                if(players.playerByName($scope.player.name)) {
+                if(Players.playerByName(players.all, $scope.player.name)) {
                     $scope.error = '"' + $scope.player.name + '" is already taken';
                     return;
                 }
@@ -59,7 +59,6 @@ define(["require", "exports"], function(require, exports) {
             $scope.isPlayerAvatar = function (name) {
                 return ($scope.player && $scope.player.avatar == name);
             };
-            players.listen();
         }
         return Controller;
     })();

@@ -11,7 +11,7 @@ export interface Scope extends ng.IScope {
   version:any;
   player:any;
   gameId:string;
-  players:ps.IPlayers;
+  players:ps.IPlayerState;
   avatars:string [];
   freeAvatars:string [];
 
@@ -25,7 +25,7 @@ export interface Scope extends ng.IScope {
 }
 
 export class Controller {
-  constructor ($scope: Scope, $location: any, Players: ps.IPlayerFactory, CurrentPlayer: any, AppVersion: any) {
+  constructor ($scope: Scope, $location: any, Players:ps.PlayerService, CurrentPlayer: any, AppVersion: any) {
     // HACKY way to do the transition
     $scope.intro = "intro"
 
@@ -43,7 +43,7 @@ export class Controller {
     $scope.gameId = $scope.player.gameId || "global"
 
     // [ ] detect which game to join ("global")
-    var players = Players($scope.gameId)
+    var players = Players.connect($scope.gameId)
     $scope.players = players
 
     // available avatars
@@ -72,7 +72,7 @@ export class Controller {
         return
       }
 
-      if (players.playerByName($scope.player.name)) {
+      if (Players.playerByName(players.all, $scope.player.name)) {
         $scope.error = '"' + $scope.player.name + '" is already taken'
         return
       }
@@ -94,9 +94,6 @@ export class Controller {
     $scope.isPlayerAvatar = function(name) {
       return ($scope.player && $scope.player.avatar == name)
     }
-
-    players.listen()
-
   }
 }
 
