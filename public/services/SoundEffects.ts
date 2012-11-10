@@ -1,14 +1,6 @@
-angular.module('services').factory('SoundEffects', function() {
+angular.module('services')
 
-  // simple sound, lets you play/pause, with a beginning offset
-  function simpleSound(file, seconds) {
-    return {
-      // plays the sound, starting at the offset
-      play: function() {
-        play(audio, seconds)
-      }
-    }
-  }
+.factory('SoundEffects', function() {
 
   var bgMusic = new Audio("/audio/g-style.mp3")
   //var underwater = new Audio("/audio/Underwater.mp3")

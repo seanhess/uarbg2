@@ -10,7 +10,6 @@
 interface IPlayer {
   x:number;
   y:number;
-  sprite:string;
   facing:string;
   state:string;
   wins:number;
@@ -19,6 +18,12 @@ interface IPlayer {
   version:string;
   name:string;
   killer:string;
+  avatar:string;
+  status:string;
+
+  // move this off of player
+  walking:bool;
+  sprite:number;
 }
 
 // only variables
@@ -105,7 +110,7 @@ angular.module('services').factory('Players', function($rootScope:ng.IScope, FB:
 
     player.x = Board.randomX()
     player.y = Board.randomY()
-    player.sprite = '1'
+    player.sprite = 1
     player.facing = "down"
     player.state = STATE.ALIVE
     player.wins = player.wins || 0
@@ -220,7 +225,7 @@ angular.module('services').factory('Players', function($rootScope:ng.IScope, FB:
       state.all.forEach((player) => {
           player.x = Board.randomX()
           player.y = Board.randomY()
-          player.sprite = '1'
+          player.sprite = 1
           player.facing = "down"
           player.state = STATE.ALIVE
           FB.update(state.playersRef.child(player.name), player)

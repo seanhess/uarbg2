@@ -1,3 +1,4 @@
+///<reference path="../def/angular.d.ts"/>
 
 function PaymentCtrl($scope, $routeParams, $location) {
   if ($routeParams.unpaid) {

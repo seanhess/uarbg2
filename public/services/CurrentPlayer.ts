@@ -1,31 +1,33 @@
 ///<reference path="../def/angular.d.ts"/>
 
-interface IPreferencesStorage extends Storage {
+interface IPreferences {
   avatar:string;
   name:string;
   gameId:string;
 }
 
+interface ICurrentPlayerService {
+  player:IPlayer;
+  loadPreferences():IPreferences;
+  savePreferences(player:IPlayer, gameId:string);
+}
 
-angular.module('services').factory('CurrentPlayer', function() {
+angular.module('services').factory('CurrentPlayer', function():ICurrentPlayerService {
   // lets you share the current player
 
-  var storage:IPreferencesStorage = <IPreferencesStorage> localStorage;
-
-  function loadPreferences() {
+  function loadPreferences():IPreferences {
     return {
-      avatar: storage.avatar,
-      name: storage.name,
-      gameId: storage.gameId
+      avatar: localStorage.getItem("avatar"),
+      name: localStorage.getItem("name"),
+      gameId: localStorage.getItem("gameId"),
     }
   }
 
-  function savePreferences(player, gameId) {
-    storage.avatar = player.avatar
-    storage.name = player.name
-    storage.gameId = gameId
+  function savePreferences(player:IPlayer, gameId:string) {
+    localStorage.setItem("avatar", player.avatar)
+    localStorage.setItem("name", player.name)
+    localStorage.setItem("gameId", gameId)
   }
-
 
   return {
     player: null,

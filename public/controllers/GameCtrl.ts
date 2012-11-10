@@ -1,5 +1,19 @@
+///<reference path="../def/angular.d.ts"/>
 
-function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $location, Board, SoundEffects, AppVersion) {
+///<reference path="../services/Missiles"/>
+///<reference path="../services/Players"/>
+///<reference path="../services/CurrentPlayer"/>
+///<reference path="../services/Board"/>
+///<reference path="../services/SoundEffects"/>
+///<reference path="../services/AppVersion"/>
+
+///<reference path="../filters/position.ts"/>
+///<reference path="../directives/keys.ts"/>
+///<reference path="../directives/sprite.ts"/>
+
+angular.module('controllers')
+
+.controller('GameCtrl', function ($scope, Players:IPlayerService, Missiles, $routeParams, CurrentPlayer, $location, Board, SoundEffects, AppVersion) {
 
   $scope.version = AppVersion
   $scope.gameId = $routeParams.gameId
@@ -19,12 +33,13 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
     //return
   //}
 
-  var players = new Players($scope.gameId, $routeParams.debugPlayerName)
+  var players = Players.connect($scope.gameId)
+  Players.join(players, CurrentPlayer.player)
   $scope.players = players
 
   var missiles = new Missiles($scope.gameId,players)
+  missiles.listen()
   $scope.missiles = missiles
-
 
   $scope.latestAlert = "Welcome to Your Underwater Adventure"
 
@@ -39,7 +54,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
 
 
   // AUDIO
-  SoundEffects.music()
+  //SoundEffects.music()
 
   $scope.test = function() {
     //SoundEffects.rocket()
@@ -90,7 +105,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
           setTimeout(function(){
             $scope.$apply(function() {
               players.current.walking = false;
-              players.move(players.current);
+              Players.move(players, players.current);
             });
           }, 500);
 
@@ -99,7 +114,7 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
           players.move(players.current);*/
 
           var collision = false;
-          players.alivePlayers().forEach(function(val,key){
+          Players.alivePlayers(players.all).forEach(function(val,key){
             if (val.name != players.current.name && val.status != "dead") {
               if (location.axis == "x") {
                 if (val.x == location.location && val.y == players.current.y) collision = true;
@@ -112,15 +127,11 @@ function GameCtrl($scope, Players, Missiles, $routeParams, CurrentPlayer, $locat
           if (!collision) {
             players.current[location.axis] = location.location;
             players.current.facing = location.facing;
-            players.move(players.current);
+            Players.move(players, players.current);
           } else {
             // we can play a collision sound here!
           }
         }
       }
   }
-
-  players.join(CurrentPlayer.player)
-  players.listen()
-  missiles.listen()
-}
+})

@@ -22,6 +22,10 @@ interface IBoard {
   RIGHT: string;
   UP: string;
   DOWN: string;
+
+  WIDTH: number;
+  HEIGHT: number;
+  UNIT: number;
 }
 
 // these are the worst variable names of all time
@@ -53,6 +57,10 @@ angular.module('services').factory('Board', function($rootScope:ng.IRootScopeSer
     RIGHT: "right",
     UP: "up",
     DOWN: "down",
+
+    UNIT:UNIT,
+    WIDTH:WIDTH,
+    HEIGHT:HEIGHT,
   }
 
   return Board
