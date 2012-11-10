@@ -1,9 +1,5 @@
-import app = module("../app")
+///<reference path="../def/angular.d.ts"/>
 
-export interface IAppVersion {
-  num: string;
-}
-
-app.main.factory('AppVersion', function($rootScope) {
-  return {num: "1.1"}
+angular.module('services').factory('AppVersion', function($rootScope) {
+  return "1.1"
 })

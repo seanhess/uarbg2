@@ -1,75 +1,77 @@
-// I could just use reference
+///<reference path="../def/angular.d.ts"/>
 
-
-import app = module("../app")
-
-module MAP {
-  export var width = 800
-  export var height = 600
-  export var unit = 50
-
-  export var grid = {
-    x:width / unit,
-    y:width / unit,
-  }
-}
-
-// Directions
-export var LEFT = "left"
-export var RIGHT = "right"
-export var UP = "up"
-export var DOWN = "down"
-
-export interface IPosition {
+interface IPosition {
   axis:string;
   distance:number;
 }
 
-export interface IPoint {
+interface IPoint {
   x:number;
   y:number;
 }
 
-export interface IBoard {
+interface IBoard {
   getPosition(direction:string):IPosition;
   move(object:IPoint, position:IPosition);
   isHit(one:IPoint, two:IPoint):bool;
   randomX():number;
   randomY():number;
+
+  // constants
+  LEFT: string;
+  RIGHT: string;
+  UP: string;
+  DOWN: string;
 }
 
 // these are the worst variable names of all time
-export interface IMove {
+interface IMove {
   axis: string;
   location: number;
   facing: string;
 }
 
-app.main.factory('Board', function($rootScope:ng.IRootScopeService):IBoard {
+angular.module('services').factory('Board', function($rootScope:ng.IRootScopeService):IBoard {
 
-  return {
+  var WIDTH = 800
+  var HEIGHT = 600
+  var UNIT = 50
+  var GRID = {
+    x: WIDTH / UNIT,
+    y: HEIGHT / UNIT,
+  }
+
+  var Board = {
     move: move,
     getPosition: getPosition,
     isHit: isHit,
-    randomX: makeRandomN(MAP.grid.x),
-    randomY: makeRandomN(MAP.grid.y),
+    randomX: makeRandomN(GRID.x),
+    randomY: makeRandomN(GRID.y),
+
+    // Direction Constants
+    LEFT: "left",
+    RIGHT: "right",
+    UP: "up",
+    DOWN: "down",
   }
+
+  return Board
 
   function getPosition(direction:string):IPosition {
 
-      if(direction === UP) {
+      if(direction === Board.UP) {
         return {axis: 'y', distance: -1}
       }
 
-      if(direction === RIGHT) {
+      if(direction === Board.RIGHT) {
         return {axis: 'x', distance: 1}
       }
 
-      if(direction === DOWN) {
+      if(direction === Board.DOWN) {
         return {axis: 'y', distance: 1}
       }
 
-      if(direction === LEFT) {
+      if(direction === Board.LEFT) {
         return {axis: 'x', distance: -1}
       }
 
@@ -84,13 +86,13 @@ app.main.factory('Board', function($rootScope:ng.IRootScopeService):IBoard {
     var distance = position.distance
     var potential = object[axis] + distance;
     var direction; 
-    if (axis == 'x' && distance > 0) direction = RIGHT
-    else if (axis == 'x' && distance < 0) direction = LEFT
-    else if (axis == 'y' && distance > 0) direction = DOWN
-    else if (axis == 'y' && distance < 0) direction = UP
+    if (axis == 'x' && distance > 0) direction = Board.RIGHT
+    else if (axis == 'x' && distance < 0) direction = Board.LEFT
+    else if (axis == 'y' && distance > 0) direction = Board.DOWN
+    else if (axis == 'y' && distance < 0) direction = Board.UP
     else console.log("BAD MOVE", axis, distance)
 
-    if (MAP.grid[axis] <= potential || potential < 0) {
+    if (GRID[axis] <= potential || potential < 0) {
       return null
     }
 

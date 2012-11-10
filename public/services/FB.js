@@ -1,6 +1,5 @@
-define(["require", "exports", '../app'], function(require, exports, __app__) {
-    var app = __app__;
-
+var firebase;
+(function (firebase) {
     var FB = (function () {
         function FB($rootScope) {
             this.$rootScope = $rootScope;
@@ -30,9 +29,9 @@ define(["require", "exports", '../app'], function(require, exports, __app__) {
         };
         return FB;
     })();
-    exports.FB = FB;    
-    app.main.factory('FB', function ($rootScope) {
-        return new FB($rootScope);
-    });
-})
+    firebase.FB = FB;    
+})(firebase || (firebase = {}));
 
+angular.module('services').factory('FB', function ($rootScope) {
+    return new firebase.FB($rootScope);
+});

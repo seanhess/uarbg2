@@ -1,20 +1,13 @@
 
-// I have a freaking circular reference. LAME!
-// There's no reason to, I guess
-// Except that I have no way to bind it otherwise :)
-
-// So, pretty much all I'm doing is exporting interfaces
-// and using them. Everything else is the same
-
 // And I like passing the state around instead of making it internal
 // but keep it minimal (use state.all instead of state)
 
-import app = module("../app")
-import fb = module("./FB")
-import av = module("./AppVersion")
-import b = module("./Board")
+///<reference path="../def/angular.d.ts"/>
+///<reference path="./FB"/>
+///<reference path="./AppVersion"/>
+///<reference path="./Board"/>
 
-export interface IPlayer {
+interface IPlayer {
   x:number;
   y:number;
   sprite:string;
@@ -29,7 +22,7 @@ export interface IPlayer {
 }
 
 // only variables
-export interface IPlayerState {
+interface IPlayerState {
   current: IPlayer;
   winner: IPlayer;
   taunt: string;
@@ -38,12 +31,12 @@ export interface IPlayerState {
 
   // private stuff. not for binding
   myname:string;
-  gameRef:fb.IRef;
-  playersRef:fb.IRef;
+  gameRef:firebase.IRef;
+  playersRef:firebase.IRef;
 }
 
 // only methods
-export interface IPlayerService {
+interface IPlayerService {
 
   isAlive(p:IPlayer):bool;
   alivePlayers(players:IPlayer[]):IPlayer[];
@@ -56,7 +49,7 @@ export interface IPlayerService {
   move(state:IPlayerState, player:IPlayer);
 }
 
-app.main.factory('Players', function($rootScope:ng.IScope, FB:fb.FB, Board:b.IBoard, AppVersion:av.IAppVersion):IPlayerService {
+angular.module('services').factory('Players', function($rootScope:ng.IScope, FB:firebase.IFB, Board:IBoard, AppVersion:any):IPlayerService {
   // the big cheese. Does the deed
   // you can make fancy bindings here, no?
 

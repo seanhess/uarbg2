@@ -1,10 +1,6 @@
-define(function(require) {
-  var app = require('app')
-  app.main
-
 // This service keeps track of the missiles
 
-.factory('Missiles', function($rootScope, FB, Board) {
+angular.module('services').factory('Missiles', function($rootScope, FB, Board) {
   return function(gameId, Players) {
 
     var gameRef = FB.game(gameId)
@@ -101,7 +97,5 @@ define(function(require) {
 
     return missiles
   }
-
-})
 
 })

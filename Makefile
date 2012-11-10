@@ -1,2 +1,2 @@
 all:
-	tsc --module amd public/app.ts
+	tsc --out public/main.js public/app.ts

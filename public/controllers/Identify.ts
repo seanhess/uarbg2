@@ -1,17 +1,18 @@
-///<reference path="../def/jquery.d.ts"/>
 ///<reference path="../def/angular.d.ts"/>
 
-import ps = module("../services/Players")
+///<reference path="../services/Players"/>
+///<reference path="../services/CurrentPlayer"/>
 
-export interface Scope extends ng.IScope {
+console.log("Register: IdentifyCtrl")
 
+interface IdentifyScope extends ng.IScope {
   intro:string;
   error:string;
 
   version:any;
   player:any;
   gameId:string;
-  players:ps.IPlayerState;
+  players:IPlayerState;
   avatars:string [];
   freeAvatars:string [];
 
@@ -21,11 +22,10 @@ export interface Scope extends ng.IScope {
   join(): void;
   selectAvatar(name: string): void;
   isPlayerAvatar(name:string): bool;
-
 }
 
-export class Controller {
-  constructor ($scope: Scope, $location: any, Players:ps.IPlayerService, CurrentPlayer: any, AppVersion: any) {
+angular.module('controllers').controller('IdentifyCtrl', function($scope: IdentifyScope, $location: any, Players:IPlayerService, CurrentPlayer: any, AppVersion: string) {
+
     // HACKY way to do the transition
     $scope.intro = "intro"
 
@@ -52,6 +52,7 @@ export class Controller {
     $scope.avatarIsFree = function (avatarName) {
       return ($scope.freeAvatars.indexOf(avatarName) != -1);
     }
+
     $scope.avatarIsAvailable = function (avatarName) {
       return (players.isPaid || $scope.freeAvatars.indexOf(avatarName) != -1);
     }
@@ -94,7 +95,7 @@ export class Controller {
     $scope.isPlayerAvatar = function(name) {
       return ($scope.player && $scope.player.avatar == name)
     }
-  }
-}
+
+})
 
 

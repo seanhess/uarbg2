@@ -1,23 +1,21 @@
-define(["require", "exports", 'controllers/Identify'], function(require, exports, __Identify__) {
-    var Identify = __Identify__;
-
-    var app = angular.module('uarbg2', [], function ($routeProvider) {
-        $routeProvider.when('/game/:gameId', {
-            templateUrl: 'partials/game.html',
-            controller: "GameCtrl"
-        });
-        $routeProvider.when('/paid', {
-            templateUrl: 'partials/paid.html',
-            controller: "PaymentCtrl"
-        });
-        $routeProvider.when('/identify', {
-            templateUrl: 'partials/identify.html',
-            controller: Identify.Controller
-        });
-        $routeProvider.otherwise({
-            redirectTo: '/identify'
-        });
+console.log("app.ts");
+var app = angular.module('app', [
+    'controllers'
+], function ($routeProvider) {
+    console.log("In Router");
+    $routeProvider.when('/game/:gameId', {
+        templateUrl: 'partials/game.html',
+        controller: "GameCtrl"
     });
-    exports.main = app;
-})
-
+    $routeProvider.when('/paid', {
+        templateUrl: 'partials/paid.html',
+        controller: "PaymentCtrl"
+    });
+    $routeProvider.when('/identify', {
+        templateUrl: 'partials/identify.html',
+        controller: "IdentifyCtrl"
+    });
+    $routeProvider.otherwise({
+        redirectTo: '/identify'
+    });
+});

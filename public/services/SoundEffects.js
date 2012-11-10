@@ -1,8 +1,4 @@
-define(function(require) {
-  var app = require('app')
-  app.main
-
-.factory('SoundEffects', function() {
+angular.module('services').factory('SoundEffects', function() {
 
   // simple sound, lets you play/pause, with a beginning offset
   function simpleSound(file, seconds) {
@@ -59,5 +55,4 @@ define(function(require) {
     //levelUp: makeSound(underwater, 76, 2500)
   }
 
-})
 })
