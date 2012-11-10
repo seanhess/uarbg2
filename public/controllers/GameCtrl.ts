@@ -75,7 +75,7 @@ angular.module('controllers')
 
   function getSprite(newDirection) {
     var slide,
-        previousDirection = players.current.facing,
+        previousDirection = players.current.direction,
         previous = players.current.sprite;
 
     if(previousDirection === newDirection) {
@@ -87,50 +87,64 @@ angular.module('controllers')
     return slide;
   }
 
+  // ignore ALL key presses if they are dead
   $scope.keypress = function (e) {
 
-      if (e.keyCode === 32) {
-        Missiles.fireMissile(missiles, players.current)
-      }
+      // you can do ANYTHING if you are dead
+      if (!Players.isAlive(players.current)) return
 
-      else {
-        var boardDirection = keyCodeToDirection(e.keyCode)
-        if (!boardDirection) return
-        var position = Board.getPosition(boardDirection)
-        var location = Board.move(players.current, position)
-        if (location && players.current.state != "dead") {
-          players.current.walking = true;
+      if (e.keyCode === 32)
+        return Missiles.fireMissile(missiles, players.current)
 
-          setTimeout(function(){
-            $scope.$apply(function() {
-              players.current.walking = false;
-              Players.move(players, players.current);
-            });
-          }, 500);
+      var direction = keyCodeToDirection(e.keyCode)
+      if (!direction) return
+
+      var position = Board.move(players.current, direction)
+      if (!position) return
+        
+      players.current.x = position.x
+      players.current.y = position.y
+      players.current.direction = position.direction
+      console.log(players.current.direction)
+
+      Players.move(players, players.current);
+
+          // you need:
+          // a list of updates: { x: 1, y: 2, direction: 'down' }
+
+          //players.current.walking = true;
+
+          //setTimeout(function(){
+            //$scope.$apply(function() {
+              //players.current.walking = false;
+              //Players.move(players, players.current);
+            //});
+          //}, 500);
 
           /*players.current[location.axis] = location.location;
           players.current.facing = location.facing;
           players.move(players.current);*/
 
-          var collision = false;
-          Players.alivePlayers(players.all).forEach(function(val,key){
-            if (val.name != players.current.name && val.state != "dead") {
-              if (location.axis == "x") {
-                if (val.x == location.location && val.y == players.current.y) collision = true;
-              }
-              if (location.axis == "y") {
-                if (val.y == location.location && val.x == players.current.x) collision = true;
-              }
-            }
-          });
-          if (!collision) {
-            players.current[location.axis] = location.location;
-            players.current.facing = location.facing;
-            Players.move(players, players.current);
-          } else {
-            // we can play a collision sound here!
-          }
-        }
-      }
+          // WILL I HIT ANY OTHER PLAYERS?
+
+          //var collision = false;
+          //Players.alivePlayers(players.all).forEach(function(p:IPlayer){
+            //if (p.name != players.current.name && p.state != "dead") {
+              //if (location.axis == "x") {
+                //if (p.x == location.location && p.y == players.current.y) collision = true;
+              //}
+              //if (location.axis == "y") {
+                //if (p.y == location.location && p.x == players.current.x) collision = true;
+              //}
+            //}
+          //});
+          //if (!collision) {
+
+
+          //} else {
+            //// we can play a collision sound here!
+          //}
+        //}
+      // }
   }
 })

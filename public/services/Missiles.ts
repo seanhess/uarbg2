@@ -66,7 +66,7 @@ angular.module('services')
       var missile = {
         x: player.x,
         y: player.y,
-        direction: player.facing,
+        direction: player.direction,
         sourcePlayer: player.name
       }
 
@@ -92,16 +92,15 @@ angular.module('services')
 
       function moveMissile() {
         // move the missile
-        var position = Board.getPosition(missile.direction)
-        var location = Board.move(missile, position);
-        if (!location) return explodeMissile(missile)
-        missile[position.axis] = location.location              
+        var position = Board.move(missile, missile.direction)
+        if (!position) return explodeMissile(missile)
+
+        missile.x = position.x
+        missile.y = position.y
+        missile.direction = position.direction
 
         // Check to see if the missile hits anyone
-        var hitPlayer = players.all.filter((player:IPlayer) {
-            Board.isHit(player, missile)
-        })[0]
-
+        var hitPlayer = <IPlayer> Board.findHit(players.all, missile)
         if (hitPlayer) {
           explodeMissile(missile)
           if (hitPlayer == players.current) 

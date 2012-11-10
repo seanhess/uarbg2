@@ -17,7 +17,7 @@ interface IPlayer {
   name:string;
   avatar:string;
 
-  facing?:string;
+  direction?:string;
   message?:string;
   killer?:string;
 
@@ -116,7 +116,7 @@ angular.module('services')
     player.x = Board.randomX()
     player.y = Board.randomY()
     player.sprite = 1
-    player.facing = "down"
+    player.direction = Board.DOWN
     player.state = STATE.ALIVE
     player.wins = player.wins || 0
     player.losses = player.losses || 0
@@ -150,7 +150,7 @@ angular.module('services')
     // copy as many properites as you care about
     player.x = remotePlayer.x
     player.y = remotePlayer.y
-    player.facing = remotePlayer.facing
+    player.direction = remotePlayer.direction
     player.state = remotePlayer.state;
     player.wins = remotePlayer.wins;
     player.losses = remotePlayer.losses;
@@ -231,7 +231,7 @@ angular.module('services')
           player.x = Board.randomX()
           player.y = Board.randomY()
           player.sprite = 1
-          player.facing = "down"
+          player.direction = Board.DOWN
           player.state = STATE.ALIVE
           FB.update(state.playersRef.child(player.name), player)
       })

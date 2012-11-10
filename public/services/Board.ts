@@ -1,6 +1,7 @@
 ///<reference path="../def/angular.d.ts"/>
+///<reference path="../def/underscore.d.ts"/>
 
-interface IPosition {
+interface IPositionChange {
   axis:string;
   distance:number;
 }
@@ -10,12 +11,18 @@ interface IPoint {
   y:number;
 }
 
+interface IDirectional extends IPoint {
+  x:number;
+  y:number;
+  direction:string;
+}
+
 interface IBoard {
-  getPosition(direction:string):IPosition;
-  move(object:IPoint, position:IPosition);
+  move(object:IPoint, direction:string):IDirectional;
   isHit(one:IPoint, two:IPoint):bool;
   randomX():number;
   randomY():number;
+  findHit(objects:IPoint[], object:IPoint):IPoint;
 
   // constants
   LEFT: string;
@@ -32,7 +39,7 @@ interface IBoard {
 interface IMove {
   axis: string;
   location: number;
-  facing: string;
+  direction: string;
 }
 
 angular.module('services')
@@ -43,16 +50,16 @@ angular.module('services')
   var HEIGHT = 600
   var UNIT = 50
   var GRID = {
-    x: WIDTH / UNIT,
-    y: HEIGHT / UNIT,
+    maxX: WIDTH / UNIT,
+    maxY: HEIGHT / UNIT,
   }
 
   var Board = {
     move: move,
-    getPosition: getPosition,
     isHit: isHit,
-    randomX: makeRandomN(GRID.x),
-    randomY: makeRandomN(GRID.y),
+    findHit: findHit,
+    randomX: makeRandomN(GRID.maxX),
+    randomY: makeRandomN(GRID.maxY),
 
     // Direction Constants
     LEFT: "left",
@@ -67,7 +74,7 @@ angular.module('services')
 
   return Board
 
-  function getPosition(direction:string):IPosition {
+  function getPositionChange(direction:string):IPositionChange {
 
       if(direction === Board.UP) {
         return {axis: 'y', distance: -1}
@@ -91,26 +98,34 @@ angular.module('services')
       }
   }
 
-  function move(object:IPoint, position:IPosition) {
-    var axis = position.axis
-    var distance = position.distance
-    var potential = object[axis] + distance;
-    var direction; 
-    if (axis == 'x' && distance > 0) direction = Board.RIGHT
-    else if (axis == 'x' && distance < 0) direction = Board.LEFT
-    else if (axis == 'y' && distance > 0) direction = Board.DOWN
-    else if (axis == 'y' && distance < 0) direction = Board.UP
-    else console.log("BAD MOVE", axis, distance)
+  // returns a new directional position for you
+  function move(object:IPoint, direction:string):IDirectional {
 
-    if (GRID[axis] <= potential || potential < 0) {
-      return null
+    var dp = getPositionChange(direction)
+    if (!dp) return
+
+    // start with the original
+    var moved:IDirectional = {
+      x: object.x,
+      y: object.y,
+      direction: direction,
     }
 
-    return {
-      axis: axis,
-      location: potential,
-      facing: direction
-    }
+    moved[dp.axis] += dp.distance
+
+    if (!inBounds(moved)) return
+
+    return moved
+  }
+
+  function inBounds(p:IPoint) {
+    return (0 <= p.x && p.x < GRID.maxX && 0 <= p.y && p.y < GRID.maxY)
+  }
+
+  function findHit(objects:IPoint[], object:IPoint):IPoint {
+    return objects.filter((obj:IPoint) {
+      return Board.isHit(obj, object)
+    })[0]
   }
 
   function isHit(one:IPoint, two:IPoint):bool {
