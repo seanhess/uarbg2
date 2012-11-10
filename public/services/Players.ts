@@ -10,20 +10,23 @@
 interface IPlayer {
   x:number;
   y:number;
-  facing:string;
-  state:string;
+
   wins:number;
   losses:number;
-  message:string;
   version:string;
   name:string;
-  killer:string;
   avatar:string;
-  status:string;
+
+  facing?:string;
+  message?:string;
+  killer?:string;
+
+  // alive or dead
+  state:string;
 
   // move this off of player
-  walking:bool;
-  sprite:number;
+  walking?:bool;
+  sprite?:number;
 }
 
 // only variables
@@ -36,8 +39,8 @@ interface IPlayerState {
 
   // private stuff. not for binding
   myname:string;
-  gameRef:firebase.IRef;
-  playersRef:firebase.IRef;
+  gameRef:fire.IRef;
+  playersRef:fire.IRef;
 }
 
 // only methods
@@ -56,7 +59,7 @@ interface IPlayerService {
 
 angular.module('services')
 
-.factory('Players', function($rootScope:ng.IScope, FB:firebase.IFB, Board:IBoard, AppVersion:any):IPlayerService {
+.factory('Players', function($rootScope:ng.IScope, FB:IFirebaseService, Board:IBoard, AppVersion:any):IPlayerService {
   // the big cheese. Does the deed
   // you can make fancy bindings here, no?
 
@@ -251,7 +254,7 @@ angular.module('services')
   // your function stuff is CRAP if you don't pass it in. no better than a class
   // property of PLAYERS
   function playerByName(players:IPlayer[], name:string):IPlayer {
-    return players.filter((p) => (p.name == name))[0]
+    return players.filter((p:IPlayer) => (p.name == name))[0]
   }
 
   function latestVersion(players:IPlayer[]):string {

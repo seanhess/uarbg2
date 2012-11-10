@@ -13,14 +13,14 @@
 
 angular.module('controllers')
 
-.controller('GameCtrl', function ($scope, Players:IPlayerService, Missiles, $routeParams, CurrentPlayer, $location, Board, SoundEffects, AppVersion) {
+.controller('GameCtrl', function ($scope, Players:IPlayerService, Missiles:IMissileService, $routeParams, CurrentPlayer:ICurrentPlayerService, $location, Board:IBoard, SoundEffects:ISoundEffectsService, AppVersion:string) {
 
   $scope.version = AppVersion
   $scope.gameId = $routeParams.gameId
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
-    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player" + Math.floor(Math.random()*6), state: "alive"}
+    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player" + Math.floor(Math.random()*6), state: "alive", x:0, y:0, wins:0, losses:0, version:AppVersion}
 
   // only play if you are identified
   if (!CurrentPlayer.player) 
@@ -37,8 +37,7 @@ angular.module('controllers')
   Players.join(players, CurrentPlayer.player)
   $scope.players = players
 
-  var missiles = new Missiles($scope.gameId,players)
-  missiles.listen()
+  var missiles = Missiles.connect($scope.gameId, players)
   $scope.missiles = missiles
 
   $scope.latestAlert = "Welcome to Your Underwater Adventure"
@@ -66,12 +65,12 @@ angular.module('controllers')
       DOWN = 40,
       SPACE = 32
 
-  function keyCodeToDirection(code) {
+  function keyCodeToDirection(code:number):string {
     if (code == LEFT) return Board.LEFT
     else if (code == RIGHT) return Board.RIGHT
     else if (code == DOWN) return Board.DOWN
     else if (code == UP) return Board.UP
-    return false
+    return null
   }
 
   function getSprite(newDirection) {
@@ -91,7 +90,7 @@ angular.module('controllers')
   $scope.keypress = function (e) {
 
       if (e.keyCode === 32) {
-        missiles.fireMissile(players.current)
+        Missiles.fireMissile(missiles, players.current)
       }
 
       else {
@@ -99,7 +98,7 @@ angular.module('controllers')
         if (!boardDirection) return
         var position = Board.getPosition(boardDirection)
         var location = Board.move(players.current, position)
-        if (location && players.current.status != "dead") {
+        if (location && players.current.state != "dead") {
           players.current.walking = true;
 
           setTimeout(function(){
@@ -115,7 +114,7 @@ angular.module('controllers')
 
           var collision = false;
           Players.alivePlayers(players.all).forEach(function(val,key){
-            if (val.name != players.current.name && val.status != "dead") {
+            if (val.name != players.current.name && val.state != "dead") {
               if (location.axis == "x") {
                 if (val.x == location.location && val.y == players.current.y) collision = true;
               }

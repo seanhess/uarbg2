@@ -4,7 +4,13 @@
 // TODO switch to firebase.d.ts
 declare var Firebase;
 
-module firebase {
+interface IFirebaseService {
+  game(gameId:string):fire.IRef;
+  apply(cb:fire.IValueCB):fire.IRefCB;
+  update(ref:fire.IRef, obj:any);
+}
+
+module fire {
 
   export interface IRef {
     child(name:string);
@@ -22,12 +28,6 @@ module firebase {
     (val:any);
   }
 
-  export interface IFB {
-    game(gameId:string):IRef;
-    apply(cb:IValueCB):IRefCB;
-    update(ref:IRef, obj:any);
-  }
-
 
   // Functional Style Class: it's the same as the module that you were looking for!
   // wait, this sucks. To call other functions in the module, you have to use this
@@ -39,7 +39,7 @@ module firebase {
   // minus: can lose this pointer
   // minus: you should be using an interface type, so you have to define the interface twice anyway
 
-  export class FB {
+  export class FB implements IFirebaseService{
 
     constructor(
         private $rootScope:ng.IRootScopeService
@@ -71,6 +71,6 @@ module firebase {
   }
 }
 
-angular.module('services').factory('FB', function($rootScope) {
-  return new firebase.FB($rootScope)
+angular.module('services').factory('FB', function($rootScope):IFirebaseService {
+  return new fire.FB($rootScope)
 })
