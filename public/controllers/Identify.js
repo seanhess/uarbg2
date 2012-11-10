@@ -8,7 +8,6 @@ define(["require", "exports"], function(require, exports) {
                     $scope.intro = "show";
                 });
             }, 1200);
-            console.log("WAHOO");
             $scope.version = AppVersion;
             $scope.player = CurrentPlayer.loadPreferences();
             $scope.gameId = $scope.player.gameId || "global";

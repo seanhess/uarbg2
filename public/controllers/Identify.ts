@@ -36,8 +36,6 @@ export class Controller {
         })
     }, 1200)
 
-    console.log("WAHOO")
-
     $scope.version = AppVersion
 
     // see if they have a preferred name and gameId

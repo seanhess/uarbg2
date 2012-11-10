@@ -3,6 +3,7 @@ define(["require", "exports", "../app"], function(require, exports, __app__) {
 
     
     
+    
     app.main.factory('Players', function ($rootScope, FB, Board, AppVersion) {
         return {
             isAlive: isAlive,

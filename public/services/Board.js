@@ -1,103 +1,97 @@
-define(function(require) {
-  var app = require('app')
-  app.main
+define(["require", "exports", "../app"], function(require, exports, __app__) {
+    var app = __app__;
 
-.factory('Board', function($rootScope) {
+    var MAP;
+    (function (MAP) {
+        MAP.width = 800;
+        MAP.height = 600;
+        MAP.unit = 50;
+        MAP.grid = {
+            x: MAP.width / MAP.unit,
+            y: MAP.width / MAP.unit
+        };
+    })(MAP || (MAP = {}));
 
-  var map = { 
-    width: 800,
-    height: 600,
-    unit: 50
-  }
-
-  map.grid = {
-    x: map.width / map.unit,
-    y: map.height / map.unit
-  }
-
-  console.log(map, map.grid)
-
-  // Directions
-  var LEFT = "left"
-  var RIGHT = "right"
-  var UP = "up"
-  var DOWN = "down"
-
-  function getPosition(direction) {
-      var position = {}
-
-      if(direction === UP) {
-        position.axis = 'y'
-        position.distance = -1;
-      }
-
-      else if(direction === RIGHT) {
-        position.axis = 'x'
-        position.distance = 1
-      }
-
-      else if(direction === DOWN) {
-        position.axis = 'y'
-        position.distance = 1
-      }
-
-      else if(direction === LEFT) {
-        position.axis = 'x'
-        position.distance = -1
-      }
-
-      else {
-        console.log("BAD DIRECTION", direction)
-        return false
-      }
-
-      return position;
-  }
-
-  function move(object, position) {
-    var axis = position.axis
-    var distance = position.distance
-    var potential = object[axis] + distance;
-    var direction; 
-    if (axis == 'x' && distance > 0) direction = RIGHT
-    else if (axis == 'x' && distance < 0) direction = LEFT
-    else if (axis == 'y' && distance > 0) direction = DOWN
-    else if (axis == 'y' && distance < 0) direction = UP
-    else console.log("BAD MOVE", axis, distance)
-
-    if (map.grid[axis] <= potential || potential < 0) {
-      return false
-    }
-
-    return {
-      axis: axis,
-      location: potential,
-      facing: direction
-    }
-  }
-
-  function isHit(one, two) {
-    return (one.x == two.x && one.y == two.y)
-  }
-
-  function makeRandomN(max) {
-    return function() {
-      return Math.floor(Math.random() * max)
-    }
-  }
-
-  return {
-    move: move,
-    getPosition: getPosition,
-    unit: map.unit,
-    isHit: isHit,
-    randomX: makeRandomN(map.grid.x),
-    randomY: makeRandomN(map.grid.y),
-    LEFT: LEFT,
-    RIGHT: RIGHT,
-    UP: UP,
-    DOWN: DOWN,
-  }
+    exports.LEFT = "left";
+    exports.RIGHT = "right";
+    exports.UP = "up";
+    exports.DOWN = "down";
+    app.main.factory('Board', function ($rootScope) {
+        return {
+            move: move,
+            getPosition: getPosition,
+            isHit: isHit,
+            randomX: makeRandomN(MAP.grid.x),
+            randomY: makeRandomN(MAP.grid.y)
+        };
+        function getPosition(direction) {
+            if(direction === exports.UP) {
+                return {
+                    axis: 'y',
+                    distance: -1
+                };
+            }
+            if(direction === exports.RIGHT) {
+                return {
+                    axis: 'x',
+                    distance: 1
+                };
+            }
+            if(direction === exports.DOWN) {
+                return {
+                    axis: 'y',
+                    distance: 1
+                };
+            }
+            if(direction === exports.LEFT) {
+                return {
+                    axis: 'x',
+                    distance: -1
+                };
+            } else {
+                console.log("BAD DIRECTION", direction);
+                return null;
+            }
+        }
+        function move(object, position) {
+            var axis = position.axis;
+            var distance = position.distance;
+            var potential = object[axis] + distance;
+            var direction;
+            if(axis == 'x' && distance > 0) {
+                direction = exports.RIGHT;
+            } else {
+                if(axis == 'x' && distance < 0) {
+                    direction = exports.LEFT;
+                } else {
+                    if(axis == 'y' && distance > 0) {
+                        direction = exports.DOWN;
+                    } else {
+                        if(axis == 'y' && distance < 0) {
+                            direction = exports.UP;
+                        } else {
+                            console.log("BAD MOVE", axis, distance);
+                        }
+                    }
+                }
+            }
+            if(MAP.grid[axis] <= potential || potential < 0) {
+                return null;
+            }
+            return {
+                axis: axis,
+                location: potential,
+                facing: direction
+            };
+        }
+        function isHit(one, two) {
+            return (one.x == two.x && one.y == two.y);
+        }
+        function makeRandomN(max) {
+            return function () {
+                return Math.floor(Math.random() * max);
+            }
+        }
+    });
 })
 
-})

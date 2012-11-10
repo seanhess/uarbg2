@@ -12,6 +12,7 @@
 import app = module("../app")
 import fb = module("./FB")
 import av = module("./AppVersion")
+import b = module("./Board")
 
 export interface IPlayer {
   x:number;
@@ -55,7 +56,7 @@ export interface IPlayerService {
   move(state:IPlayerState, player:IPlayer);
 }
 
-app.main.factory('Players', function($rootScope:ng.IScope, FB:fb.FB, Board, AppVersion:av.IAppVersion):IPlayerService {
+app.main.factory('Players', function($rootScope:ng.IScope, FB:fb.FB, Board:b.IBoard, AppVersion:av.IAppVersion):IPlayerService {
   // the big cheese. Does the deed
   // you can make fancy bindings here, no?
 
