@@ -12,7 +12,9 @@ interface ICurrentPlayerService {
   savePreferences(player:IPlayer, gameId:string);
 }
 
-angular.module('services').factory('CurrentPlayer', function():ICurrentPlayerService {
+angular.module('services')
+
+.factory('CurrentPlayer', function():ICurrentPlayerService {
   // lets you share the current player
 
   function loadPreferences():IPreferences {

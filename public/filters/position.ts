@@ -7,10 +7,3 @@ angular.module('filters')
     return {left: object.x * Board.UNIT + "px", top: object.y * Board.UNIT + "px"}
   }
 })
-
-
-.filter("tauntposition", function(Board:IBoard) {
-  return function(object:IPoint) {
-    return {left: (object.x+1) * Board.UNIT + "px", top: object.y * Board.UNIT + "px"}
-  }
-})

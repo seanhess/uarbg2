@@ -1,32 +1,42 @@
+interface ISoundEffectsService {
+  music();
+  explosion();
+  rocket();
+}
+
+declare class Audio {
+  currentTime: number;
+  play();
+  pause();
+}
+
 angular.module('services')
 
-.factory('SoundEffects', function() {
+.factory('SoundEffects', function():ISoundEffectsService {
 
   var bgMusic = new Audio("/audio/g-style.mp3")
   //var underwater = new Audio("/audio/Underwater.mp3")
   var epic = new Audio("/audio/UnderwaterEpicBattle.mp3")
 
-  function makeMusic(audio, seconds) {
-    console.log("makeMusic ",audio.networkState, " / ", audio.readyState)
+  function makeMusic(audio:any, seconds:number):() => void {
     seconds = seconds || 0
-    
     return function() {
       audio.play();
     }
-    /*
-    var callback = function() {
-      $(audio).bind("canplay", function() {
-        console.log("makeMusic - canplay")
-        audio.currentTime = seconds
-        audio.play()
-      })
-    }
-    audio.load()
-    return callback*/
+
+    //var callback = function() {
+      //$(audio).bind("canplay", function() {
+        //console.log("makeMusic - canplay")
+        //audio.currentTime = seconds
+        //audio.play()
+      //})
+    //}
+    //audio.load()
+    //return callback
   }
 
   // all parameters required
-  function makeSound(audio, seconds, duration) {
+  function makeSound(audio:any, seconds:number, duration:number):() => void {
     return function() {
       audio.pause()
       // we don't want the canplay thing if we're going to play it after it's been really loaded.

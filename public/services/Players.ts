@@ -54,7 +54,9 @@ interface IPlayerService {
   move(state:IPlayerState, player:IPlayer);
 }
 
-angular.module('services').factory('Players', function($rootScope:ng.IScope, FB:firebase.IFB, Board:IBoard, AppVersion:any):IPlayerService {
+angular.module('services')
+
+.factory('Players', function($rootScope:ng.IScope, FB:firebase.IFB, Board:IBoard, AppVersion:any):IPlayerService {
   // the big cheese. Does the deed
   // you can make fancy bindings here, no?
 

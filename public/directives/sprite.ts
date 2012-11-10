@@ -3,7 +3,7 @@
 angular.module('directives')
 
 .directive('sprite', function($parse) {
-  return function(scope, element, attrs) {
+  return function(scope:ng.IScope, element:JQuery, attrs) {
     // element is the player div
     // attrs.sprite is "player1"
 

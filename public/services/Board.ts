@@ -35,7 +35,9 @@ interface IMove {
   facing: string;
 }
 
-angular.module('services').factory('Board', function($rootScope:ng.IRootScopeService):IBoard {
+angular.module('services')
+
+.factory('Board', function($rootScope:ng.IRootScopeService):IBoard {
 
   var WIDTH = 800
   var HEIGHT = 600
