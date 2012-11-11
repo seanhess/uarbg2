@@ -120,6 +120,6 @@ angular.module('services')
     }
 
     function onRemovedMissile(missile) {
-      console.log("onRemovedMissile()")
+
     }
 })

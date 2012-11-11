@@ -6,8 +6,10 @@ angular.module('directives')
   return function(scope:ng.IScope, element:JQuery, attrs) {
     // element is a jquery element
 
-    // focus the div
+    // focus the div. without the first line it doesn't get keyboard events. 
+    // without the second you have to click on it
     element.attr('tabindex', 0)
+    element.focus()
 
     var onPress = $parse(attrs.keypress)
     var isPressed = false
