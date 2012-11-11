@@ -31,11 +31,17 @@ interface IPlayerState {
   winner: string;
   isPaid: bool;
   all: IPlayer [];
+  id?: string;
 
   // private stuff. not for binding
   myname:string;
   gameRef:fire.IRef;
   playersRef:fire.IRef;
+
+  boundOnJoin?:fire.IRefCB;
+  boundOnUpdate?:fire.IRefCB;
+  boundOnQuit?:fire.IRefCB;
+  boundOnWinner?:fire.IRefCB;
 }
 
 // only methods
@@ -46,7 +52,8 @@ interface IPlayerService {
   playerByName(players:IPlayer[], name:string):IPlayer;
   latestVersion(players:IPlayer[]):string;
 
-  connect(gameId:string):IPlayerState;
+  connect(gameId:string, id:string):IPlayerState;
+  disconnect(state:IPlayerState);
   join(state:IPlayerState, player:IPlayer);
   killPlayer(state:IPlayerState, player:IPlayer, killerName:string);
   move(state:IPlayerState, player:IPlayer);
@@ -57,7 +64,7 @@ interface IPlayerService {
 
 angular.module('services')
 
-.factory('Players', function($rootScope:ng.IScope, FB:IFirebaseService, Board:IBoard, AppVersion:any):IPlayerService {
+.factory('Players', function($rootScope:ng.IScope, FB:IFirebaseService, Board:IBoard, AppVersion:string):IPlayerService {
   // the big cheese. Does the deed
   // you can make fancy bindings here, no?
 
@@ -72,9 +79,10 @@ angular.module('services')
     killPlayer: killPlayer,
     move: move,
     resetGame: resetGame,
+    disconnect: disconnect,
   }
 
-  function connect(gameId:string):IPlayerState {
+  function connect(gameId:string, id:string):IPlayerState {
 
     var gameRef = FB.game(gameId)
     var playersRef = gameRef.child('players')
@@ -87,17 +95,31 @@ angular.module('services')
       current: null,
       winner: null,
       isPaid: isPaid(),
-      all: []
+      all: [],
+      id: id,
     }
 
-    // better way to bind? nope! that's what they are for!
-    playersRef.on('child_added', FB.apply((p) => onJoin(state,p)))
-    playersRef.on('child_changed', FB.apply((p) => onUpdate(state,p)))
-    playersRef.on('child_removed', FB.apply((p) => onQuit(state,p)))
+    state.boundOnJoin = FB.apply((p) => onJoin(state,p))
+    state.boundOnUpdate = FB.apply((p) => onUpdate(state,p))
+    state.boundOnQuit = FB.apply((p) => onQuit(state,p))
+    state.boundOnWinner = FB.apply((n) => onWinner(state,n))
 
-    gameRef.child('winner').on('value', FB.apply((n) => onWinner(state,n)))
+    // better way to bind? nope! that's what they are for!
+    playersRef.on('child_added', state.boundOnJoin)
+    playersRef.on('child_changed', state.boundOnUpdate)
+    playersRef.on('child_removed', state.boundOnQuit)
+
+    gameRef.child('winner').on('value', state.boundOnWinner)
 
     return state
+  }
+
+  function disconnect(state:IPlayerState) {
+    state.playersRef.off('child_added', state.boundOnJoin)
+    state.playersRef.off('child_changed', state.boundOnUpdate)
+    state.playersRef.off('child_removed', state.boundOnQuit)
+
+    state.gameRef.child('winner').off('value', state.boundOnWinner)
   }
 
   function isAlive(p:IPlayer):bool {
@@ -120,7 +142,7 @@ angular.module('services')
     player.wins = player.wins || 0
     player.losses = player.losses || 0
     player.taunt = null
-    player.version = AppVersion.num
+    player.version = AppVersion
 
     var ref = state.playersRef.child(player.name)
     ref.removeOnDisconnect();
@@ -129,6 +151,7 @@ angular.module('services')
 
   // what can change on a person?
   function onJoin(state:IPlayerState, player:IPlayer) {
+    // state.current needs to refer to the SAME player you add to the array
     if (!state.current && player.name == state.myname) {
       state.current = player
     }
@@ -155,7 +178,6 @@ angular.module('services')
     if (remotePlayer.killer) player.killer = remotePlayer.killer
 
     if (player.state == STATE.DEAD) {
-      console.log("DEATH", player.name)
       $rootScope.$broadcast("kill", player)
       // EVERYONE needs to check the win, because otherwise the game doesn't end!
       checkWin(state)

@@ -33,7 +33,7 @@ angular.module('controllers')
     //return
   //}
 
-  var players = Players.connect($scope.gameId)
+  var players = Players.connect($scope.gameId, "Game")
   Players.join(players, CurrentPlayer.player)
   $scope.players = players
 
@@ -53,7 +53,7 @@ angular.module('controllers')
 
 
   // AUDIO
-  //SoundEffects.music()
+  SoundEffects.music()
 
   $scope.test = function() {
     //SoundEffects.rocket()
@@ -110,4 +110,8 @@ angular.module('controllers')
       //});
       //if (!collision) {
   }
+
+  $scope.$on('$destroy', function() {
+    Players.disconnect(players)
+  });
 })

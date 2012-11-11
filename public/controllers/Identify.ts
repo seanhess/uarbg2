@@ -43,7 +43,7 @@ angular.module('controllers').controller('IdentifyCtrl', function($scope: Identi
     $scope.gameId = $scope.player.gameId || "global"
 
     // [ ] detect which game to join ("global")
-    var players = Players.connect($scope.gameId)
+    var players = Players.connect($scope.gameId, "Identify")
     $scope.players = players
 
     // available avatars
@@ -95,6 +95,10 @@ angular.module('controllers').controller('IdentifyCtrl', function($scope: Identi
     $scope.isPlayerAvatar = function(name) {
       return ($scope.player && $scope.player.avatar == name)
     }
+
+    $scope.$on('$destroy', function() {
+      Players.disconnect(players)
+    });
 
 })
 

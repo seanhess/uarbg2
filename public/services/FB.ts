@@ -16,6 +16,7 @@ module fire {
     child(name:string);
     val();
     on(event:string, cb:IRefCB);
+    off(event:string, cb:IRefCB);
     set(val:any);
     removeOnDisconnect();
   }

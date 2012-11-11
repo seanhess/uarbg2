@@ -32,6 +32,8 @@ angular.module('services')
     }
 
     function connect(gameId:string, players:IPlayerState):IMissileState {
+
+      console.log("M.connect", players.id)
       var missilesRef = FB.game(gameId).child('missiles')
 
       var all = []
