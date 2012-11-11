@@ -1,21 +1,5 @@
 ///<reference path="../def/angular.d.ts"/>
 
-/*
-
-// sprite-walking="player.walking"
-// sprite: generic, plays through different sprites on a sheet
-// hmm... I'd like to reuse some stuff
-
-
-SPRITES: in general, make them change vertically, so you just change the background-y
-
-... this should be defined in the CSS, no?
-
-PERSON: bind to direction
-PERSON: play through multiple states
-*/
-
-
 angular.module('directives')
 
 // simple directive that updates the background-y given a direction
@@ -79,8 +63,7 @@ angular.module('directives')
       if (frame >= TOTAL_FRAMES) stopWalking()
     }
 
-    scope.$watch(attrs.spriteWalking + ".x", startWalking)
-    scope.$watch(attrs.spriteWalking + ".y", startWalking)
+    attrs.$observe('spriteWalking', startWalking)
   }
 })
 

@@ -34,10 +34,8 @@
           ng-repeat="player in players.all | filter:{state:'alive'}"
           ng-style="player | position"
           sprite-direction="player.direction"
-          sprite-walking="player"
+          sprite-walking="{{player.x}} {{player.y}}"
           >
-
-          <!--sprite-walking="player.x + player.y"-->
 
         <div class="taunt triangle-border left" ng-show="players.taunt">{{players.taunt}}</div>
       </div>

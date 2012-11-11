@@ -3,42 +3,31 @@ uarbg2
 
 Underwater Adventure Rocket Bazooka Guys v2
 
-
 Install
 -------
 
-* npm install
-* bower install
-* node_modules/.bin/coffee app.coffee
-
+    make install
 
 Compiling
 ---------
 
-This should compile EVERYTHING, since app includes the controllers, and the controllers import the services
+    make
 
-    tsc --module amd public/app.ts
-
-You still need to add everything to public/main.js to get it to load
-
-Todo
-----
-
-* matchmaking via geolocation
-
-* Skinning the main screen
-
-* Boot old players! Save your player version
-
-
-
-HitList
-------
-* Winning Bug/ Dead player moves. Too many points
+Hit List
+--------
+* Fix rounds / winning
+* Fix closed-lid players
 * Explosion
-* Unlocking Payments
 
-Skinning
-* New backgrounds!
-* Bring the playerCard to the main screen
-* Logo with padding and looking nicer
+* DONE move/fire after dead
+
+Next Features
+-------------
+* facebook / twitter login
+* invite only
+
+
+Not Yet
+-------
+* Update payments
+* matchmaking via geolocation

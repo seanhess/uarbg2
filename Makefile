@@ -1,6 +1,11 @@
-all: build-ts
+all: build
 
-build-ts:
+build:
 	tsc --out public/main.js public/app.ts
+
+install:
+	npm install && bower install
+
+
 
 

@@ -23,10 +23,6 @@ interface IPlayer {
 
   // alive or dead
   state:string;
-
-  // move this off of player
-  walking?:bool;
-  sprite?:number;
 }
 
 // only variables
@@ -115,7 +111,6 @@ angular.module('services')
 
     player.x = Board.randomX()
     player.y = Board.randomY()
-    player.sprite = 1
     player.direction = Board.DOWN
     player.state = STATE.ALIVE
     player.wins = player.wins || 0
@@ -225,12 +220,11 @@ angular.module('services')
       state.gameRef.child('winner').remove()
 
       state.all.forEach((player) => {
-          player.x = Board.randomX()
-          player.y = Board.randomY()
-          player.sprite = 1
-          player.direction = Board.DOWN
-          player.state = STATE.ALIVE
-          FB.update(state.playersRef.child(player.name), player)
+        player.x = Board.randomX()
+        player.y = Board.randomY()
+        player.direction = Board.DOWN
+        player.state = STATE.ALIVE
+        FB.update(state.playersRef.child(player.name), player)
       })
   }
 

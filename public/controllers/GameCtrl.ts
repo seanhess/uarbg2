@@ -73,20 +73,6 @@ angular.module('controllers')
     return null
   }
 
-  function getSprite(newDirection) {
-    var slide,
-        previousDirection = players.current.direction,
-        previous = players.current.sprite;
-
-    if(previousDirection === newDirection) {
-      slide = ++previous % 3;
-    } else {
-      slide = 1;
-    }
-
-    return slide;
-  }
-
   // ignore ALL key presses if they are dead
   $scope.keypress = function (e) {
 
@@ -110,42 +96,19 @@ angular.module('controllers')
 
       Players.move(players, players.current);
 
-          // you need:
-          // a list of updates: { x: 1, y: 2, direction: 'down' }
+      // WILL I HIT ANY OTHER PLAYERS?
 
-          //players.current.walking = true;
-
-          //setTimeout(function(){
-            //$scope.$apply(function() {
-              //players.current.walking = false;
-              //Players.move(players, players.current);
-            //});
-          //}, 500);
-
-          /*players.current[location.axis] = location.location;
-          players.current.direction = location.direction;
-          players.move(players.current);*/
-
-          // WILL I HIT ANY OTHER PLAYERS?
-
-          //var collision = false;
-          //Players.alivePlayers(players.all).forEach(function(p:IPlayer){
-            //if (p.name != players.current.name && p.state != "dead") {
-              //if (location.axis == "x") {
-                //if (p.x == location.location && p.y == players.current.y) collision = true;
-              //}
-              //if (location.axis == "y") {
-                //if (p.y == location.location && p.x == players.current.x) collision = true;
-              //}
-            //}
-          //});
-          //if (!collision) {
-
-
-          //} else {
-            //// we can play a collision sound here!
+      //var collision = false;
+      //Players.alivePlayers(players.all).forEach(function(p:IPlayer){
+        //if (p.name != players.current.name && p.state != "dead") {
+          //if (location.axis == "x") {
+            //if (p.x == location.location && p.y == players.current.y) collision = true;
+          //}
+          //if (location.axis == "y") {
+            //if (p.y == location.location && p.x == players.current.x) collision = true;
           //}
         //}
-      // }
+      //});
+      //if (!collision) {
   }
 })
