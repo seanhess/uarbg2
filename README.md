@@ -15,18 +15,19 @@ Compiling
 
 Hit List
 --------
-* Fix rounds / winning
-* Fix closed-lid players
 * Explosion
 * Rocket animation?
-* BUG: must click to play
+* (bug) must click to play
+* (bug) multiple taunt bubbles. umm... no
+* (bug) you can kill yourself?
 
-* use signals/events instead of $rootScope.broadcast
+* (clean) use signals/events instead of $rootScope.broadcast
+* (clean) going back to the main page should clean up the game. 
+* (idea) switch game/matches when you switch matches?
 
-* CLEANUP: going back to the main page should clean up the game. 
-* IDEA: switch game/matches when you switch matches?
-
-* DONE move/fire after dead
+* DONE (bug) move/fire after dead
+* DONE (bug) rounds / winning
+* DONE (bug) closed-lid players
 
 Next Features
 -------------

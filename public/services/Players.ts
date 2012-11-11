@@ -10,6 +10,7 @@
 interface IPlayer {
   x:number;
   y:number;
+  direction:string;
 
   wins:number;
   losses:number;
@@ -17,8 +18,7 @@ interface IPlayer {
   name:string;
   avatar:string;
 
-  direction?:string;
-  message?:string;
+  taunt?:string;
   killer?:string;
 
   // alive or dead
@@ -29,7 +29,6 @@ interface IPlayer {
 interface IPlayerState {
   current: IPlayer;
   winner: string;
-  taunt: string;
   isPaid: bool;
   all: IPlayer [];
 
@@ -87,7 +86,6 @@ angular.module('services')
 
       current: null,
       winner: null,
-      taunt: null,
       isPaid: isPaid(),
       all: []
     }
@@ -121,7 +119,7 @@ angular.module('services')
     player.state = STATE.ALIVE
     player.wins = player.wins || 0
     player.losses = player.losses || 0
-    player.message = null
+    player.taunt = null
     player.version = AppVersion.num
 
     var ref = state.playersRef.child(player.name)
@@ -152,6 +150,7 @@ angular.module('services')
     player.state = remotePlayer.state;
     player.wins = remotePlayer.wins;
     player.losses = remotePlayer.losses;
+    player.taunt = remotePlayer.taunt;
     //player.walking = remotePlayer.walking;
     if (remotePlayer.killer) player.killer = remotePlayer.killer
 
@@ -172,7 +171,6 @@ angular.module('services')
     // ignore nulls
     if (!name) {
       state.winner = name
-      state.taunt = null
       return
     }
 
@@ -180,38 +178,33 @@ angular.module('services')
     if (name == state.winner) return
 
     state.winner = name
-    state.taunt = TAUNT_LIST[Math.floor(Math.random()*TAUNT_LIST.length)];
     console.log("WE HAVE A WINNER", state.winner)
     $rootScope.$broadcast("winner", name)
 
-    // Now EVERYONE resets the game together
+    // Now EVERYONE resets the game together. Since we're all setting it to the same state, it's ok.
     setTimeout(() => resetGame(state), 1000)
-
-    // don't "WIN" twice if you're already the winner
-    //if (state.winner && state.winner.name == player.name)
-      //return
-
-    //if (state.current && state.current.name == player.name) {
-      //setTimeout(() => resetGame(state), 3000)
-    //}
+    setTimeout(() => startGame(state), 2000)
   }
 
-  // reset game
-  // immediately makes it playable? 
-  // I could move them back
+  // resets game, but does NOT make it playable
+  // only resets YOU. any players not paying attention don't get reset. they get REMOVED?
+  // at least we can make them be dead
   function resetGame(state:IPlayerState) {
-      console.log("Initialize Game")
-      // build walls?? (how t
-      // for each player, make them alive
-      state.gameRef.child('winner').remove()
+    console.log("Initialize Game")
 
-      state.all.forEach((player) => {
-        player.x = Board.randomX()
-        player.y = Board.randomY()
-        player.direction = Board.DOWN
-        player.state = STATE.ALIVE
-        FB.update(state.playersRef.child(player.name), player)
-      })
+    state.current.x = Board.randomX()
+    state.current.y = Board.randomY()
+    state.current.direction = Board.DOWN
+    state.current.state = STATE.ALIVE
+    state.current.taunt = null
+
+    FB.update(state.playersRef.child(state.current.name), state.current)
+  }
+
+  // makes the game playable
+  function startGame(state:IPlayerState) {
+      console.log("START Game!")
+      state.gameRef.child('winner').remove()
   }
 
   // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
@@ -237,10 +230,11 @@ angular.module('services')
     state.gameRef.child("winner").removeOnDisconnect();
     state.gameRef.child("winner").set(winner.name)
 
-    // only if it is ME, then give yourself a point
+    // only if it is ME, then give yourself a point and taunt
     if (winner.name == state.current.name) {
       winner.wins += 1
-      state.playersRef.child(winner.name).child("wins").set(winner.wins)
+      winner.taunt = TAUNT_LIST[Math.floor(Math.random()*TAUNT_LIST.length)];
+      FB.update(state.playersRef.child(winner.name), winner)
     }
   }
 

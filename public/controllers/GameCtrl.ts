@@ -20,7 +20,7 @@ angular.module('controllers')
 
   // DEBUG: you can set ?debugPlayerName and just hit refresh over and over to reconnect
   if ($routeParams.debugPlayerName)
-    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player" + Math.floor(Math.random()*6), state: "alive", x:0, y:0, wins:0, losses:0, version:AppVersion}
+    CurrentPlayer.player = {name: $routeParams.debugPlayerName, avatar:"player" + Math.floor(Math.random()*6), state: "alive", x:0, y:0, wins:0, losses:0, version:AppVersion, direction:Board.DOWN}
 
   // only play if you are identified
   if (!CurrentPlayer.player) 
@@ -76,8 +76,9 @@ angular.module('controllers')
   // ignore ALL key presses if they are dead
   $scope.keypress = function (e) {
 
-      // you can do ANYTHING if you are dead
+      // you can do ANYTHING if you are dead, or if the game is currently OVER
       if (!Players.isAlive(players.current)) return
+      if (players.winner) return
 
       if (e.keyCode === 32)
         return Missiles.fireMissile(missiles, players.current)

@@ -37,7 +37,7 @@
           sprite-walking="{{player.x}} {{player.y}}"
           >
 
-        <div class="taunt triangle-border left" ng-show="players.taunt">{{players.taunt}}</div>
+        <div class="taunt triangle-border left" ng-show="player.taunt">{{player.taunt}}</div>
       </div>
       <div ng-repeat="missile in missiles.all"> 
       <div class="missile {{missile.direction}}" ng-style="missile | position"></div>
