@@ -3,5 +3,5 @@
 angular.module('services')
 
 .factory('AppVersion', function():string {
-  return "1.1"
+  return "1.2"
 })
