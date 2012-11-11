@@ -102,6 +102,7 @@ angular.module('controllers')
       var position = Board.move(players.current, direction)
       if (!position) return
         
+      // the x and y change
       players.current.x = position.x
       players.current.y = position.y
       players.current.direction = position.direction
@@ -122,7 +123,7 @@ angular.module('controllers')
           //}, 500);
 
           /*players.current[location.axis] = location.location;
-          players.current.facing = location.facing;
+          players.current.direction = location.direction;
           players.move(players.current);*/
 
           // WILL I HIT ANY OTHER PLAYERS?

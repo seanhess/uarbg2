@@ -89,25 +89,9 @@ html {
   -o-transition-duration: 500ms;
   -ms-transition-duration: 500ms;
   transition-duration: 500ms;
-  background: url("/images/player1.png") no-repeat -150px -150px;
   position: absolute;
   width: 50px;
   height: 50px;
-}
-#game #board .player2 {
-  background: url("/images/player2.png") no-repeat -150px -150px;
-}
-#game #board .player3 {
-  background: url("/images/player3.png") no-repeat -150px -150px;
-}
-#game #board .player4 {
-  background: url("/images/player4.png") no-repeat -150px -150px;
-}
-#game #board .player5 {
-  background: url("/images/player5.png") no-repeat -150px -150px;
-}
-#game #board .player6 {
-  background: url("/images/player6.png") no-repeat -150px -150px;
 }
 #game #board .missile {
   position: absolute;
@@ -204,6 +188,7 @@ html {
   height: 89px;
   margin-top: 16px;
 }
+.avatar,
 .avatar.player1 {
   background: url("/images/player1.png") no-repeat center bottom;
 }

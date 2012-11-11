@@ -1,77 +1,84 @@
 ///<reference path="../def/angular.d.ts"/>
 
+/*
+
+// sprite-walking="player.walking"
+// sprite: generic, plays through different sprites on a sheet
+// hmm... I'd like to reuse some stuff
+
+
+SPRITES: in general, make them change vertically, so you just change the background-y
+
+... this should be defined in the CSS, no?
+
+PERSON: bind to direction
+PERSON: play through multiple states
+*/
+
+
 angular.module('directives')
 
-.directive('sprite', function($parse) {
+// simple directive that updates the background-y given a direction
+// shouldn't some of this be in the css instead? Should this have the knowledge
+// of the background size?
+
+.directive('spriteDirection', function(Board:IBoard) {
+  return {
+    restrict:'A',
+    link:function(scope:ng.IScope, element:JQuery, attrs) {
+      scope.$watch(attrs.spriteDirection, function(direction) {
+        direction = direction || Board.DOWN
+
+        if(direction == Board.UP)
+          element.css('backgroundPositionY', '-100px');
+
+        else if(direction == Board.RIGHT)
+          element.css('backgroundPositionY', '-50px');
+
+        else if(direction == Board.DOWN)
+          element.css('backgroundPositionY', '-150px');
+
+        else if(direction == Board.LEFT)
+          element.css('backgroundPositionY', '0px');
+      })
+    }
+  }
+})
+
+// Now, sprite-walking. I need to know when either x or y changes
+.directive('spriteWalking', function(Board:IBoard) {
   return function(scope:ng.IScope, element:JQuery, attrs) {
-    // element is the player div
-    // attrs.sprite is "player1"
 
-    var isWalking;
+    var ANIMATE_DURATION = 500
+    var FRAME_DURATION = 70
+    var TOTAL_FRAMES = Math.ceil(ANIMATE_DURATION / FRAME_DURATION)
 
-    function setFacing(facing) {
-      var facing = (typeof facing == 'undefined') ? "down" : facing;
+    // animate up to a certain number of times
+    // well, until css transition end, really
+    // you need to know the duration, so you can set a timer
 
-      if(facing == "up") {
-        element.css('backgroundPositionY', '-100px');
-      }
+    var interval;
+    var frame;
 
-      if(facing == "right") {
-        element.css('backgroundPositionY', '-50px');
-      }
-
-      if(facing == "down") {
-        element.css('backgroundPositionY', '-150px');
-      }
-
-      if(facing == "left") {
-        element.css('backgroundPositionY', '0px');
-      }
+    function startWalking() {
+      frame = 0
+      stopWalking() // don't double animate!
+      interval = setInterval(animateFrame, FRAME_DURATION)
     }
 
-    function walking() {
-      var i = 0;
-      var animateWalk = function() {
-        return setTimeout(function(){
-          setSprite(++i % 3);		
-          if(isWalking) {
-            animateWalk();
-          }
-        }, 70);
-      }
-
-      return animateWalk();
+    function stopWalking() {
+      frame = 0
+      clearInterval(interval)
     }
 
-    function setSprite(sprite) {
-      if(sprite == 0) {
-        element.css('backgroundPositionX', '0');
-      }
-
-      if(sprite == 1) {
-        element.css('backgroundPositionX', '-50px');
-      }
-
-      if(sprite == 2) {
-        element.css('backgroundPositionX', '-100px');
-      }
+    function animateFrame() {
+      var sprite = frame++ % 3
+      if(sprite == 0)      element.css('backgroundPositionX', '0');
+      else if(sprite == 1) element.css('backgroundPositionX', '-50px');
+      else if(sprite == 2) element.css('backgroundPositionX', '-100px');
+      if (frame >= TOTAL_FRAMES) stopWalking()
     }
 
-    scope.$watch(attrs.sprite, function(val) {
-      setSprite(val);
-    })
-
-    scope.$watch(attrs.spriteFacing, function(val) {
-      setFacing(val);
-    })
-
-    scope.$watch(attrs.spriteWalking, function(val) {
-      if(val) {
-        isWalking = true;
-        walking();
-      } else {
-        isWalking = false;
-      }
-    })
+    scope.$watch(attrs.spriteWalking, startWalking)
   }
 })

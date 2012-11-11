@@ -30,13 +30,15 @@
 
       <h1 class="winner" ng-show="players.winner">{{players.winner.name}} Wins!</h1>
 
-      <div class="player {{player.avatar}}" 
+      <div class="player avatar {{player.avatar}}" 
           ng-repeat="player in players.all | filter:{state:'alive'}"
           ng-style="player | position"
-          sprite="player.sprite"
-          sprite-facing="player.facing"
-          sprite-walking="player.walking"
+          sprite-direction="player.direction"
+          sprite-walking="player.x"
           >
+
+          <!--sprite-walking="player.x + player.y"-->
+
         <div class="taunt triangle-border left" ng-show="players.taunt">{{players.taunt}}</div>
       </div>
       <div ng-repeat="missile in missiles.all"> 

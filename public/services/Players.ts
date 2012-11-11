@@ -129,9 +129,6 @@ angular.module('services')
   }
 
   // what can change on a person?
-  // position = {x, y, facing}
-  // then you can bind to it separately
-
   function onJoin(state:IPlayerState, player:IPlayer) {
     if (!state.current && player.name == state.myname) {
       state.current = player
