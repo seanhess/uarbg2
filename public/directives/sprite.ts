@@ -79,6 +79,11 @@ angular.module('directives')
       if (frame >= TOTAL_FRAMES) stopWalking()
     }
 
-    scope.$watch(attrs.spriteWalking, startWalking)
+    scope.$watch(attrs.spriteWalking + ".x", startWalking)
+    scope.$watch(attrs.spriteWalking + ".y", startWalking)
   }
 })
+
+
+// TODO more generic form you can use for missiles, or the explosion, etc
+// just some way to kick off a Y-based animation when a property changes?
