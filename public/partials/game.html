@@ -28,7 +28,7 @@
 
     <div id="board" keypress="keypress(e)" ng-click="test()">
 
-      <h1 class="winner" ng-show="players.winner">{{players.winner.name}} Wins!</h1>
+      <h1 class="winner" ng-show="players.winner">{{players.winner}} Wins!</h1>
 
       <div class="player avatar {{player.avatar}}" 
           ng-repeat="player in players.all | filter:{state:'alive'}"

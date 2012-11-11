@@ -28,7 +28,7 @@ interface IPlayer {
 // only variables
 interface IPlayerState {
   current: IPlayer;
-  winner: IPlayer;
+  winner: string;
   taunt: string;
   isPaid: bool;
   all: IPlayer [];
@@ -51,6 +51,9 @@ interface IPlayerService {
   join(state:IPlayerState, player:IPlayer);
   killPlayer(state:IPlayerState, player:IPlayer, killerName:string);
   move(state:IPlayerState, player:IPlayer);
+
+  // TODO no reset, make a NEW game
+  resetGame(state:IPlayerState);
 }
 
 angular.module('services')
@@ -68,7 +71,8 @@ angular.module('services')
     connect: connect,
     join: join,
     killPlayer: killPlayer,
-    move: move
+    move: move,
+    resetGame: resetGame,
   }
 
   function connect(gameId:string):IPlayerState {
@@ -92,6 +96,8 @@ angular.module('services')
     playersRef.on('child_added', FB.apply((p) => onJoin(state,p)))
     playersRef.on('child_changed', FB.apply((p) => onUpdate(state,p)))
     playersRef.on('child_removed', FB.apply((p) => onQuit(state,p)))
+
+    gameRef.child('winner').on('value', FB.apply((n) => onWinner(state,n)))
 
     return state
   }
@@ -150,7 +156,9 @@ angular.module('services')
     if (remotePlayer.killer) player.killer = remotePlayer.killer
 
     if (player.state == STATE.DEAD) {
+      console.log("DEATH", player.name)
       $rootScope.$broadcast("kill", player)
+      // EVERYONE needs to check the win, because otherwise the game doesn't end!
       checkWin(state)
     }
   }
@@ -159,60 +167,38 @@ angular.module('services')
     state.all = state.all.filter((p) => p.name != player.name)
   }
 
-  function checkWin(state:IPlayerState) {
-    var alive = alivePlayers(state.all)
+  function onWinner(state:IPlayerState, name:string) {
 
-    if (alive.length > 1) return
-    var winner = alive[0]
-    if (state.current == null || winner != state.current) return
-
-    // only if is ME
-    // why not share the winner with everyone?
-    winner.wins += 1
-    state.playersRef.child(winner.name).child("wins").set(winner.wins)
-    state.gameRef.child("winner").removeOnDisconnect();
-    FB.update(state.gameRef.child("winner"), winner)
-    // Nobody else should be able to act (already because they are dead)
-
-    // game is set to OVER (missiles finish hitting? like, can you still die?)
-    // save the WINNER!
-
-    // YOU WIN
-
-    // kick the game back to zero
-    // restart the game in 3 seconds!
-    // then turn everyone back to alive! (the winner does this?)
-  }
-
-  function onWinner(state:IPlayerState, player:IPlayer) {
-
-    // this can get called with null
-    if (!player) {
-      state.winner = null
+    // ignore nulls
+    if (!name) {
+      state.winner = name
       state.taunt = null
       return
     }
 
-    // don't "WIN" twice if you're already the winner
-    if (state.winner && state.winner.name == player.name)
-      return
+    // ignore if it hasn't changed
+    if (name == state.winner) return
 
-    // set the winner on all computers
-    state.winner = player
+    state.winner = name
     state.taunt = TAUNT_LIST[Math.floor(Math.random()*TAUNT_LIST.length)];
+    console.log("WE HAVE A WINNER", state.winner)
+    $rootScope.$broadcast("winner", name)
 
-    // only one person should reset the game
-    //console.log("ON WINNER")
-    //if (players.current) console.log(" - me ", players.current.name)
-    //if (player) console.log(" - win", player.name)
-    //if (players.winner) console.log(" - old", players.winner.name)
-    //console.log("PASSED")
+    // Now EVERYONE resets the game together
+    setTimeout(() => resetGame(state), 1000)
 
-    if (state.current && state.current.name == player.name) {
-      setTimeout(() => resetGame(state), 3000)
-    }
+    // don't "WIN" twice if you're already the winner
+    //if (state.winner && state.winner.name == player.name)
+      //return
+
+    //if (state.current && state.current.name == player.name) {
+      //setTimeout(() => resetGame(state), 3000)
+    //}
   }
 
+  // reset game
+  // immediately makes it playable? 
+  // I could move them back
   function resetGame(state:IPlayerState) {
       console.log("Initialize Game")
       // build walls?? (how t
@@ -230,10 +216,32 @@ angular.module('services')
 
   // killPlayer ONLY happens from the current player's perspective. yOu can only kill yourself
   function killPlayer(state:IPlayerState, player:IPlayer, killerName:string) {
+    console.log("KILL", player.name, "by", killerName)
     player.state = STATE.DEAD
     player.losses += 1
     player.killer = killerName
     FB.update(state.playersRef.child(player.name), player)
+  }
+
+  // EVERYONE sets winner / game state to over
+  // but only the winner can add his score if he's paying attention
+  function checkWin(state:IPlayerState) {
+    var alive = alivePlayers(state.all)
+    if (alive.length > 1) return
+
+    var winner = alive[0]
+    console.log("WINNER", winner)
+    //if (state.current == null || winner != state.current) return
+
+    // Game is OVER, set the winner
+    state.gameRef.child("winner").removeOnDisconnect();
+    state.gameRef.child("winner").set(winner.name)
+
+    // only if it is ME, then give yourself a point
+    if (winner.name == state.current.name) {
+      winner.wins += 1
+      state.playersRef.child(winner.name).child("wins").set(winner.wins)
+    }
   }
 
   function move(state:IPlayerState, player:IPlayer) {

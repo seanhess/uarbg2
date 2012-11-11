@@ -92,8 +92,6 @@ angular.module('controllers')
       players.current.x = position.x
       players.current.y = position.y
       players.current.direction = position.direction
-      console.log(players.current.direction)
-
       Players.move(players, players.current);
 
       // WILL I HIT ANY OTHER PLAYERS?

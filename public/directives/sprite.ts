@@ -48,6 +48,7 @@ angular.module('directives')
       frame = 0
       stopWalking() // don't double animate!
       interval = setInterval(animateFrame, FRAME_DURATION)
+      animateFrame()
     }
 
     function stopWalking() {

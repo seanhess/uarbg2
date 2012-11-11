@@ -1,7 +1,6 @@
 ///<reference path="../def/angular.d.ts"/>
 ///<reference path="../def/jquery.d.ts"/>
 
-console.log("KEYPRESS")
 angular.module('directives')
 .directive('keypress', function($parse) {
   return function(scope:ng.IScope, element:JQuery, attrs) {
