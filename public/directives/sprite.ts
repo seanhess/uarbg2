@@ -29,6 +29,13 @@ angular.module('directives')
   }
 })
 
+// animates through N background states, all at 50px (of course) :)
+.directive('spriteAnimate', function() {
+  return function(scope:ng.IScope, element:JQuery, attrs) {
+
+  }
+})
+
 // Now, sprite-walking. I need to know when either x or y changes
 .directive('spriteWalking', function(Board:IBoard) {
   return function(scope:ng.IScope, element:JQuery, attrs) {

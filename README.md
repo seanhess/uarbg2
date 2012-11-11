@@ -15,8 +15,8 @@ Compiling
 
 Hit List
 --------
-* Explosion
-* Rocket animation
+* Explosion (NEED: explosion and rocket in the same format)
+* Rocket animation 
 * (bug) you can kill yourself?
 
 * (clean) use signals/events instead of $rootScope.broadcast
