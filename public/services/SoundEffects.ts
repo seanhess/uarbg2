@@ -15,6 +15,7 @@ angular.module('services')
 .factory('SoundEffects', function():ISoundEffectsService {
 
   var bgMusic = new Audio("/audio/g-style.mp3")
+  bgMusic.loop = true
   //var underwater = new Audio("/audio/Underwater.mp3")
   var epic = new Audio("/audio/UnderwaterEpicBattle.mp3")
 
